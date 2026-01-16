@@ -2,7 +2,7 @@
 # menopause
 
 <!-- badges: start -->
-[<img src="https://zenodo.org/badge/DOI/10.5281/zenodo.18149332.svg">](https://doi.org/10.5281/zenodo.18149332)
+[https://doi.org/10.5281/zenodo.18149332](https://doi.org/10.5281/zenodo.18149332)
 <!-- badges: end -->
 
 Download this repo, install the dependencies, and then run:

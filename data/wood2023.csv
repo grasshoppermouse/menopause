@@ -1,0 +1,29 @@
+Species,Community,PrR,PrR source,PrR statistical significance,Source for demographic measures
+Chimpanzee (*Pan troglodytes*),"Ngogo, Kibale, Uganda",0.195,This study,Significant,This study
+Chimpanzee (*Pan troglodytes*),"Gombe, Tanzania",0.006,-11,Not significant,-40
+Chimpanzee (*Pan troglodytes*),"Gombe, Tanzania",0.02,-12,Not tested,-12
+Chimpanzee (*Pan troglodytes*),"Composite of Gombe, Tai, Kanyawara, Mahale, Bossou",0.018,-29,Not significant,"(*8, 66*)"
+Mountain gorilla (*Gorilla beringei*),Rwanda,0.022,-11,Not significant,-11
+Mountain gorilla (*Gorilla beringei*),Rwanda,0.04,-12,Not tested,-12
+Mountain gorilla (*Gorilla beringei*),Uganda,0.10,,Significant,
+Blue monkey (*Cercopithecus mitis*),"Kakamega Forest, Kenya",0.005,-11,Not significant,-40
+Blue monkey (*Cercopithecus mitis*),"Kakamega Forest, Kenya",0.02,-12,Not tested,-12
+Blue monkey (*Cercopithecus mitis*),"Kakamega Forest, Kenya",0.041,-29,Not significant,"(*86, 87*)"
+Japanese macaque (*Macaca fuscata*),"Yakushima and Kinkazan Islands, Japan",0.005,-11,Not significant,-88
+Rhesus macaque (*Macaca mulatta*),Community name not listed by (*29*),0.007,-29,Not significant,No source listed by (*29*)
+Northern muriqui (*Brachyteles hypoxanthus*),"Caratinga, Brazil",0.06,-12,Not tested,-12
+Olive baboon (*Papio anubis*),"Gombe, Tanzania",0.02,-11,Not significant,-89
+Ring-tailed lemur (*Lemur catta*),"Berenty, Madagascar",0.001,-11,Not significant,-90
+Verreaux’s sifaka (*Propithecus verreauxi*),"Beza Mahafaly, Madagascar",0.003,-11,Not significant,-40
+Verreaux’s sifaka (*Propithecus verreauxi*),"Beza Mahafaly, Madagascar",0.02,-12,Not tested,-12
+White-headed capuchin (*Cebus capucinus*),"Santa Rosa, Costa Rica",0.004,-11,Not significant,-40
+White-headed capuchin (*Cebus capucinus*),"Santa Rosa, Costa Rica",0.04,-12,Not tested,-12
+Yellow baboon (*Papio cynocephalus*),"Amboseli, Kenya",0.036,-11,Not significant,-40
+Yellow baboon (*Papio cynocephalus*),"Amboseli, Kenya",0.01,-12,Not tested,-12
+Human (*Homo sapiens*),Hadza hunter-gatherers - Tanzania,0.443,(*11*),Significant,(*84*)
+Human (*Homo sapiens*),!Kung hunter-gatherers - Botswana,0.426,(*1*),Significant,(*93*)
+Human (*Homo sapiens*),Ache hunter-gatherers - Paraguay,0.439,(*1*),Significant,(*94*)
+Human (*Homo sapiens*),Historical Sweden 1751–1755,0.477,(*1*),Significant,(*95*)
+Human (*Homo sapiens*),Plantation slaves of Trinidad,0.302,(*1*),Significant,(*60*)
+Toothed whales (*Delphinidae*),Orca (*Orcinus orca*),0.52,,,
+Toothed whales (*Delphinidae*),Short-finned pilot whale (*Globicephala macrorhynchus*),0.26,,,

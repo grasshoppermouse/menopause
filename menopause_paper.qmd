@@ -298,6 +298,8 @@ Simulations were deterministic, i.e., there were no stochastic parameters.
 
 : Parameter values for simulation runs. Each run was a unique combination of these values for each age of women from age at first birth (AFB) to the maximum age (80 years), with the constraint that $1.6 \le \mathrm{TEE}_{prop}f + \mathrm{TEE}_{prop}m \le 3.4$. {#tbl-parameters}
 
+Simulations were conducted using `{r} R.version.string`. Code and data are available here: <https://github.com/grasshoppermouse/menopause>.
+
 # Results
 
 ```{r}

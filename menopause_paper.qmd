@@ -74,7 +74,10 @@ library(hgEnergyGrowth)
 tar_load(c(
   params2,
   params2grid, 
-  params2out
+  params2out,
+  params3,
+  params3grid, 
+  params3out
   )
 )
 
@@ -392,6 +395,8 @@ Across simulations in the *Menopause* condition with a "Medium" rate of skill ac
 
 The influence of parameter combinations on lifetime energy balance in the restricted set of simulations are depicted in @sfig-meanEB. In general, higher joint productivity of the wife and husband was understandably associated with higher mean energy balance, as was, to a lesser degree, faster skill acquisition by both sexes.
 
+Finally, simulations were also run with an earlier (`{r} params3$menopause_age[1]`) and later (`{r} params3$menopause_age[1]`) age of menopause.  At the earlier age of menopause, families start to climb out of the energy deficit earlier and more rapidly (on average), and there is a longer period of energy surplus post menopause, and the converse for the older age at menopause. These results are with the same age at first birth, IBI, life expectancies at birth, TEE, and joint parental energy production as in the primary set of simulations. See @sfig-multipleages. With earlier and older ages of menopause, total fertility is lower or higher (+/- 2 births). A future fitness optimizing analysis would seek optimal IBI, lifespan, age at first birth, body size (TEE), and so forth, given, e.g., abilities to extract energy from the environment.
+
 ## Parent mortality
 
 ```{r}
@@ -436,7 +441,11 @@ Older parents --- including older women --- would have had greater knowledge of 
 
 # Concluding remarks
 
-Simulation results do not illuminate why the distinctive human life history pattern evolved [see, e.g., @kaplan2000]. They do suggest, however, that menopause was an integral element of human life history, necessary to avert a midlife energetic crisis threatened by relatively short interbirth intervals and long periods of juvenile dependency. Young couples, who in contemporary hunter-gatherers often live with either the wife's or husband's parents [@hill2011], produced an energetic surplus, likely subsidizing the younger siblings of the wife or husband via, e.g., brideservice [@Walker_2011]. Couples' midlife reproductive cessation (menopause) optimized family size at an energetically sustainable level as juvenile energy production ramped up (the mother hypothesis, albeit here also including fathers and older offspring), and energy transfers from couples' parents increased (the grandmother hypothesis, albeit here also including grandfathers). The couple and their increasingly productive offspring [@Pretelli_2022; @Pretelli_2024] then became energetically self-sustaining, and finally energetically "profitable", with the capacity to invest in their children's families.
+Simulation results do not illuminate why the distinctive human life history pattern evolved [see, e.g., @kaplan2000]. They do suggest, however, that menopause was an integral element of human life history, necessary to avert a midlife energetic crisis threatened by relatively short interbirth intervals and long periods of dependency in large bodied and large brained, and thus energetically expensive juveniles. Young couples, who in contemporary hunter-gatherers often live with either the wife's or husband's parents [@hill2011], produced an energetic surplus, likely subsidizing the younger siblings of the wife or husband via, e.g., brideservice [@Walker_2011]. Couples' midlife reproductive cessation (menopause) optimized family size at an energetically sustainable level as juvenile energy production ramped up (the mother hypothesis, albeit here also including fathers and older offspring), and energy transfers from couples' parents increased (the grandmother hypothesis, albeit here also including grandfathers). The couple and their increasingly productive offspring [@Pretelli_2022; @Pretelli_2024] then became energetically self-sustaining, and finally energetically "profitable", with the capacity to invest in their children's families.
+
+# Acknowedgements
+
+Thanks to Nicole Hess, Ilaria Pretelli, and Erik Ringen for helpful comments.
 
 # Supplementary information
 
@@ -488,6 +497,17 @@ wrap_plots(plots, ncol = 3, guides = "collect") & theme(legend.position = "top",
 ```
 
 Relationship between parameter combinations and mean lifetime energy balance in all simulations. See also @sfig-energybalance.
+:::
+
+::: {#sfig-multipleages}
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+plot_outdf3
+```
+
+Simulations with multiple ages of menopause, but with all other parameters assuming the same values as in the main analysis. Menopause (age 38) corresponds to the *Menopause* condition in the main analysis, and Menopause (age 80) to the *No menopause* condition.
 :::
 
 # References

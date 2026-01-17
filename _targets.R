@@ -89,6 +89,26 @@ list(
     name = params2out,
     command = pmap(params2grid, hg_lifecourse, .progress = F)
   ),
+  tar_target(
+    name = params3,
+    command = list_assign(params2, menopause_age = c(32, 38, 44, 80))
+  ),
+  tar_target(
+    name = params3grid,
+    command = expand.grid(params3) |> 
+      dplyr::filter(
+        # Values from Kraft et al. 2020, accounting for some numeric double weirdness
+        TEE_prop_m + TEE_prop_f >= 1.599 & TEE_prop_m + TEE_prop_f <= 3.401,
+      
+        # Fast, medium, and slow skill acquisition
+        (age50_f == params2$age50_f[1] & b1_f == params2$b1_f[3]) | (age50_f == params2$age50_f[2] & b1_f == params2$b1_f[2]) | (age50_f == params2$age50_f[3] & b1_f == params2$b1_f[1]),
+        (age50_m == params2$age50_m[1] & b1_m == params2$b1_m[3]) | (age50_m == params2$age50_m[2] & b1_m == params2$b1_m[2]) | (age50_m == params2$age50_m[3] & b1_m == params2$b1_m[1]),
+      )
+  ),
+  tar_target(
+    name = params3out,
+    command = pmap(params3grid, hg_lifecourse, .progress = F)
+  ),
   tar_quarto(
     name = menopause_paper,
     path = "menopause_paper.qmd"

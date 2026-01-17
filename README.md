@@ -16,4 +16,6 @@ Then run:
 
 `targets::tar_make()`
 
-This takes about 30 minutes on my iMac M3, and should create the `menopause_paper.html` file.
+This takes about 90 minutes on my iMac M3, and should create the `menopause_paper.html` file. 
+There is a multiprocessing setting in the `_targets.R` file (currently commented out) that could
+speed things up.

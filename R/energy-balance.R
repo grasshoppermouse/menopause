@@ -97,3 +97,38 @@ eb_pos <-
     .by = ParamSet
   )
 100*round(mean(eb_pos$early_prop, na.rm = T), 2)
+
+
+# Multiple ages of menopause ----------------------------------------------
+
+AFB <- params3$afb
+max_age <- params3$max_age
+AOM <- params3$menopause_age[-4]
+
+params3grid$ParamSet <- 1:nrow(params3grid)
+
+outdf3 <- 
+  list_rbind(params3out, names_to = "ParamSet") |> 
+  left_join(params3grid) |>
+  mutate(
+    Menopause = str_glue("Menopause (age {menopause_age})"),
+    Menopause = factor(Menopause, levels = sort(unique(Menopause), decreasing = F)),
+    Parent_production = TEE_prop_f + TEE_prop_m
+  ) |> 
+  mutate(
+    cumsumEB = cumsum(energy_balance),
+    .by = ParamSet
+  )
+
+outdf3mean <- out_mean(outdf3)
+
+plot_outdf3 <-
+  ggplot(outdf3, aes(wife_age, energy_balance, colour = `Parent_production`, group = ParamSet)) + 
+  geom_line(alpha = 0.01) +
+  geom_line(data = outdf3mean, aes(wife_age, mean_energybalance, group = age_gap), colour = 'lightblue') +
+  geom_hline(yintercept = 0, colour = 'red') +
+  scale_color_viridis_c(option = "A") +
+  guides(colour = guide_colorbar(title = "Parent\nproduction")) +
+  labs(x = "Wife age (years)", y = "Daily family energy\nbalance (kcals)") +
+  facet_wrap(~Menopause) + 
+  theme_linedraw(15)

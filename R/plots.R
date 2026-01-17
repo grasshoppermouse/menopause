@@ -123,24 +123,24 @@ plot_hadza_kids <-
   theme_classic(15)
 plot_hadza_kids
 
-dk2020 <- tibble(
-  Age = 0:80,
-  Productivity = koster2020skill(Age)
-)
-
-plot_koster2020 <-
-  ggplot(dk2020, aes(Age, Productivity)) +
-  geom_line() +
-  labs(x = "Age (years)", y = "Skill") +
-  theme_minimal(15)
-plot_koster2020
-
-schniter2015 <- png::readPNG(here("Figures/schniter2015.png"), native = T)
-
-plot_skills <-
-  plot_hadza_kids + schniter2015 + plot_koster2020 + 
-  plot_layout(ncol = 2) + plot_skill_ontogeny + plot_annotation(tag_levels = "A")
-plot_skills
+# dk2020 <- tibble(
+#   Age = 0:80,
+#   Productivity = koster2020skill(Age)
+# )
+# 
+# plot_koster2020 <-
+#   ggplot(dk2020, aes(Age, Productivity)) +
+#   geom_line() +
+#   labs(x = "Age (years)", y = "Skill") +
+#   theme_minimal(15)
+# plot_koster2020
+# 
+# schniter2015 <- png::readPNG(here("Figures/schniter2015.png"), native = T)
+# 
+# plot_skills <-
+#   plot_hadza_kids + schniter2015 + plot_koster2020 + 
+#   plot_layout(ncol = 2) + plot_skill_ontogeny + plot_annotation(tag_levels = "A")
+# plot_skills
 
 # Parameter table plots ---------------------------------------------------
 

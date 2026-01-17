@@ -8,12 +8,12 @@ Description: Data and code to render menopause paper
 License: MIT + file LICENSE
 Imports: 
     binford,
-    rmcelreath/cchunts,
+    cchunts,
     gamm4,
     ggcorrplot,
     glmmTMB,
-    grasshoppermouse/hagenutils,
-    grasshoppermouse/hgEnergyGrowth,
+    hagenutils,
+    hgEnergyGrowth,
     here,
     marquee,
     metaDigitise,
@@ -29,6 +29,10 @@ Imports:
     tinyplot,
     tinytable,
     viridis
+Remotes:
+    rmcelreath/cchunts,
+    grasshoppermouse/hagenutils,
+    grasshoppermouse/hgEnergyGrowth
 Encoding: UTF-8
 Language: en
 Roxygen: list(markdown = TRUE)

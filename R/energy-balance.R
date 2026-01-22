@@ -9,10 +9,18 @@ AOM <- min(params2$menopause_age)
 out_mean <- function(d){
   d |> 
     summarise(
+      menopause_age = mean(menopause_age),
       fertility = mean(fertility),
+      # fertility2 = mean(fertility2),
       family_size = mean(family_size),
-      family_consumption = mean(family_consumption),
+      mean_family_consumption = mean(family_consumption),
+      mean_wife_consumption = mean(wifeTEE),
+      mean_husband_consumption = mean(husbandTEE),
+      mean_total_child_consumption = mean(total_child_consumption),
       mean_production = mean(family_production),
+      mean_wife_production = mean(wife_production),
+      mean_husband_production = mean(husband_production),
+      mean_total_child_production = mean(total_child_production),
       mean_energybalance = mean(energy_balance),
       resident_children = mean(resident_children),
       wife_survival = mean(wife_survival),
@@ -101,10 +109,6 @@ eb_pos <-
 
 # Multiple ages of menopause ----------------------------------------------
 
-AFB <- params3$afb
-max_age <- params3$max_age
-AOM <- params3$menopause_age[-4]
-
 params3grid$ParamSet <- 1:nrow(params3grid)
 
 outdf3 <- 
@@ -122,13 +126,5 @@ outdf3 <-
 
 outdf3mean <- out_mean(outdf3)
 
-plot_outdf3 <-
-  ggplot(outdf3, aes(wife_age, energy_balance, colour = `Parent_production`, group = ParamSet)) + 
-  geom_line(alpha = 0.01) +
-  geom_line(data = outdf3mean, aes(wife_age, mean_energybalance, group = age_gap), colour = 'lightblue') +
-  geom_hline(yintercept = 0, colour = 'red') +
-  scale_color_viridis_c(option = "A") +
-  guides(colour = guide_colorbar(title = "Parent\nproduction")) +
-  labs(x = "Wife age (years)", y = "Daily family energy\nbalance (kcals)") +
-  facet_wrap(~Menopause) + 
-  theme_linedraw(15)
+# Total fertility for multiple ages of menopause
+fertility_mean <- map_dbl(params3$menopause_age, \(ma) max(hg_lifecourse(menopause_age = ma)$fertility2)) |> round(digits = 1)

@@ -3,6 +3,7 @@
 # Lifetables --------------------------------------------------------------
 
 LTS <- bind_rows(
+  Kung_Both = lifetable("kung", sex = 0),
   Ache_Female = lifetable("ache", sex = 0),
   Ache_Male = lifetable("ache", sex = 1),
   Hadza_Female = lifetable("hadza", sex = 0),
@@ -11,17 +12,21 @@ LTS <- bind_rows(
   UN_Male = lifetable("avg", sex = 1, e0 = 30),
   .id = "Group"
 ) |> 
+  mutate(x = ifelse(is.na(x), Age, x)) |>
+  dplyr::select(x, lx, Group) |> 
   separate_wider_delim(Group, delim = "_", names = c("Group", "Sex"))
 
 plot_lifetables <-
   ggplot(LTS[LTS$x <= 75,], aes(x, lx, colour = Sex)) + 
   geom_line(linewidth = 1) +
-  scale_color_binary() +
+  scale_color_viridis_d(option = "A", end = 0.8) +
+  # scale_color_scico_d(palette = 'managua') +
   guides(colour = guide_legend(override.aes = list(linewidth = 2))) +
   labs(x = "Age (years)", y = "Survival") +
-  facet_wrap(~Group, ncol = 3) +
+  facet_wrap(~Group, ncol = 2) +
   theme_bw(15) +
   theme(legend.position = 'top', legend.title = element_blank())
+# plot_lifetables
 
 # Growth ------------------------------------------------------------------
 

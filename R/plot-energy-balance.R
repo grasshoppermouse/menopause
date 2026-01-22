@@ -26,7 +26,7 @@ plot_energybalance <- function(d, dmean, alpha = 0.01){
     theme(axis.title.y = element_text(angle = 0, hjust = 1))
   
   p2 <-
-    ggplot(dmean, aes(wife_age, family_consumption, group = age_gap)) + 
+    ggplot(dmean, aes(wife_age, mean_family_consumption, group = age_gap)) + 
     geom_line() +
     labs(x = "Wife age (years)", y = "Daily family energy\nconsumption (kcals)") +
     facet_wrap(~Menopause) + 
@@ -72,10 +72,116 @@ plot_energybalance <- function(d, dmean, alpha = 0.01){
 }
 
 
-# plot_childproduction2 <-
-#   ggplot(outdf[outdf$child_age<18,], aes(child_age, total_child_production, group = ParamSet)) + 
-#   geom_line(alpha = 0.01) + 
-#   geom_line(aes(y = total_child_consumption), colour = "red") +
-#   geom_smooth(group = 1) +
-#   labs(x = "Oldest child age (years)", y = "Total child consumption/production (kcals)") +
-#   theme_minimal(15)
+# Family energy production over the lifecourse in menopause condition
+
+nm_dict <- c(
+  mean_wife_production = "Wife", 
+  mean_husband_production = "Husband", 
+  mean_total_child_production = "All children",
+  mean_wife_consumption = "Wife", 
+  mean_husband_consumption = "Husband", 
+  mean_total_child_consumption = "All children"
+)
+
+energyProd <- 
+  lifecourse_mean2 |> 
+  pivot_longer(
+    c(mean_wife_production, mean_husband_production, mean_total_child_production), 
+    names_to = 'Member', 
+    values_to = 'production'
+  ) |> 
+  mutate(
+    Member = nm_dict[Member]
+  )
+
+plot_energyProd <-
+  ggplot(energyProd, aes(wife_age, production, fill = Member)) + 
+  geom_col() +
+  scale_fill_viridis_d(option = "A", begin = 0.2, end = 0.9) +
+  labs(x = "Wife age (years)", y = "Production (kcals)") +
+  ylim(0, 10500) +
+  facet_wrap(~Menopause) +
+  theme_minimal(15) +
+  theme(strip.text = element_blank())
+plot_energyProd
+
+energyConsumers <- 
+  lifecourse_mean2 |> 
+  pivot_longer(
+    c(mean_wife_consumption, mean_husband_consumption, mean_total_child_consumption), 
+    names_to = 'Member', 
+    values_to = 'consumption'
+  ) |> 
+  mutate(
+    Member = nm_dict[Member]
+  )
+
+plot_energyConsumers <-
+  ggplot(energyConsumers, aes(wife_age, consumption, fill = Member)) + 
+  geom_col() +
+  scale_fill_viridis_d(option = "A", begin = 0.2, end = 0.9) +
+  labs(x = "Wife age (years)", y = "Consumption (kcals)") +
+  ylim(0, 10500) +
+  facet_wrap(~Menopause) +
+  theme_minimal(15)
+# plot_energyConsumers
+
+plot_consumption_production <- 
+  plot_energyConsumers / plot_energyProd + plot_layout(guides = 'collect', axes = 'collect') & 
+  theme(legend.position = 'top', legend.title = element_blank())
+
+# Positive balance without menopause --------------------------------------
+
+# Joint productivity <= 2.8 adult male TEE
+outdf2.8 <-
+  outdf |> 
+  dplyr::filter(TEE_prop_f == 1, TEE_prop_m > 1, alpha_m == 0.5, alpha_f == 0.5, age_gap == 5, menopause_age == 80) |> 
+  mutate(
+    b1_m = factor(b1_m, levels = (unique(b1_m))),
+    b1_f = ordered(b1_f),
+    alpha_m = ordered(alpha_m),
+    age_gap = ordered(age_gap),
+  )
+
+plot2.8 <-
+  ggplot(outdf2.8, aes(wife_age, energy_balance, colour = b1_f, group = ParamSet)) +
+  geom_line(alpha = 1) +
+  geom_hline(yintercept = 0, colour = 'red') +
+  scale_colour_viridis_d(option = "A", end = 0.8) +
+  guides(colour = guide_legend("b1 (female)", reverse = T, override.aes = list(linewidth = 2))) +
+  labs(x = "Wife age (years)", y = "Energy balance (kcals)") +
+  facet_grid(b1_m ~ TEE_prop_m) +
+  theme_bw(15) +
+  theme(strip.text.y = element_text(angle = 0))
+plot2.8
+
+# Multiple ages of menopause ----------------------------------------------
+
+plot_outdf3 <-
+  ggplot(outdf3, aes(wife_age, energy_balance, colour = `Parent_production`, group = ParamSet)) + 
+  geom_line(alpha = 0.01) +
+  geom_line(data = outdf3mean, aes(wife_age, mean_energybalance, group = age_gap), colour = 'lightblue') +
+  geom_hline(yintercept = 0, colour = 'red') +
+  scale_color_viridis_c(option = "A") +
+  guides(colour = guide_colorbar(title = "Parent\nproduction")) +
+  labs(x = "Wife age (years)", y = "Daily family energy\nbalance (kcals)") +
+  facet_wrap(~Menopause) + 
+  theme_bw(15)
+
+clrs <- viridisLite::turbo(4)
+
+plot_outdf3mean <-
+  ggplot(outdf3mean, aes(wife_age, mean_energybalance, colour = factor(menopause_age))) + 
+  geom_line(alpha = 1) +
+  geom_hline(yintercept = 0, colour = 'red') +
+  
+  annotate("text", label = fertility_mean[1], x = 32, y = -500, hjust = 0, colour = clrs[1]) +
+  annotate("text", label = fertility_mean[2], x = 38, y = -500, hjust = 0, colour = clrs[2]) +
+  annotate("text", label = fertility_mean[3], x = 44, y = -500, hjust = 0, colour = clrs[3]) +
+  annotate("text", label = fertility_mean[4], x = 73, y = -500, hjust = 0, colour = clrs[4]) +
+  
+  scale_color_viridis_d(option = "H") +
+  guides(colour = guide_legend(title = "Menopause age", position = "top", override.aes = list(linewidth = 2))) +
+  labs(x = "Wife age (years)", y = "Daily family energy\nbalance (kcals)") +
+  theme_bw(15)
+plot_outdf3mean

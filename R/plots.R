@@ -140,11 +140,15 @@ plot_hadza_kids
 #   theme_minimal(15)
 # plot_koster2020
 # 
+# kaplan2000male <- png::readPNG("Figures/kaplan2000male.png", native = T)
+# kaplan2000female <- png::readPNG("Figures/kaplan2000female.png", native = T)
 # schniter2015 <- png::readPNG(here("Figures/schniter2015.png"), native = T)
 # 
 # plot_skills <-
-#   plot_hadza_kids + schniter2015 + plot_koster2020 + 
-#   plot_layout(ncol = 2) + plot_skill_ontogeny + plot_annotation(tag_levels = "A")
+#   wrap_elements(kaplan2000male) + kaplan2000female +
+#   plot_hadza_kids + schniter2015 + 
+#   plot_koster2020 + plot_skill_ontogeny + 
+#   plot_annotation(tag_levels = "A") + plot_layout(ncol = 2)
 # plot_skills
 
 # Parameter table plots ---------------------------------------------------

@@ -126,9 +126,18 @@ plot_energyConsumers <-
   theme_minimal(15)
 # plot_energyConsumers
 
+plot_kraft_energy <- png::readPNG("Figures/plot_kraft_energy.png", native = T, info = T)
+
 plot_consumption_production <- 
-  plot_energyConsumers / plot_energyProd + plot_layout(guides = 'collect', axes = 'collect') & 
+  wrap_elements(full = plot_kraft_energy) + 
+  wrap_plots(
+    plot_energyConsumers + plot_energyProd + 
+      plot_layout(guides = 'collect', axes = 'collect', ncol = 1)
+  ) +
+  plot_layout(ncol = 1, heights = c(3,2)) +
+  plot_annotation(tag_levels = "A") & 
   theme(legend.position = 'top', legend.title = element_blank())
+# plot_consumption_production
 
 # Positive balance without menopause --------------------------------------
 

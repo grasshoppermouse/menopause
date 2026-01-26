@@ -12,6 +12,10 @@ Download this repo, and install the dependencies:
 pak::local_install()
 ```
 
+The simulation code is in this package, which should be installed along with the other dependencies:
+
+[https://github.com/grasshoppermouse/hgEnergyGrowth](https://github.com/grasshoppermouse/hgEnergyGrowth)
+
 Then run:
 
 `targets::tar_make()`

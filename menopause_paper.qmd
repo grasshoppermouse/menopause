@@ -180,7 +180,7 @@ biparental_min <- round(min(biparental_means$Sum) / 2300, 1)
 biparental_max <- round(max(biparental_means$Sum) / 2300, 1)
 ```
 
-Taking the average daily TEE of a hunter-gatherer adult to be about 2300 kcals, and using the energy production values in [@fig-energyconprod]A from @Kraft_2021, adult hunter-gatherer women produced from `{r} female_prop_min` to `{r} female_prop_max` of daily adult TEE, men from `{r} male_prop_min` to `{r} male_prop_max` of daily adult TEE, and one woman plus one man produced from `{r} biparental_min` to `{r} biparental_max` of daily adult TEE. Accordingly, maximum female energy production was modeled as a range from `{r} min(params2$TEE_prop_f)` to `{r} max(params2$TEE_prop_f)` of adult TEE, and maximum male energy production as a range from `{r} min(params2$TEE_prop_m)` to `{r} max(params2$TEE_prop_m)` of adult TEE, with the constraint that $1.6 \le \mathrm{TEE}_{prop}f + \mathrm{TEE}_{prop}m \le 3.4$ (i.e., the range of surplus to support juvenile offspring).
+Taking the average daily TEE of a hunter-gatherer adult to be about 2300 kcals, and using the energy production values in [@fig-energyconprod]A from @Kraft_2021, adult hunter-gatherer women produced from `{r} female_prop_min` to `{r} female_prop_max` of daily adult TEE, men from `{r} male_prop_min` to `{r} male_prop_max` of daily adult TEE, and one woman plus one man produced from `{r} biparental_min` to `{r} biparental_max` of daily adult TEE. Accordingly, maximum female energy production was modeled as a range from `{r} min(params2$TEE_prop_f)` to `{r} max(params2$TEE_prop_f)` of adult TEE, and maximum male energy production as a range from `{r} min(params2$TEE_prop_m)` to `{r} max(params2$TEE_prop_m)` of adult TEE, with the constraint that $1.6 \le \mathrm{TEE}_{prop,f} + \mathrm{TEE}_{prop,m} \le 3.4$ (i.e., the range of surplus to support juvenile offspring).
 
 ### Age- and sex-specific energy production
 
@@ -244,10 +244,10 @@ b1grid |>
 
 ## Parameter space and simulated life course
 
-One simulation was run for every combination of parameters in @tbl-parameters, with the exception that the sum of wife and husband energy production was constrained to $1.6 \le \mathrm{TEE}_{prop}f + \mathrm{TEE}_{prop}m \le 3.4$, as noted earlier. For each of the resulting `{r} nrow(params2grid)` combinations of parameter values the following vectors were computed in sequence:
+One simulation was run for every combination of parameters in @tbl-parameters, with the exception that the sum of wife and husband energy production was constrained to $1.6 \le \mathrm{TEE}_{prop,f} + \mathrm{TEE}_{prop,m} \le 3.4$, as noted earlier. For each of the resulting `{r} nrow(params2grid)` combinations of parameter values the following vectors were computed in sequence:
 
 1.  wife's age was an integer-valued vector from AFB until the maximum age (80), at one-year intervals.
-2.  husband's age was wife's age + age gap at marriage.
+2.  husband's age was wife's $age + age_{gap}$ (marriage age gap).
 3.  wife's probability of survival at each age relative to her AFB was computed with the female life table (all wives and husbands assumed to be alive at AFB; with SRB = 1.05 the numbers of surviving females and males at AFB is approximately equal).
 4.  husband's probability of survival at each age relative to AFB was computed with the male life table.
 5.  pregnancies (coded as 0, 1) occurred every IBI years, starting at one year prior to AFB.
@@ -263,21 +263,21 @@ Simulations were deterministic, i.e., there were no stochastic parameters.
 
 | Parameter | Description | Values |
 |:-------------------|:-------------------------|:--------------------------|
-| $e_0f$ | Female life expectancy at birth (years) | 35 |
-| $e_0m$ | Male life expectancy at birth (years) | 30 |
+| $e_{0,f}$ | Female life expectancy at birth (years) | 35 |
+| $e_{0,m}$ | Male life expectancy at birth (years) | 30 |
 | $\mathrm{SRB}$ | Sex ratio at birth | 1.05 |
 | $\mathrm{AFB}$ | Age at first birth (years) | `{r} params2$afb` |
 | $age_{max}$ | Maximum human age (years) | `{r} paste(params2$max_age, collapse = ', ')` |
-| $\mathrm{Marriage}_{gap}$ | Marriage age gap | `{r} paste(params2$age_gap, collapse = ', ')` |
+| $\mathrm{age}_{gap}$ | Marriage age gap | `{r} paste(params2$age_gap, collapse = ', ')` |
 | $\mathrm{IBI}$ | Interbirth interval (years) | 3 |
 | $age_{menopause}$ | Age of menopause | `{r} paste(params2$menopause_age, collapse = ', ')` |
 | $\alpha_f$, $\alpha_m$ | Relative importance of skill vs. strength for females and males | `{r} paste(params2$alpha_m, collapse = ', ')` |
-| $age_{50}f, age_{50}m$ | Age of 50% skill acquisition | `{r} paste(params2$age50_m, collapse = ', ')` |
-| $b_1f$, $b_1m$ | Skill acquisition rate for females and males | `{r} paste(params2$b1_f, collapse = ', ')` |
-| $\mathrm{TEE}_{prop}f$ | Maximum productivity for females as a proportion of adult TEE | `{r} paste(params2$TEE_prop_f, collapse = ', ')` |
-| $\mathrm{TEE}_{prop}m$ | Maximum productivity for males as a proportion of adult TEE | `{r} paste(params2$TEE_prop_m, collapse = ', ')` |
+| $age_{50,f}$, $age_{50,m}$ | Age of 50% skill acquisition | `{r} paste(params2$age50_m, collapse = ', ')` |
+| $b_{1,f}$, $b_{1,m}$ | Skill acquisition rate | `{r} paste(params2$b1_f, collapse = ', ')` |
+| $\mathrm{TEE}_{prop,f}$ | Maximum productivity for females as a proportion of adult TEE | `{r} paste(params2$TEE_prop_f, collapse = ', ')` |
+| $\mathrm{TEE}_{prop,m}$ | Maximum productivity for males as a proportion of adult TEE | `{r} paste(params2$TEE_prop_m, collapse = ', ')` |
 
-: Parameter values for simulation runs. Each run was a unique combination of these values for each age of women from age at first birth (AFB) to the maximum age (80 years), with the constraint that $1.6 \le \mathrm{TEE}_{prop}f + \mathrm{TEE}_{prop}m \le 3.4$. {#tbl-parameters}
+: Parameter values for simulation runs. Each run was a unique combination of these values for each age of women from age at first birth (AFB) to the maximum age (80 years), with the constraint that $1.6 \le \mathrm{TEE}_{prop,f} + \mathrm{TEE}_{prop.m} \le 3.4$. {#tbl-parameters}
 
 Simulations were conducted using `{r} R.version.string`. Code and data are available here: <https://github.com/grasshoppermouse/menopause>.
 
@@ -307,9 +307,9 @@ age_zero <- signchange(LC_menopause$resident_children)$age[1]
 age_none <- round(LC_none$resident_children[LC_none$wife_age == age_zero], 1)
 ```
 
-The main results across the entire parameter space are displayed in @sfig-energybalance. However, not all regions of parameter space are equally plausible for real hunter-gatherer families. For example, in `{r} negE[2]` of `{r} nrow(params2grid)` parameter combinations (`{r} negEpct`%), energy balance was always negative. Most analyses were therefore restricted to a subset of the simulations, as follows. The *Menopause* condition more realistically reflects real hunter-gather families. The restricted subset of simulation runs in the *Menopause* condition comprised those that resulted in mean energy balance values across the entire lifespan that were within `{r} EBthreshold` kcals of 0. Those in the *No menopause* condition comprised those with combinations of parameter values matching those in the *Menopause* condition. The main results from this subset of `{r} length(unique(lifecourse$ParamSet))` parameter combinations are depicted in @fig-energybalance, which are qualitatively similar to results from the entire parameter space in @sfig-energybalance, albeit with less variation, and biased toward simulation runs with more positive energy balances, although also removing simulations with exceptionally high mean energy balances.
+The main results across the entire parameter space are displayed in @sfig-energybalance. However, not all regions of parameter space are equally plausible for real hunter-gatherer families. For example, in `{r} negE[2]` of `{r} nrow(params2grid)` parameter combinations (`{r} negEpct`%), energy balance was always negative. Most analyses were therefore restricted to a subset of the simulations, as follows. The *Menopause* condition more realistically reflects real hunter-gather families. The restricted subset of simulation runs in the *Menopause* condition comprised those that resulted in mean energy balance values across the entire lifespan that were within `{r} EBthreshold` kcals of 0. Those in the *No menopause* condition comprised those with combinations of parameter values matching those in the *Menopause* condition. The main results from this subset of `{r} length(unique(lifecourse$ParamSet))` parameter combinations are depicted in @fig-energybalance, which are qualitatively similar to results from the entire parameter space in @sfig-energybalance, albeit with less variation, and biased toward simulation runs with more positive energy balances, although also omitting simulations with exceptionally high mean energy balances.
 
-With the exception that the parameters specifying the joint energy production of wife and husband ($\mathrm{TEE}_{prop}f,\mathrm{TEE}_{prop}m$) were further constrained to a narrow band of higher values, parameter values in the restricted subset nevertheless spanned the entire ranges of possible values, with varying deviations from the equal distributions in the full parameter grid. Specifically, the female skill acquisition rate ($b_1f$) was biased upwards for higher values of female productivity ($\mathrm{TEE}_{prop}f$), and the male skill acquisition rate ($b_1m$) was biased upwards for intermediate values of male productivity ($\mathrm{TEE}_{prop}m$) but downwards for the highest level of male productivity, likely due to the constraint on maximum lifetime energy balance. See @sfig-paramplots.
+With the exception that the parameters specifying the joint energy production of wife and husband ($\mathrm{TEE}_{prop,f},\mathrm{TEE}_{prop,m}$) were further constrained to a narrow band of higher values, parameter values in the restricted subset nevertheless spanned the entire ranges of possible values, with varying deviations from the equal distributions in the full parameter grid. Specifically, the female skill acquisition rate ($b_{1,f}$) was biased upwards for higher values of female productivity ($\mathrm{TEE}_{prop,f}$), and the male skill acquisition rate ($b_{1,m}$) was biased upwards for intermediate values of male productivity ($\mathrm{TEE}_{prop,m}$) but downwards for the highest level of male productivity, likely due to the constraint on maximum lifetime energy balance. See @sfig-paramplots.
 
 For wife's age from AFB to age of menopause, during which `{r} total_fertility` children are born, the *No menopause* and *Menopause* conditions are identical, after which they diverge. There are only about a maximum of `{r} max_kids` resident children, however, due to child mortality, and to a lesser extent, maternal mortality ([@fig-energybalance]A).
 
@@ -327,13 +327,13 @@ As family size grows and as children mature, daily family energy consumption gro
 #| label: fig-energyconprod
 #| fig-width: 10
 #| fig-height: 12
-#| fig-cap: "**A**: Empirical daily per capita adult energy production by contemporary hunter-gatherer females and males across ten populations. Boxplots in the top panel indicate the distributions of female, male, and total production depicted in the bottom panel. Total (pair bond): average production of one adult female plus one adult male. Grey bars indicate the range of average female (lower) to male (higher) total energy expenditure (TEE) for chimpanzees (left) and adult Hadza (right) measured using doubly labeled water. The dotted line indicates total TEE for one Hadza female + one male. Chimpanzee energy production is assumed to equal total energy expenditure (i.e., no surplus production other than for lactation). Data from @Kraft_2021 and @Pontzer_2015. **B, C**: Mean simulated daily energy consumption and production by the wife, husband, and their children over the lifespan of the wife, averaged over the restricted parameter space."
+#| fig-cap: "**A**: Empirical daily per capita adult energy production by contemporary hunter-gatherer females and males across ten populations. Boxplots in the top panel indicate the distributions of female, male, and total production depicted in the bottom panel. Total (pair bond): average production of one adult female plus one adult male. Grey bars indicate the range of average female (lower) to male (higher) TEE for chimpanzees (left) and adult Hadza (right) measured using doubly labeled water. The dotted line indicates total TEE for one Hadza female + one male. Chimpanzee energy production is assumed to equal total energy expenditure (i.e., no surplus production other than for lactation). Data from @Kraft_2021 and @Pontzer_2015. **B, C**: Mean simulated daily energy consumption and production by the wife, husband, and their children over the lifespan of the wife, averaged over the restricted parameter space."
 plot_consumption_production
 ```
 
 ## Energy production
 
-Family energy production increases slowly for about the first decade after AFB, but more rapidly in the second decade as the productivity of maturing children increases. Subsequently, energy production declines due to wife and husband mortality, and in the *Menopause* condition, the departure of older productive children (see [@fig-energyconprod]C). Within-condition variation is due to variation in the parameters affecting productivity --- $\alpha$, $b_1$, and $\mathrm{TEE}_{prop}$ --- each of which varies by sex. See @tbl-parameters and [@fig-energybalance]C. Qualitatively, energy consumption and production track family size.
+Family energy production increases slowly for about the first decade after AFB, but more rapidly in the second decade as the productivity of maturing children increases. Subsequently, energy production declines due to wife and husband mortality, and in the *Menopause* condition, the departure of older productive children (see [@fig-energyconprod]C). Within-condition variation is due to variation in the parameters affecting productivity ($\alpha$, $b_1$, and $\mathrm{TEE}_{prop}$), each of which varies by sex. See @tbl-parameters and [@fig-energybalance]C. Qualitatively, energy consumption and production track family size.
 
 ## Energy balance
 
@@ -389,7 +389,7 @@ pctpos <- round(100 * mean(meanEB > 0), 1)
 
 The influence of parameter combinations on lifetime energy balance in the restricted set of simulations are depicted in @sfig-meanEB. In general, higher joint productivity of the wife and husband was understandably associated with higher mean energy balance, as was, to a lesser degree, faster skill acquisition by both sexes. In the *No menopause* condition, the combination of these factors in a small region of the parameter space (`{r} pctpos`% of simulations) enabled families with older, productive children to reverse decreasing energy balances. See @sfig-nomenopause.
 
-Finally, simulations were also run with an earlier (`{r} params3$menopause_age[1]`) and later (`{r} params3$menopause_age[3]`) age of menopause.  At the earlier age of menopause, families start to climb out of the energy deficit earlier and more rapidly (on average), and there is a longer period of energy surplus post menopause, and conversely for the older age at menopause. Other than the ages of menopause, these simulations used the same parameter values as used in the primary set of simulations. See @sfig-multipleages. With earlier and older ages of menopause, total fertility is lower or higher (+/- 2 births). A future analysis would seek the values of the IBI, lifespan, age at first birth, body size (TEE), and so forth, that optimize fitness, given, e.g., abilities to extract energy from the environment.
+Finally, simulations were also run with an earlier (`{r} params3$menopause_age[1]`) and later (`{r} params3$menopause_age[3]`) age of menopause.  At the earlier age of menopause, families start to climb out of the energy deficit earlier and more rapidly (on average), and there is a longer period of energy surplus post menopause, with the reverse pattern for the older age at menopause. Other than the ages of menopause, these simulations used the same parameter values as used in the primary set of simulations. See @sfig-multipleages. With earlier and older ages of menopause, total fertility is lower or higher (+/- 2 births), respectively. A future analysis would seek the values of the IBI, lifespan, age at first birth, body size (TEE), and so forth, that optimize fitness, given, e.g., abilities to extract energy from the environment.
 
 ## Parent mortality
 
@@ -436,7 +436,7 @@ Second, young adults with few or no children produced a surplus that subsidized 
 
 There are three important distinctions between the results of the simulations reported here, and the @Kaplan_2010 "two sex" model. First, @Kaplan_2010 emphasize the importance of the increasing costs of pregnancy and childbirth with increasing age: in their model, menopause evolves because at midlife these costs reduce the benefits of continued reproduction which then no longer outweigh the benefits of transferring resources to kin. In the simulations, in contrast, menopause evolves simply because, given the amounts of energy that foragers can extract from environment, the relatively rapid production of offspring who require substantial calories yet who cannot support themselves for a decade or more limits their number to about four. This limit is reached after 6-7 births spaced 3 years apart (with high infant mortality), i.e., about 20 years after age at first birth. Nevertheless, age-related increases in the costs of pregnancy and childbirth could be additional factors favoring menopause.
 
-Second, juvenile productivity plays little role in the @Kaplan_2010 model but an important role in the simulations, where, in combination with reproductive cessation, the increasing productivity of older juveniles [@Pretelli_2022; @Pretelli_2024] helps families escape an energy deficit even without energy transfers (but energy transfers from young adults and older parents are still critical).
+Second, juvenile productivity plays little role in the @Kaplan_2010 model but an important role in the simulations, where, in combination with reproductive cessation, the increasing productivity of older juveniles [@Pretelli_2022; @Pretelli_2024] helps families escape an energy deficit even without energy transfers between families (but energy transfers from young adults and older parents are still critical).
 
 Third, although I have framed the simulations in terms of nuclear families comprising a wife and husband in a lifelong monogamous relationship raising their joint offspring --- a key assumption of the @Kaplan_2010 "two sex" model --- the results of the simulations do not rely on this assumption. The results are equally consistent with, e.g., a pooled energy model [@kramer2010] in which all females reproduce (i.e., no non-reproductive females) and all individuals pool their resources to provision every member of the community according to their needs. The potential midlife energetic crisis is simply a consequence of producing offspring every three years who require substantial calories to reach adulthood yet cannot provide all those calories themselves for a decade or more. In this regard, results are also consistent with the venerable grandmother hypothesis [@Hawkes_2020]. Note, however, that the simulations do not address the collective action problems or other evolutionary challenges of energy transfers. They also do not take into account that in real families and communities, parents and children adjust the time devoted to production in response to changes in demand [e.g., @kramer2005].
 
@@ -517,7 +517,7 @@ Results from all simulations for the *No menopause* (left) and *Menopause* (righ
 plot_outdf3mean
 ```
 
-Mean energy balance in simulations with multiple ages of menopause but with all other parameters assuming the same values as in the main analysis. Numeric values are total fertility, taking into account female mortality. Menopause age 38 corresponds to the *Menopause* condition in the main analysis, and Menopause age 80 to the *No menopause* condition.
+Mean energy balance in simulations with multiple ages of menopause but with all other parameters assuming the same values as in the main analysis. Trajectories are identical prior to the ages of menopause, diverging thereafter. Numeric values are total fertility, taking into account female mortality. Menopause age 38 corresponds to the *Menopause* condition in the main analysis, and Menopause age 80 to the *No menopause* condition.
 :::
 
 ::: {#sfig-nomenopause}
@@ -529,7 +529,7 @@ Mean energy balance in simulations with multiple ages of menopause but with all 
 plot2.8
 ```
 
-Example trajectories from the small region of the restricted parameter space in the *No Menopause* condition in which energy balances were positive (`{r} pctpos`% of simulations). Columns: $\mathrm{TEE}_{prop}m$. Rows: $b_1m$. For clarity, the parameter space is further restricted to: $\mathrm{TEE}_{prop}f = 1$, $\mathrm{Marriage}_{gap} = 5$, and $alpha_m = alpha_f = 0.5$.
+Example trajectories from the small region of the restricted parameter space in the *No Menopause* condition in which energy balances were positive (`{r} pctpos`% of simulations). Columns: $\mathrm{TEE}_{prop,}$. Rows: $b_{1,m}$. For clarity, the parameter space is further restricted to: $\mathrm{TEE}_{prop,f} = 1$, $\mathrm{age}_{gap} = 5$, and $alpha_m = alpha_f = 0.5$.
 :::
 
 ## Parameter variation
@@ -544,7 +544,7 @@ plots <- combn(prms, 2, \(p) plot_param_matrix(menopause_param_space, outdf, p[1
 wrap_plots(plots, ncol = 3, guides = "collect") & theme(legend.position = "top", legend.key.width = unit(2, "cm"))
 ```
 
-Heatmaps of $(Observed - Expected)/Expected$ for every combination of parameter values in the restricted subset of simulations compared to the unrestricted set. -1: no simulations with that combination; 0: the expected number of simulations; 1: twice as many simulations as expected; 2: 3x as many simulations as expected. Grey: missing in the original parameter grid due to the constraint: $1.6 \le TEE_{prop}f + TEE_{prop}m \le 3.4$.
+Heatmaps of $(Observed - Expected)/Expected$ for every combination of parameter values in the restricted subset of simulations compared to the unrestricted set. -1: no simulations with that combination; 0: the expected number of simulations; 1: twice as many simulations as expected; 2: 3x as many simulations as expected. Grey: missing in the original parameter grid due to the constraint: $1.6 \le TEE_{prop,f} + TEE_{prop,m} \le 3.4$.
 :::
 
 ::: {#sfig-meanEB}

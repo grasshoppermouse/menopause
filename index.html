@@ -2526,7 +2526,7 @@ Figure 2: Age-specific energy production. <strong>A, B</strong>: Mean daily ene
 <section id="adult-hunter-gatherer-energy-production" class="level2">
 <h2 class="anchored" data-anchor-id="adult-hunter-gatherer-energy-production">Adult hunter-gatherer energy production</h2>
 <p>A compilation of adult hunter-gatherer energy production by sex found that males typically (but not always) produced a surplus of calories beyond the typical adult male TEE, women generally produced around an adult female TEE (but in some cases with a surplus and in others with a deficit), and the combined male and female production was generally a surplus that would support offspring <span class="citation" data-cites="Kraft_2021">(<a href="#ref-Kraft_2021" role="doc-biblioref">Kraft et al., 2021</a>)</span>. See <a href="#fig-energyconprod" class="quarto-xref">Figure 3</a>A.</p>
-<p>Taking the average daily TEE of a hunter-gatherer adult to be about 2300 kcals, and using the energy production values in <a href="#fig-energyconprod" class="quarto-xref">Figure 3</a>A from <span class="citation" data-cites="Kraft_2021">Kraft et al. (<a href="#ref-Kraft_2021" role="doc-biblioref">2021</a>)</span>, adult hunter-gatherer women produced from to - of daily adult TEE, men from to - of daily adult TEE, and one woman plus one man produced from to - of daily adult TEE. Accordingly, maximum female energy production was modeled as a range from 0.4 to 1.8 of adult TEE, and maximum male energy production as a range from 1 to 2.6 of adult TEE, with the constraint that <span class="math inline">\(1.6 \le \mathrm{TEE}_{prop}f + \mathrm{TEE}_{prop}m \le 3.4\)</span> (i.e., the range of surplus to support juvenile offspring).</p>
+<p>Taking the average daily TEE of a hunter-gatherer adult to be about 2300 kcals, and using the energy production values in <a href="#fig-energyconprod" class="quarto-xref">Figure 3</a>A from <span class="citation" data-cites="Kraft_2021">Kraft et al. (<a href="#ref-Kraft_2021" role="doc-biblioref">2021</a>)</span>, adult hunter-gatherer women produced from 0.4 to 1.6 of daily adult TEE, men from 1 to 2.4 of daily adult TEE, and one woman plus one man produced from 1.7 to 3.3 of daily adult TEE. Accordingly, maximum female energy production was modeled as a range from 0.4 to 1.8 of adult TEE, and maximum male energy production as a range from 1 to 2.6 of adult TEE, with the constraint that <span class="math inline">\(1.6 \le \mathrm{TEE}_{prop}f + \mathrm{TEE}_{prop}m \le 3.4\)</span> (i.e., the range of surplus to support juvenile offspring).</p>
 <section id="age--and-sex-specific-energy-production" class="level3">
 <h3 class="anchored" data-anchor-id="age--and-sex-specific-energy-production">Age- and sex-specific energy production</h3>
 <p>Hunter-gatherer energy production (kcals/day) by age and sex is fairly uncertain because there have been very few such populations to study, and measurements might be restricted to food returned to camp (ignoring food consumed during foraging), perhaps obtained only during parts of the year, and/or data from adults only. Drawing inspiration from modeling approaches in <span class="citation" data-cites="Gurven_2005">Gurven &amp; Walker (<a href="#ref-Gurven_2005" role="doc-biblioref">2005</a>)</span>, <span class="citation" data-cites="gurven2006b">Gurven &amp; Kaplan (<a href="#ref-gurven2006b" role="doc-biblioref">2006</a>)</span>, <span class="citation" data-cites="Koster_2020">Koster et al. (<a href="#ref-Koster_2020" role="doc-biblioref">2020</a>)</span>, and <span class="citation" data-cites="Schniter_2015">Schniter et al. (<a href="#ref-Schniter_2015" role="doc-biblioref">2015</a>)</span>, I modeled foraging productivity across the lifespan as follows:</p>
@@ -2555,8 +2555,8 @@ Table 1: Ages at which skill level reaches 50% and 95% of maximum value for eac
 
     <script>
 
-      function styleCell_zs2elws10u57wpd2k5bf(i, j, css_id) {
-          var table = document.getElementById("tinytable_zs2elws10u57wpd2k5bf");
+      function styleCell_cdqwqanmlgwgusb9tqvz(i, j, css_id) {
+          var table = document.getElementById("tinytable_cdqwqanmlgwgusb9tqvz");
           var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
           if (cell) {
               console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
@@ -2566,7 +2566,7 @@ Table 1: Ages at which skill level reaches 50% and 95% of maximum value for eac
           }
       }
       function insertSpanRow(i, colspan, content) {
-        var table = document.getElementById('tinytable_zs2elws10u57wpd2k5bf');
+        var table = document.getElementById('tinytable_cdqwqanmlgwgusb9tqvz');
         // Find the row with data-row attribute matching i
         var targetRow = table.querySelector(`tr [data-row="${i}"]`).closest('tr');
         var newRow = table.insertRow(targetRow.rowIndex);
@@ -2578,8 +2578,8 @@ Table 1: Ages at which skill level reaches 50% and 95% of maximum value for eac
         // this may be unsafe, but innerText does not interpret <br>
         newCell.innerHTML = content;
       }
-      function spanCell_zs2elws10u57wpd2k5bf(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_zs2elws10u57wpd2k5bf");
+      function spanCell_cdqwqanmlgwgusb9tqvz(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_cdqwqanmlgwgusb9tqvz");
         const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
         if (!targetCell) {
           console.warn(`Cell at (${i}, ${j}) not found.`);
@@ -2610,14 +2610,14 @@ Table 1: Ages at which skill level reaches 50% and 95% of maximum value for eac
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '3', j: 0 }, { i: '3', j: 1 }, { i: '3', j: 2 }, { i: '3', j: 3 },  ], css_id: 'tinytable_css_9ezi24xh9b98vg0eqn6o',}, 
-          { positions: [ { i: '0', j: 0 }, { i: '0', j: 1 }, { i: '0', j: 2 }, { i: '0', j: 3 },  ], css_id: 'tinytable_css_u1uqrvhnonbd0jlttrig',}, 
+          { positions: [ { i: '3', j: 0 }, { i: '3', j: 1 }, { i: '3', j: 2 }, { i: '3', j: 3 },  ], css_id: 'tinytable_css_489uze41fx7709mj94cy',}, 
+          { positions: [ { i: '0', j: 0 }, { i: '0', j: 1 }, { i: '0', j: 2 }, { i: '0', j: 3 },  ], css_id: 'tinytable_css_wqa79o4pceq3whzaael8',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_zs2elws10u57wpd2k5bf(cell.i, cell.j, group.css_id);
+                  styleCell_cdqwqanmlgwgusb9tqvz(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -2625,11 +2625,11 @@ Table 1: Ages at which skill level reaches 50% and 95% of maximum value for eac
 
     <style>
 
-.table td.tinytable_css_9ezi24xh9b98vg0eqn6o, .table th.tinytable_css_9ezi24xh9b98vg0eqn6o { border-bottom: solid #d3d8dc 0.1em; }
-.table td.tinytable_css_u1uqrvhnonbd0jlttrig, .table th.tinytable_css_u1uqrvhnonbd0jlttrig { border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+.table td.tinytable_css_489uze41fx7709mj94cy, .table th.tinytable_css_489uze41fx7709mj94cy { border-bottom: solid #d3d8dc 0.1em; }
+.table td.tinytable_css_wqa79o4pceq3whzaael8, .table th.tinytable_css_wqa79o4pceq3whzaael8 { border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
 </style>
     <div class="container">
-      <table class="table table-borderless" id="tinytable_zs2elws10u57wpd2k5bf" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="table table-borderless" id="tinytable_cdqwqanmlgwgusb9tqvz" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         <thead>
         
               <tr>

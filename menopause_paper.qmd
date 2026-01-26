@@ -168,14 +168,16 @@ Accordingly, hunter-gatherer TEE was modeled using the regression model in @Baju
 A compilation of adult hunter-gatherer energy production by sex found that males typically (but not always) produced a surplus of calories beyond the typical adult male TEE, women generally produced around an adult female TEE (but in some cases with a surplus and in others with a deficit), and the combined male and female production was generally a surplus that would support offspring [@Kraft_2021]. See [@fig-energyconprod]A.
 
 ```{r}
-female_prop_min <- round(min(HG_means$value[HG_means$name == "Female"] / 2300), 1)
-female_prop_max <- round(max(HG_means$value[HG_means$name == "Female"] / 2300), 1)
+female_prop_min <- round(min(HG_means$Ea_mean[HG_means$Sex == "Female"] / 2300), 1)
+female_prop_max <- round(max(HG_means$Ea_mean[HG_means$Sex == "Female"] / 2300), 1)
 
-male_prop_min <- round(min(HG_means$value[HG_means$name == "Male"] / 2300), 1)
-male_prop_max <- round(max(HG_means$value[HG_means$name == "Male"] / 2300), 1)
+male_prop_min <- round(min(HG_means$Ea_mean[HG_means$Sex == "Male"] / 2300), 1)
+male_prop_max <- round(max(HG_means$Ea_mean[HG_means$Sex == "Male"] / 2300), 1)
 
-biparental_min <- round(min(HG_means$value[HG_means$name == "Total (pair bond)"] / 2300), 1)
-biparental_max <- round(max(HG_means$value[HG_means$name == "Total (pair bond)"] / 2300), 1)
+biparental_means <- HG_means |> summarise(Sum = sum(Ea_mean), .by = Population)
+
+biparental_min <- round(min(biparental_means$Sum) / 2300, 1)
+biparental_max <- round(max(biparental_means$Sum) / 2300, 1)
 ```
 
 Taking the average daily TEE of a hunter-gatherer adult to be about 2300 kcals, and using the energy production values in [@fig-energyconprod]A from @Kraft_2021, adult hunter-gatherer women produced from `{r} female_prop_min` to `{r} female_prop_max` of daily adult TEE, men from `{r} male_prop_min` to `{r} male_prop_max` of daily adult TEE, and one woman plus one man produced from `{r} biparental_min` to `{r} biparental_max` of daily adult TEE. Accordingly, maximum female energy production was modeled as a range from `{r} min(params2$TEE_prop_f)` to `{r} max(params2$TEE_prop_f)` of adult TEE, and maximum male energy production as a range from `{r} min(params2$TEE_prop_m)` to `{r} max(params2$TEE_prop_m)` of adult TEE, with the constraint that $1.6 \le \mathrm{TEE}_{prop}f + \mathrm{TEE}_{prop}m \le 3.4$ (i.e., the range of surplus to support juvenile offspring).

@@ -97,7 +97,7 @@ energyProd <-
 plot_energyProd <-
   ggplot(energyProd, aes(wife_age, production, fill = Member)) + 
   geom_col() +
-  scale_fill_viridis_d(option = "A", begin = 0.2, end = 0.9) +
+  scale_fill_viridis_d(option = "A", begin = 0.2, end = 0.9, direction = -1) +
   labs(x = "Wife age (years)", y = "Production (kcals)") +
   ylim(0, 10500) +
   facet_wrap(~Menopause) +
@@ -119,12 +119,16 @@ energyConsumers <-
 plot_energyConsumers <-
   ggplot(energyConsumers, aes(wife_age, consumption, fill = Member)) + 
   geom_col() +
-  scale_fill_viridis_d(option = "A", begin = 0.2, end = 0.9) +
+  scale_fill_viridis_d(option = "A", begin = 0.2, end = 0.9, direction = -1) +
   labs(x = "Wife age (years)", y = "Consumption (kcals)") +
   ylim(0, 10500) +
   facet_wrap(~Menopause) +
   theme_minimal(15)
 # plot_energyConsumers
+
+# p <- plot_energyConsumers + plot_energyProd + 
+#   plot_layout(guides = 'collect', axes = 'collect', ncol = 1) & 
+#   theme(legend.position = 'top', legend.title = element_blank())
 
 plot_kraft_energy <- png::readPNG("Figures/plot_kraft_energy.png", native = T, info = T)
 

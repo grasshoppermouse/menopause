@@ -27,9 +27,9 @@ format:
     toc-expand: 2
     embed-resources: true
     keep-md: false
-  # docx:
-  #   number-sections: false
-  #   fig-format: pdf
+  docx:
+    number-sections: true
+    reference-doc: custom-reference-doc.docx
 execute:
   echo: false
   warning: false
@@ -139,7 +139,7 @@ Energy balance (production minus consumption) in a hunter-gatherer nuclear famil
 
 ## Age at first birth (AFB), age at last birth (ALB), and interbirth interval (IBI)
 
-@Davison_2021 compiled demographic and life history values for contemporary hunter-gather populations, small-scale subsistence populations, and chimpanzee populations. I primarily used their averaged values from the five hunter-gatherer populations: Ache, Agta, Hadza, Hiwi, and !Kung (Ju/'hoansi). Although @Davison_2021 did not provide a numerical value for mean AFB, their Figures 2 and S2 indicate hunter-gatherer values clustering from shortly before 20 years of age to shortly after. They found that the average AFB for all human subsistence populations was shortly before 20 years. Hunter-gatherer age at last birth (ALB) ranged from 36 to 42, with a median of about 38, and mean total fertility was 6.2. Hunter-gatherer IBIs ranged from 2.8 years (Agta) to 3.3 years (Hiwi), with a mean value of 3.1 years. For simplicity, and to match the foregoing values as closely as possible, in all simulation runs fertility was constant until ALB, at which point it was set to 0, IBI = 3 years, AFB = `{r} params2$afb`, and, for runs with menopause, ALB = `{r} min(params2$menopause_age)`. Birth at age x was conditional on female survival to age x. For women who survived to the age of menopause, these values resulted in a total fertility of `{r} sum(lifecourse_ex$births)`, slightly above the mean empirical value. Taking into account that not all women survive to the age of menopause, however, total fertility in the simulations was `{r} fertility_mean[2]`. For simulation runs without menopause, women give birth until the end of life.
+@Davison_2021 compiled demographic and life history values for contemporary hunter-gather populations, small-scale subsistence populations, and chimpanzee populations. I primarily used their averaged values from the five hunter-gatherer populations: Ache, Agta, Hadza, Hiwi, and !Kung (Ju/'hoansi). Although @Davison_2021 did not provide a numerical value for mean AFB, their Figures 2 and S2 indicate hunter-gatherer values clustering from shortly before 20 years of age to shortly after. They found that the average AFB for all human subsistence populations was shortly before 20 years. Hunter-gatherer age at last birth (ALB) ranged from 36 to 42, with a median of about 38, and mean total fertility was 6.2. Hunter-gatherer IBIs ranged from 2.8 years (Agta) to 3.3 years (Hiwi), with a mean value of 3.1 years. For simplicity, and to match the foregoing values as closely as possible, in all simulation runs fertility was constant until ALB, at which point it was set to 0, IBI = 3 years, AFB = `{r} params2$afb`, and, for runs with menopause, ALB = `{r} min(params2$menopause_age)`. Birth at age x was conditional on female survival to age x. For women who survived to the age of menopause, these values resulted in a total fertility of `{r} max(lifecourse_ex$fertility)`, slightly above the mean empirical value. Taking into account that not all women survive to the age of menopause, however, total fertility in the simulations was `{r} max(lifecourse_ex$fertility2)`. For simulation runs without menopause, women give birth until the end of life.
 
 ## Age- and sex-specific survivorship (mortality)
 
@@ -251,7 +251,7 @@ One simulation was run for every combination of parameters in @tbl-parameters, w
 3.  wife's probability of survival at each age relative to her AFB was computed with the female life table (all wives and husbands assumed to be alive at AFB; with SRB = 1.05 the numbers of surviving females and males at AFB is approximately equal).
 4.  husband's probability of survival at each age relative to AFB was computed with the male life table.
 5.  pregnancies (coded as 0, 1) occurred every IBI years, starting at one year prior to AFB.
-6.  births (coded as 0, 1) occurred every IBI years, starting at AFB and ending at either the age of menopause, or at end of life.
+6.  births (coded as 0, 1) occurred every IBI years, starting at AFB and ending at either the age of menopause, or at end of life, and then scaled by mother survival to age x.
 7.  child survival was age-specific survival (averaged for females and males) multiplied by births (i.e., no new children in years with birth = 0).
 8.  wife, husband, and child TEE's at each age (as described earlier) were multiplied by their survival at each age.
 9.  wife, husband, and child productivities at each age were computed using @eq-productivity and multiplied by their respective survival at each age.
@@ -305,8 +305,8 @@ posenergy <- outdf |> summarise(allneg = all(energy_balance > 0), .by = ParamSet
 posE <- table(posenergy$allneg)
 posEpct <- 100*round(posE[2]/nrow(params2grid), 2)
 
-total_fertility <- sum(LC_menopause$births)
-max_kids <- round(max(LC_none$resident_children)) # Should be the same for menopause condition
+total_fertility <- round(sum(LC_menopause$births), 1)
+max_kids <- round(max(LC_none$resident_children), 1) # Should be the same for menopause condition
 
 age_zero <- signchange(LC_menopause$resident_children)$age[1]
 age_none <- round(LC_none$resident_children[LC_none$wife_age == age_zero], 1)
@@ -316,7 +316,7 @@ The main results across the entire parameter space are displayed in @sfig-energy
 
 With the exception that the parameters specifying the joint energy production of wife and husband ($\mathrm{TEE}_{prop,f},\mathrm{TEE}_{prop,m}$) were further constrained to a narrow band of higher values, parameter values in the restricted subset nevertheless spanned the entire ranges of possible values, with varying deviations from the equal distributions in the full parameter grid. Specifically, the female skill acquisition rate ($b_{1,f}$) was biased upwards for higher values of female productivity ($\mathrm{TEE}_{prop,f}$), and the male skill acquisition rate ($b_{1,m}$) was biased upwards for intermediate values of male productivity ($\mathrm{TEE}_{prop,m}$) but downwards for the highest level of male productivity, likely due to the constraint on maximum lifetime energy balance. See @sfig-paramplots.
 
-For wife's age from AFB to age of menopause, during which `{r} total_fertility` children are born, the *No menopause* and *Menopause* conditions are identical, after which they diverge. There are only about a maximum of `{r} max_kids` resident children, however, due to child mortality, and to a lesser extent, maternal mortality ([@fig-energybalance]A).
+For wife's age from AFB to age of menopause, during which `{r} total_fertility` children are born (accounting for wife mortality), the *No menopause* and *Menopause* conditions are identical, after which they diverge. There are only an average of `{r} max_kids` resident children, however, due to child mortality ([@fig-energybalance]A).
 
 ## Family size
 

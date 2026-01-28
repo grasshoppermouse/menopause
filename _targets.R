@@ -19,8 +19,7 @@ tar_option_set(
    "hgEnergyGrowth",
    "metaDigitise",
    "hagenutils"
-  )#,
-  # controller = crew::crew_controller_local(workers = 5, seconds_idle = 60)
+  )
 ) 
 
 tar_source(

@@ -2,7 +2,7 @@
 plot_energybalance <- function(d, dmean, alpha = 0.01){
   
   colrs <- viridis(5, option = "H")
-  fntsize <- 3.7
+  fntsize <- 2.9
   
   d <- rename(d, `Parent\nproduction` = Parent_production)
   
@@ -65,8 +65,8 @@ plot_energybalance <- function(d, dmean, alpha = 0.01){
       strip.text.x = element_blank()
     )
   
-  p1 + p2 + p3 + p4 + 
-    plot_layout(ncol = 1, axes = "collect_x", guides = "collect") + 
+  p1 + p2 + wrap_plots(p3 / p4 +  plot_layout(axes = "collect_x", guides = "collect"))+
+    plot_layout(ncol = 1, axes = "collect_x", heights = c(1, 1, 2.5)) + 
     plot_annotation(tag_levels = "A") & 
     theme(plot.tag.position = "topright")
 }

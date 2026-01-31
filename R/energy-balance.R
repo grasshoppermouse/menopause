@@ -22,6 +22,7 @@ out_mean <- function(d){
       mean_husband_production = mean(husband_production),
       mean_total_child_production = mean(total_child_production),
       mean_energybalance = mean(energy_balance),
+      mean_energybalance2 = mean(energy_balance2),
       resident_children = mean(resident_children),
       wife_survival = mean(wife_survival),
       husband_survival = mean(husband_survival),
@@ -38,12 +39,15 @@ outdf <-
   mutate(
     Menopause = ifelse(menopause_age < max_age, str_glue("Menopause (age {menopause_age})"), "No Menopause"),
     Menopause = factor(Menopause, levels = sort(unique(Menopause), decreasing = T)),
-    Parent_production = TEE_prop_f + TEE_prop_m
+    Parent_production = TEE_prop_f + TEE_prop_m,
+    energy_balance2 = wife_production + husband_production - family_consumption # Without juvenile production
   ) |> 
   mutate(
     cumsumEB = cumsum(energy_balance),
     .by = ParamSet
   )
+
+outdfmean <- out_mean(outdf)
 
 outdfsplit <- split(outdf, outdf$menopause_age)
 outdfsplit_menopause <- outdfsplit[[1]]
@@ -117,7 +121,8 @@ outdf3 <-
   mutate(
     Menopause = str_glue("Menopause (age {menopause_age})"),
     Menopause = factor(Menopause, levels = sort(unique(Menopause), decreasing = F)),
-    Parent_production = TEE_prop_f + TEE_prop_m
+    Parent_production = TEE_prop_f + TEE_prop_m,
+    energy_balance2 = wife_production + husband_production - family_consumption # Without juvenile production
   ) |> 
   mutate(
     cumsumEB = cumsum(energy_balance),

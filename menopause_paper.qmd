@@ -364,7 +364,7 @@ age_maxEB <- age_maxEB[length(age_maxEB)] # In case there is an earlier peak
 
 For the births of the first two children, mean energy balance (averaging across the restricted parameter space) is positive in both conditions, dropping well below 0 at the birth of the fourth child in both conditions, when, due to child mortality, parents are caring for about `{r} paste(fourth, collapse = "-")` children. In the *No menopause* condition, mean energy balance is negative after this for the rest of the lifespan (see [@fig-energybalance]D, left).
 
-In the *Menopause* condition, after menopause (age `{r} AOM`) mean energy balance begins to increase as the productivity of maturing children increases and as children leave the family, becoming positive when wives turn `{r} next_pos_wife_age` and parents are caring for about `{r} round(next_pos_res_kids, 0)` children. Energy balance peaks again about a decade later, at age `{r} age_maxEB`, as the last child has left the family, declining thereafter due to wife and husband mortality. See [@fig-energybalance]D, right.
+In the *Menopause* condition, after menopause (age `{r} AOM`) mean energy balance begins to increase as the productivity of maturing children increases and as children leave the family, becoming positive when wives turn `{r} next_pos_wife_age` and parents are caring for about `{r} round(next_pos_res_kids, 0)` children. Energy balance peaks again about a decade later, at age `{r} age_maxEB`, as the last child has left the family, declining thereafter due to wife and husband mortality. See [@fig-energybalance]D, right. Energy balance was also computed excluding juvenile production, which revealed pronounced energy deficits across most of the lifespan for all parameter combinations (@sfig-nokids).
 
 ::: {#fig-energybalance}
 ```{r}
@@ -447,7 +447,7 @@ Second, young adults with few or no children produced a surplus that subsidized 
 
 There are three important distinctions between the results of the simulations reported here, and the @Kaplan_2010 "two sex" model. First, @Kaplan_2010 emphasize the importance of the increasing costs of pregnancy and childbirth with increasing age: in their model, menopause evolves because at midlife these costs reduce the benefits of continued reproduction which then no longer outweigh the benefits of transferring resources to kin. In the simulations, in contrast, menopause evolves simply because, given the amounts of energy that foragers can extract from environment, the relatively rapid production of offspring who require substantial calories yet who cannot support themselves for a decade or more limits their number to about four. This limit is reached after 6-7 births spaced 3 years apart (with high infant mortality), i.e., about 20 years after age at first birth. Nevertheless, age-related increases in the costs of pregnancy and childbirth could be additional factors favoring menopause.
 
-Second, juvenile productivity plays little role in the @Kaplan_2010 model but an important role in the simulations, where, in combination with reproductive cessation, the increasing productivity of older juveniles [@Pretelli_2022; @Pretelli_2024] helps families escape an energy deficit even without energy transfers between families (but energy transfers from young adults and older parents are still critical).
+Second, juvenile productivity plays little role in the @Kaplan_2010 model but an important role in the simulations, where, in combination with reproductive cessation, the increasing productivity of older juveniles [@Pretelli_2022; @Pretelli_2024] helps families escape an energy deficit. Moreover, without juvenile production, families would be in a pronounced negative energy balance for most of the wife's lifespan that the few years of surplus could not offset [@sfig-nokids].
 
 Third, although I have framed the simulations in terms of nuclear families comprising a wife and husband in a lifelong monogamous relationship raising their joint offspring --- a key assumption of the @Kaplan_2010 "two sex" model --- the results of the simulations do not rely on this assumption. The results are equally consistent with, e.g., a pooled energy model [@kramer2010] in which all females reproduce (i.e., no non-reproductive females) and all individuals pool their resources to provision every member of the community according to their needs. The potential midlife energetic crisis is simply a consequence of producing offspring every three years who require substantial calories to reach adulthood yet cannot provide all those calories themselves for a decade or more. In this regard, results are also consistent with the venerable grandmother hypothesis [@Hawkes_2020]. Note, however, that the simulations do not address the collective action problems or other evolutionary challenges of energy transfers. They also do not take into account that in real families and communities, parents and children adjust the time devoted to production in response to changes in demand [e.g., @kramer2005].
 
@@ -528,7 +528,7 @@ Histogram of the mean differences in age at first marriage for husbands and wive
 #| fig-width: 10
 #| fig-height: 10
 
-plot_energybalance(outdf, out_mean(outdf))
+plot_energybalance(outdf, outdfmean)
 ```
 
 Results from all simulations for the *No menopause* (left) and *Menopause* (right) conditions. Each line in panels B to D represents a result from a run with a single combination of parameter values. Colors in C & D represent the total production of wife and husband as a proportion of adult TEE. Blues lines in C & D are the mean values across all simulations for each wife age.
@@ -554,6 +554,15 @@ plot2.8
 ```
 
 Example trajectories from the small region of the restricted parameter space in the *No Menopause* condition in which energy balances were positive (`{r} pctpos`% of simulations). Columns: $\mathrm{TEE}_{prop,}$. Rows: $b_{1,m}$. For clarity, the parameter space is further restricted to: $\mathrm{TEE}_{prop,f} = 1$, $\mathrm{age}_{gap} = 5$, and $alpha_m = alpha_f = 0.5$.
+:::
+
+::: {#sfig-nokids}
+```{r}
+#| fig-width: 10
+plot_nokids
+```
+
+Energy balance in the *Menopause* condition including juvenile productivity (left) vs. excluding juvenile productivity (right) in the unrestricted parameter space.
 :::
 
 ## Parameter variation

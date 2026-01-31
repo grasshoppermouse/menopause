@@ -198,3 +198,31 @@ plot_outdf3mean <-
   labs(x = "Wife age (years)", y = "Daily family energy\nbalance (kcals)") +
   theme_bw(15)
 plot_outdf3mean
+
+# Energy balance with and without juvenile production ---------------------
+
+# Unrestricted parameter space, menopause condition
+nokids_df <- 
+  outdfsplit_menopause |> 
+  pivot_longer(c(energy_balance, energy_balance2), names_to = "KidProd", values_to = 'energy_balance') |> 
+  mutate(
+    KidProd = ifelse(KidProd == "energy_balance", "With juvenile production", "Without juvenile production")
+  )
+
+nokids_mean <-
+  outdfsplit_menopause |> 
+  out_mean() |> 
+  pivot_longer(c(mean_energybalance, mean_energybalance2), names_to = "KidProd", values_to = 'energy_balance') |> 
+  mutate(
+    KidProd = ifelse(KidProd == "mean_energybalance", "With juvenile production", "Without juvenile production")
+  )
+
+plot_nokids <- 
+  ggplot(nokids_df, aes(wife_age, energy_balance, group = ParamSet)) + 
+  geom_line(alpha = 0.01) +
+  geom_line(data = nokids_mean, group = NA, colour = 'lightblue') +
+  geom_hline(yintercept = 0, colour = "red") +
+  labs(x = "Wife age (years)", y = "Energy balance (kcals)") +
+  facet_wrap(~KidProd) + 
+  theme_minimal(15)
+# plot_nokids

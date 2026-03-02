@@ -40,7 +40,7 @@ outdf <-
     Menopause = ifelse(menopause_age < max_age, str_glue("Menopause (age {menopause_age})"), "No Menopause"),
     Menopause = factor(Menopause, levels = sort(unique(Menopause), decreasing = T)),
     Parent_production = TEE_prop_f + TEE_prop_m,
-    energy_balance2 = wife_production + husband_production - family_consumption # Without juvenile production
+    energy_balance2 = energy_balance - total_child_production # Without juvenile production
   ) |> 
   mutate(
     cumsumEB = cumsum(energy_balance),

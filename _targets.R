@@ -59,6 +59,7 @@ list(
     command = list(
       group = 'avg',
       afb = 20,
+      IBI = c(3, 4),
       max_age = 80,
       menopause_age = c(38, 80),
       age_gap = c(5, 10),

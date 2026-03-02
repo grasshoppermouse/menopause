@@ -131,7 +131,9 @@ It should be acknowledged at the outset that, if menopause is an adaptation it c
 ```{r}
 # Example lifecourse with menopause = AOM
 
-lifecourse_ex <- hg_lifecourse(age_gap = 5, afb = params2$afb, menopause_age = min(params2$menopause_age))
+lifecourse_ex <- hg_lifecourse(age_gap = 5, IBI = 3, afb = params2$afb, menopause_age = min(params2$menopause_age))
+
+lifecourse_ex2 <- hg_lifecourse(age_gap = 5, IBI = 4, afb = params2$afb, menopause_age = min(params2$menopause_age))
 
 ```
 
@@ -139,7 +141,7 @@ Energy balance (production minus consumption) in a hunter-gatherer nuclear famil
 
 ## Age at first birth (AFB), age at last birth (ALB), and interbirth interval (IBI)
 
-@Davison_2021 compiled demographic and life history values for contemporary hunter-gather populations, small-scale subsistence populations, and chimpanzee populations. I primarily used their averaged values from the five hunter-gatherer populations: Ache, Agta, Hadza, Hiwi, and !Kung (Ju/'hoansi). Although @Davison_2021 did not provide a numerical value for mean AFB, their Figures 2 and S2 indicate hunter-gatherer values clustering from shortly before 20 years of age to shortly after. They found that the average AFB for all human subsistence populations was shortly before 20 years. Hunter-gatherer age at last birth (ALB) ranged from 36 to 42, with a median of about 38, and mean total fertility was 6.2. Hunter-gatherer IBIs ranged from 2.8 years (Agta) to 3.3 years (Hiwi), with a mean value of 3.1 years. For simplicity, and to match the foregoing values as closely as possible, in all simulation runs fertility was constant until ALB, at which point it was set to 0, IBI = 3 and 4 years, AFB = `{r} params2$afb`, and, for runs with menopause, ALB = `{r} min(params2$menopause_age)`. Birth at age x was conditional on female survival to age x. For women who survived to the age of menopause, these values resulted in a total fertility of `{r} max(lifecourse_ex$fertility)`, slightly above the mean empirical value. Taking into account that not all women survive to the age of menopause, however, total fertility in the simulations was `{r} round(max(lifecourse_ex$fertility2), 1)`. For simulation runs without menopause, women give birth until the end of life.
+@Davison_2021 compiled demographic and life history values for contemporary hunter-gather populations, small-scale subsistence populations, and chimpanzee populations. I primarily used their averaged values from the five hunter-gatherer populations: Ache, Agta, Hadza, Hiwi, and !Kung (Ju/'hoansi). Although @Davison_2021 did not provide a numerical value for mean AFB, their Figures 2 and S2 indicate hunter-gatherer values clustering from shortly before 20 years of age to shortly after. They found that the average AFB for all human subsistence populations was shortly before 20 years. Hunter-gatherer age at last birth (ALB) ranged from 36 to 42, with a median of about 38, and mean total fertility was 6.2. Hunter-gatherer IBIs ranged from 2.8 years (Agta) to 3.3 years (Hiwi), with a mean value of 3.1 years. For simplicity, and to match the foregoing values as closely as possible, in all simulation runs fertility was constant until ALB, at which point it was set to 0, IBI = 3 and 4 years, AFB = `{r} params2$afb`, and, for runs with menopause, ALB = `{r} min(params2$menopause_age)`. Birth at age x was conditional on female survival to age x. For women who survived to the age of menopause, these values resulted in a total fertility of `{r} max(lifecourse_ex$fertility)`, slightly above the mean empirical value. Taking into account that not all women survive to the age of menopause, however, the total fertility rate (TFR) in the simulations with IBI = 3 was $\mathrm{TFR} = `{r} round(max(lifecourse_ex$fertility2), 1)`$, and with IBI = 4 was $\mathrm{TFR} = `{r} round(max(lifecourse_ex2$fertility2), 1)`$. For simulation runs without menopause, women give birth until the end of life.
 
 ## Age- and sex-specific survivorship (mortality)
 
@@ -153,7 +155,11 @@ e0hadzaM <- round(hadzaLTm$ex[1], 1)
 
 The average life expectancy at birth for human hunter-gatherers of both sexes combined is $e_0 = 30$ years [@Davison_2021]. For the Hadza, female $e_0=`{r} e0hadzaF`$ and male $e_0=`{r} e0hadzaM`$ [@jones2016]. An analysis of !Kung mortality [$e_0=30$, @howell2017] found that it did not differ meaningfully from other human populations with similar life expectancy at birth [@coale1966; @Li_2012], a conclusion echoed by @gurven2007, who concluded that "there is a characteristic life span for our species, in which mortality decreases sharply from infancy through childhood, followed by a period in which mortality rates remain essentially constant to about age 40 years, after which mortality rises steadily in Gompertz fashion" (p. 322).
 
-The @kuhle2007 hypothesis depends on a gap in the age of marriage combined with a sex difference in mortality, which is common in many human populations as well as in many wild mammals. A study of 101 mammal species, for example, found that the median female lifespan was 18.6% longer than that of conspecfic males, and in humans the mean female advantage was 7.8% [@Lematre_2020]. For age- and sex-specific survivorship (mortality) I used the UN Model Life Tables [@Li_2012; data and code from @Gaddy_2025] with $e_0$ values similar to the Hadza, i.e., a female life expectancy at birth, $e_0 = 35$, a male life expectancy at birth, $e_0 = 30$, and a sex ratio at birth (SRB) of 1.05 (i.e., a 5% male excess). See @sfig-lifetables. These values with an IBI = 3 would result in a growing population, but with an IBI = 4 the population would be closer to stationary, similar to the !Kung [@Gurven_2019].
+The @kuhle2007 hypothesis depends on a gap in the age of marriage combined with a sex difference in mortality, which is common in many human populations as well as in many wild mammals. A study of 101 mammal species, for example, found that the median female lifespan was 18.6% longer than that of conspecfic males, and in humans the mean female advantage was 7.8% [@Lematre_2020]. For age- and sex-specific survivorship (mortality) I used the UN Model Life Tables [@Li_2012; data and code from @Gaddy_2025] with $e_0$ values similar to the Hadza and !Kung, i.e., a female life expectancy at birth, $e_0 = 35$, a male life expectancy at birth, $e_0 = 30$, and a sex ratio at birth (SRB) of 1.05 (i.e., a 5% male excess). See @sfig-lifetables.
+
+## Population growth
+
+Contemporary foraging populations typically exhibit high annual population growth rates in excess of 1%, which is unsustainable over the long term. Populations are stationary when births equal deaths over time, i.e., fertility is balanced by mortality. Among contemporary foragers, the !Kung were an exception, with a relatively low population growth rate of $r=0.17\%$ attributable to a life expectancy at birth $e_0 = 33.9$, and a $\mathrm{TFR} = 4.3$. The Hadza, on the other hand, were more typical, with $r=1.38\%$, attribuable to a similar $e_0 = 34.7$, but a higher $\mathrm{TFR} = 6.2$ [@Gurven_2019]. IBI values of 3 and 4 years, combined with the $e_0$ values specified in the previous section, approximate the TFR values (and hence the population growth rates) of the Hadza (high) and !Kung (low), respectively.
 
 ## Hunter-gatherer family energy consumption
 
@@ -268,7 +274,7 @@ Simulations were deterministic, i.e., there were no stochastic parameters.
 | $age_{\mathrm{max}}$ | Maximum human age (years) | `{r} paste(params2$max_age, collapse = ', ')` |
 | $\mathrm{SRB}$ | Sex ratio at birth | 1.05 |
 | $\mathrm{AFB}$ | Age at first birth (years) | `{r} params2$afb` |
-| $\mathrm{IBI}$ | Interbirth interval (years) | 3 |
+| $\mathrm{IBI}$ | Interbirth interval (years) | `{r} paste(params2$IBI, collapse = ', ')` |
 | $age_{\mathrm{gap}}$ | Marriage age gap (years) | `{r} paste(params2$age_gap, collapse = ', ')` |
 | $age_{\mathrm{menopause}}$ | Age of menopause | `{r} paste(params2$menopause_age, collapse = ', ')` |
 | $\alpha_f$, $\alpha_m$ | Relative importance of skill vs. strength for females and males | `{r} paste(params2$alpha_m, collapse = ', ')` |
@@ -392,7 +398,7 @@ Across simulations in the *Menopause* condition with a "Medium" rate of skill ac
 # Percent of restricted no menopause parameter space
 # with mean energy balance > 0
 
-meanEB <- tapply(nomenopause_match$energy_balance, nomenopause_match$ParamSet, mean)
+meanEB <- tapply(lifecourses$matched[[1]]$energy_balance, lifecourses$matched[[1]]$ParamSet, mean)
 pctpos <- round(100 * mean(meanEB > 0), 1)
 ```
 
@@ -433,7 +439,7 @@ To rule out the viability of a human-style life history sans menopause, it is im
 
 It is also possible that, sans menopause, ancestral foragers could simply have extracted more energy from the environment, and learned to do so rapidly. Maximum family energy consumption is `{r} maxconsumption` kcals/day, and maximum parent energy production is `{r} maxproduction` kcals/day by the Nukak, with Hadza and !Kung parents not far behind ([@fig-energyconprod]A). In regions of the parameter space with high maximum productivity and rapid skill acquisition, resident children can make up the difference (@sfig-nomenopause). Under these conditions, however, families generally produce an energy surplus across the entire lifespan, implying that changes to human life history parameters would have evolved to take advantage of the surplus, such as changes to interbirth intervals, growth and maturation rates, and ages of first birth and dispersal. 
 
-The simulations therefore suggest the following role of menopause in the co-evolution of modern human life history traits. Shorter interbirth intervals and longer periods of juvenile dependence sow the seeds of a mid-life energetic crisis: families have produced many young offspring with high energy requirements but who, per the ECM, require many years to acquire the skills necessary to provision themselves. Parents averted this crisis with three evolved strategies. First, by ceasing the production of new offspring in midlife (menopause), around age 40, parents' energetic investments would then go solely to offspring whose increasing skills enabled them to begin supporting themselves before their dispersal (@fig-energyconprod, bottom right), at which point parents began climbing out of an energy deficit even without subsidies ([@fig-energybalance]D, right). This would have been especially effective if offspring skill acquisition was relatively rapid (see the $b_1$ panels in @sfig-meanEB). This refocuses the mother hypothesis on the energy production capacity of the mother, father, and their older offspring.
+The simulations therefore suggest the following role of menopause in the co-evolution of modern human life history traits. Relatively short interbirth intervals and especially longer periods of juvenile dependence sow the seeds of a mid-life energetic crisis: families have produced many young offspring with high energy requirements but who, per the ECM, require many years to acquire the skills necessary to provision themselves. Parents averted this crisis with three evolved strategies. First, by ceasing the production of new offspring in midlife (menopause), around age 40, parents' energetic investments would then go solely to existing juvenile offspring whose increasing skills enabled them to begin supporting themselves before their dispersal (@fig-energyconprod, bottom right), at which point parents began climbing out of an energy deficit even without subsidies ([@fig-energybalance]D, right). This would have been especially effective if offspring skill acquisition was relatively rapid (see the $b_1$ panels in @sfig-meanEB). This refocuses the mother hypothesis on the energy production capacity of the mother, father, and their older offspring.
 
 Second, young adults with few or no children produced a surplus that subsidized their immature siblings to whom they are as closely genetically related as to their own offspring, akin to the "helper at the nest" pattern seen in some other cooperatively breeding species [@Hatchwell_2009; @hagen2009]. This is consistent with the brideservice practices of many hunter-gatherer societies in which the bridegroom works for the bride's family in exchange for marriage; brideprice is a related practice in which the bridegroom's family pays the bride's family with some form of wealth [@Walker_2011; @goody1973]. Third, older parents, perhaps especially the wife's parents [@Daly_2017], produced a surplus that subsidized their younger adult children's children (the grandmother hypothesis, albeit here also including the grandfather) because the older parents' one or two dependent older children largely supported themselves or perhaps even produced a surplus, or their children have all dispersed.
 
@@ -572,9 +578,9 @@ Energy balance in the *Menopause* condition including juvenile productivity (lef
 ```{r}
 #| fig-width: 10
 #| fig-height: 12
-prms <- c("age_gap", "alpha_m", "alpha_f", "b1_m", "b1_f", "TEE_prop_m", "TEE_prop_f")
-plots <- combn(prms, 2, \(p) plot_param_matrix(menopause_param_space, outdf, p[1], p[2]), simplify = F)
-wrap_plots(plots, ncol = 3, guides = "collect") & theme(legend.position = "top", legend.key.width = unit(2, "cm"))
+prms <- c("age_gap", "IBI", "alpha_m", "alpha_f", "b1_m", "b1_f", "TEE_prop_m", "TEE_prop_f")
+plots <- combn(prms, 2, \(p) plot_param_matrix(outdf_menopause_only, outdf, p[1], p[2]), simplify = F)
+wrap_plots(plots, ncol = 4, guides = "collect") & theme(legend.position = "top", legend.key.width = unit(2, "cm"))
 ```
 
 Heatmaps of $(Observed - Expected)/Expected$ for every combination of parameter values in the restricted subset of simulations compared to the unrestricted set. -1: no simulations with that combination; 0: the expected number of simulations; 1: twice as many simulations as expected; 2: 3x as many simulations as expected. Grey: missing in the original parameter grid due to the constraint: $1.6 \le TEE_{prop,f} + TEE_{prop,m} \le 3.4$.
@@ -585,8 +591,8 @@ Heatmaps of $(Observed - Expected)/Expected$ for every combination of parameter 
 ```{r}
 #| fig-width: 10
 #| fig-height: 12
-plots <- combn(prms, 2, \(p) plot_EB_param_matrix(menopause_param_space, p[1], p[2], indices = 1:max_age, limits = c(-EBthreshold, EBthreshold)), simplify = F)
-wrap_plots(plots, ncol = 3, guides = "collect") & theme(legend.position = "top", legend.key.width = unit(2, "cm"))
+plots <- combn(prms, 2, \(p) plot_EB_param_matrix(outdf_menopause_only, p[1], p[2], indices = 1:max_age, limits = c(-EBthreshold, EBthreshold)), simplify = F)
+wrap_plots(plots, ncol = 4, guides = "collect") & theme(legend.position = "top", legend.key.width = unit(2, "cm"))
 ```
 
 Relationship between parameter combinations and mean lifetime energy balance in the set of simulations with lifetime mean energy balances restricted to those within `{r} EBthreshold` kcals of 0. See also @fig-energybalance.
@@ -598,7 +604,7 @@ Relationship between parameter combinations and mean lifetime energy balance in 
 #| fig-width: 10
 #| fig-height: 12
 plots <- combn(prms, 2, \(p) plot_EB_param_matrix(outdf, p[1], p[2], indices = 1:max_age, limits = c(-3000, 1100)), simplify = F)
-wrap_plots(plots, ncol = 3, guides = "collect") & theme(legend.position = "top", legend.key.width = unit(2, "cm"))
+wrap_plots(plots, ncol = 4, guides = "collect") & theme(legend.position = "top", legend.key.width = unit(2, "cm"))
 ```
 
 Relationship between parameter combinations and mean lifetime energy balance in all simulations. See also @sfig-energybalance.

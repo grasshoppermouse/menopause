@@ -16,8 +16,4 @@ The simulation code is in this package, which should be installed along with the
 
 [https://github.com/grasshoppermouse/hgEnergyGrowth](https://github.com/grasshoppermouse/hgEnergyGrowth)
 
-Then run:
-
-`targets::tar_make()`
-
-This takes about 100 minutes on my iMac M3, and should create the `menopause_paper.html` file.
+Then knit the `menopause_paper.qmd` file using RStudio or Positron.

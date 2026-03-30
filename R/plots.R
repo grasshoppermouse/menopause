@@ -45,9 +45,7 @@ wt_params <-
     Sex = ifelse(sex == 0, "Female", "Male"),
     group = str_to_title(group),
     group = str_replace(group, "Avg", "Average"),
-    group = str_replace(group, "Kung", "!Kung"),
-    # TEElog = TEE_log(Weight, age),
-    # TEElog2 = TEE_log2(Weight, age, sex)
+    group = str_replace(group, "Kung", "!Kung")
   ) 
 
 plot_growth <-

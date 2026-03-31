@@ -1,4 +1,32 @@
 
+# Post-reproduction representation ----------------------------------------
+
+wood <-
+  read_csv(here("data", "wood2023.csv")) |> 
+  mutate(
+    PrR_max = max(PrR),
+    x0 = min(PrR),
+    .by = Species
+  ) |> 
+  mutate(
+    Species = str_replace_all(Species, "\\*", ""), # Temp remove markdown formatting
+    Species = fct_reorder(Species, PrR_max)
+  )
+
+plot_PrR <-
+  ggplot(wood, aes(PrR, Species)) +
+  geom_segment(aes(x = x0, xend = PrR_max)) +
+  geom_point(size = 3) +
+  annotate(GeomMarquee, label = "*Orcinus orca*", x = 0.53, y = 13.8, lineheight = 0.8, hjust = 1) +
+  annotate(GeomMarquee, label = "*Globicephala macrorhynchus*", x = 0.26, y = 13.8, lineheight = 0.8) +
+  annotate("text", label = "Plantation\nslaves", x = 0.3, y = 11.0, lineheight = 0.8, size = 4) +
+  annotate("text", label = "Hunter\ngatherers", x = 0.435, y = 11.0, lineheight = 0.8, size = 4) +
+  annotate("text", label = "Historical\nSweden", x = 0.48, y = 11.0, lineheight = 0.8, size = 4, hjust = 0) +
+  labs(x = "Post-reproductive representation (PrR)", y = "") +
+  theme_minimal(15) + theme(axis.text.y = element_marquee()) +
+  coord_cartesian(ylim = c(0, 14), clip = 'off')
+plot_PrR
+
 
 # Lifetables --------------------------------------------------------------
 
@@ -58,7 +86,7 @@ plot_growth <-
   labs(x = "Age (years)", y = "Weight (kg)") +
   facet_wrap(~Sex) +
   theme_minimal(15)
-plot_growth
+# plot_growth
 
 # TEE ---------------------------------------------------------------------
 
@@ -73,7 +101,7 @@ plot_TEE <-
   facet_wrap(~Sex) +
   theme_minimal(15) +
   theme(strip.text = element_blank())
-plot_TEE
+# plot_TEE
 
 # Productivity ------------------------------------------------------------
 
@@ -100,7 +128,7 @@ plot_skill_ontogeny <-
   labs(x = "Age (years)", y = "Skill") +
   theme_minimal(15) +
   theme(legend.position = "right")
-plot_skill_ontogeny
+# plot_skill_ontogeny
 
 hadza_adult_TEE <- mean(c(TEE2(20:60, NA, 'hadza')))
 out <- fit_hadza_kid_productivity(hadza_kids_total)
@@ -124,63 +152,59 @@ plot_hadza_kids <-
   scale_x_continuous(breaks = 5:15) +
   labs(x = "Age (years)", y = "Productivity (kcals)") +
   theme_classic(15)
-plot_hadza_kids
+# plot_hadza_kids
 
-# dk2020 <- tibble(
-#   Age = 0:80,
-#   Productivity = koster2020skill(Age)
-# )
-# 
-# plot_koster2020 <-
-#   ggplot(dk2020, aes(Age, Productivity)) +
-#   geom_line() +
-#   labs(x = "Age (years)", y = "Skill") +
-#   theme_minimal(15)
-# plot_koster2020
-# 
-# kaplan2000male <- png::readPNG("Figures/kaplan2000male.png", native = T)
-# kaplan2000female <- png::readPNG("Figures/kaplan2000female.png", native = T)
-# schniter2015 <- png::readPNG(here("Figures/schniter2015.png"), native = T)
-# 
-# plot_skills <-
-#   wrap_elements(kaplan2000male) + kaplan2000female +
-#   plot_hadza_kids + schniter2015 + 
-#   plot_koster2020 + plot_skill_ontogeny + 
-#   plot_annotation(tag_levels = "A") + plot_layout(ncol = 2)
-# plot_skills
 
-# Parameter table plots ---------------------------------------------------
+# Ratio of fertile females to adult males ---------------------------------
 
-plot_param_matrix <- function(d1, d2, p1, p2, digits = 2) {
-  p1v1 <- d1[[p1]]
-  p2v1 <- d1[[p2]]
-  p1v2 <- d2[[p1]]
-  p2v2 <- d2[[p2]]
-  num1 = length(p1v1)
-  num2 = length(p2v2)
-  tbl1 <- table(p1v1, p2v1)
-  tbl2 <- table(p1v2, p2v2)
-  expected <- (num1/num2) * tbl2
-  out <- (tbl1 - expected)/expected
-  suppressMessages(
-    hagenheat(round(out, digits), seriation_method = "Identity", display_values = T) +
-      scico::scale_fill_scico(palette = "vik", midpoint = 0, limits = c(-1, 1.5)) +
-      guides(fill = guide_colorbar(title = "Deviation")) +
-      xlab(p2) + 
-      ylab(p1)
-  )
+fertile_ratio <- function(e0_f, e0_m, SRB = 1.05, ALB = 40, max_age = 60){
+  
+  mx_m <- lt_col_interpolate('mx', e0_m, 'Male')
+  mx_f <- lt_col_interpolate('mx', e0_f, 'Female')
+  
+  ax_m <- lt_col_interpolate('ax', e0_m, 'Male')
+  ax_f <- lt_col_interpolate('ax', e0_f, 'Female')
+  
+  lt_m <- LT_from_mx(mx = mx_m, ax = ax_m, sex = "Male", SRB = SRB)
+  lt_f <- LT_from_mx(mx = mx_f, ax = ax_f, sex = "Female", SRB = SRB)  
+  # return(lt_f) # For debugging
+  # return(
+  #   lt_m$lx[lt_m$x == 55] / lt_f$lx[lt_f$x == 45]
+  #   )
+  
+  # Total fertile females
+  n_women_fertile <- sum(map_dbl(18:ALB, \(age) lt_f$lx[lt_f$x == age]))
+  
+  # Total fertile males
+  n_men_fertile <- sum(map_dbl(18:max_age, \(age) lt_m$lx[lt_m$x == age]))
+  
+  n_women_fertile / n_men_fertile
+  
 }
 
-plot_EB_param_matrix <- function(d, p1, p2, indices, limits, digits = 2){
-  out <- 
-    d |>
-    slice(indices, .by = ParamSet) |> 
-    mutate(across(all_of(c(p1, p2)), as.ordered)) |> 
-    summarise(mean_EB = mean(energy_balance), .by = all_of(c(p1, p2)))
-  ggplot(out, aes(.data[[p1]], .data[[p2]], fill = mean_EB)) +
-    geom_tile() +
-    geom_text(aes(label = round(mean_EB, 0)), size = 3, color = "white") +
-    scico::scale_fill_scico(palette = "bam", midpoint = 0, limits = limits) +
-    guides(fill = guide_colorbar(title = "Mean energy balance")) +
-    theme_minimal(10)
-}
+# Compute ratio of fertile females to adult males
+fertile_params <- expand_grid(e0_f = 25:70, e0_m = 25:70)
+fertile_params$ratio <- map2_dbl(fertile_params$e0_f, fertile_params$e0_m, fertile_ratio, .progress = T)
+
+plot_fertile_ratio <- 
+  fertile_params |> 
+  dplyr::filter(e0_f <= 45, e0_m <= 45) |> 
+  ggplot(aes(e0_f, e0_m, fill = ratio)) + 
+  geom_raster() + 
+  geom_textabline(intercept = 0, slope = 1, colour = 'yellow', label = 'Equal life expectancy', hjust = 0.8) +
+  geom_textabline(intercept = -5, slope = 1, colour = 'yellow', label = '5 year difference', hjust = 0.8) +
+  geom_textcontour(aes(z = ratio, label = after_stat(scales::number(level, accuracy = 0.01))), colour = 'white', alpha = 0.75, hjust = 0.35) +
+  scale_fill_scico(palette = 'vik', midpoint = 1, direction = 1, limits = c(0.30, 1.1)) +
+  guides(fill = guide_colorbar(title = 'Ratio', reverse = T)) +
+  labs(
+    title = "Ratio of fertile women (18-40) to adult men (18-60)",
+    x = expression("Female life expectancy at birth (e"[0]*")"),
+    y = expression("Male life expectancy at birth (e"[0]*")")
+  ) +
+  
+  annotate("point", x = 35, y = 30, colour = 'white', fill = "red", size = 4, pch = 21) +
+  annotate("text", x = 35, y = 31, label = "Current study", hjust = 0, colour = "white") +
+  coord_fixed() +
+  theme_minimal(15) + theme(plot.subtitle = element_text(size = 11))
+plot_fertile_ratio
+

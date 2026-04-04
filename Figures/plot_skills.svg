@@ -6,8 +6,8 @@
    viewBox="0 0 1080.00 1080.00"
    version="1.1"
    id="svg176"
-   sodipodi:docname="plot_skills0.svg"
-   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   sodipodi:docname="plot_skills.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
      showguides="true"
-     inkscape:zoom="0.70360288"
-     inkscape:cx="663.72667"
-     inkscape:cy="380.18605"
+     inkscape:zoom="3.9865432"
+     inkscape:cx="52.050106"
+     inkscape:cy="673.39041"
      inkscape:window-width="2168"
      inkscape:window-height="1186"
      inkscape:window-x="0"
@@ -810,12 +810,12 @@
      lengthAdjust="spacingAndGlyphs"
      id="text96">Age (years)</text>
   <text
-     transform="rotate(-90,272.555,235.845)"
+     transform="matrix(0,-1.1692267,1,0,36.71,497.90706)"
      text-anchor="middle"
      style="font-size:15px;font-family:Arial"
      textLength="125.9"
      lengthAdjust="spacingAndGlyphs"
-     id="text97">Productivity (kcals)</text>
+     id="text97">Productivity (kcals/day)</text>
   <text
      x="19.450001"
      y="354.67001"
@@ -1081,12 +1081,12 @@
        lengthAdjust="spacingAndGlyphs"
        id="text136">Age (years)</text>
     <text
-       transform="translate(36.71,879.51) rotate(-90)"
+       transform="matrix(0,-2.363191,1,0,36.71,878.99684)"
        text-anchor="middle"
-       style="font-size: 15.00px; font-family: &quot;Arial&quot;;"
-       textLength="27.51px"
+       style="font-size:15px;font-family:Arial"
+       textLength="27.51"
        lengthAdjust="spacingAndGlyphs"
-       id="text137">Skill</text>
+       id="text137">Hunting Skill</text>
     <text
        x="19.45"
        y="725.78"
@@ -1288,12 +1288,12 @@
        lengthAdjust="spacingAndGlyphs"
        id="text168">Age (years)</text>
     <text
-       transform="translate(523.24,879.51) rotate(-90)"
+       transform="matrix(0,-4.1765713,1,0,523.24,879.38566)"
        text-anchor="middle"
-       style="font-size: 15.00px; font-family: &quot;Arial&quot;;"
-       textLength="27.51px"
+       style="font-size:15px;font-family:Arial"
+       textLength="27.51"
        lengthAdjust="spacingAndGlyphs"
-       id="text169">Skill</text>
+       id="text169">Food acquisition Skill</text>
     <text
        x="992.15"
        y="847.14"

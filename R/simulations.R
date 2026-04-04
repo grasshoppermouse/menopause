@@ -1,8 +1,6 @@
-library(tidyverse)
-library(patchwork)
-library(ggridges)
-library(hgEnergyGrowth)
-library(hagenutils)
+
+
+# Functions ---------------------------------------------------------------
 
 binary_colors <- viridisLite::magma(11)[c(4,8)]
 
@@ -29,6 +27,8 @@ effectsizes <- function(d, outcome, param, max_age = 40){
   )
 }
 
+# Main params -------------------------------------------------------------
+
 demographic_params <- list(
   e0_f = 35,
   e0_m = 30,
@@ -46,25 +46,31 @@ skill_params <- list(
   b1_m = c(0.15, 0.25, 0.40),
   b1_f = c(0.15, 0.25, 0.40),
   age50_m = c(10, 15, 20),
-  age50_f = c(10, 15, 20),
-  
+  age50_f = c(10, 15, 20)
+)
+
+production_params <- list(
   # These values derived from Kraft et al. 2020
   TEE_prop_m = seq(1, 2.2, 0.4),
   TEE_prop_f = seq(0.4, 1.6, 0.4)
 )
 
-params <- c(skill_params, demographic_params)
+params <- c(skill_params, demographic_params, production_params)
 
-param_grid <- 
-  expand.grid(params) |> 
-  param_constraints(params) |> 
-  mutate(
-    ParamSet = cur_group_rows(),
-    Menopause = str_glue("ALB: {menopause_age}")
-  )
+run_sim <- function(params){
+  param_grid <- 
+    expand.grid(params) |> 
+    param_constraints(params) |> 
+    mutate(
+      ParamSet = cur_group_rows(),
+      Menopause = str_glue("ALB: {menopause_age}")
+    )
+  param_grid$family_sims <- pmap(param_grid, hg_lifecourse, .progress = T)
+  param_grid$pop_sims <- pmap(param_grid, hg_lifecourse2, .progress = T)
+  return(param_grid)
+}
 
-# param_grid$family_sims <- pmap(param_grid, hg_lifecourse, .progress = T)
-# param_grid$pop_sims <- pmap(param_grid, hg_lifecourse2, .progress = T)
+# param_grid <- run_sim(params)
 # save(param_grid, file = "param_grid.rds")
 
 load("param_grid.rds")
@@ -418,10 +424,10 @@ parent_loss2 <- function(d){
     oneparentage = one_parent$age[1],
     oneparentindex = one_parent$index[1],
     
-    wife_surv = 100*round(d$wife_survival[oneparentindex], 2),
-    husband_surv = 100*round(d$husband_survival[oneparentindex], 2),
-    
-    resid_kid_surv = round(d$dependents[oneparentindex], 2)
+    # Interpolate
+    wife_surv = 100*round((d$wife_survival[oneparentindex - 1] + d$wife_survival[oneparentindex]) / 2, 2),
+    husband_surv = 100*round((d$husband_survival[oneparentindex - 1] + d$husband_survival[oneparentindex]) / 2, 2),
+    resid_kid_surv = round((d$dependents[oneparentindex - 1] + d$dependents[oneparentindex]) / 2, 2)
   )
 }
 
@@ -438,6 +444,7 @@ mortality_grid3b <-
   unnest(oneparent) |> 
   mutate(
     wife_surv = paste0(wife_surv, "%"),
+    husband_surv = paste0(husband_surv, "%"),
   )
 
 plot_oneparent <-
@@ -493,3 +500,54 @@ plot_brideservice <-
   facet_wrap(~Sex) +
   theme_bw(15)
 plot_brideservice
+
+
+# Self-sufficient ---------------------------------------------------------
+
+production_params2 <- list(
+  TEE_prop_m = seq(1.8, 2.2, 0.1),
+  TEE_prop_f = seq(1, 1.6, 0.1)
+)
+
+params_ss <- c(skill_params, demographic_params, production_params2)
+
+# param_grid_ss <- run_sim(params_ss)
+# save(param_grid_ss, file = "param_grid_ss.rds")
+load("param_grid_ss.rds")
+
+fam_grid_ss <-
+  param_grid_ss |> 
+  unnest(family_sims) |> 
+  mutate(
+    TEE_prop = round(TEE_prop_f + TEE_prop_m, 1)
+  )
+
+fam_grid_ss_sum <-
+  fam_grid_ss |>
+  mutate(
+    IBI = factor(IBI)
+  ) |> 
+  summarise(
+    pos = all(energy_balance > 0),
+    meanEB = mean(energy_balance),
+    .by = c(IBI, TEE_prop, ParamSet)
+  ) |> 
+  summarise(
+    pos_prop = sum(pos) / n(),
+    meanmeanEB = mean(meanEB),
+    .by = c(IBI, TEE_prop)
+  )
+
+plot_selfsufficient <-
+  ggplot(fam_grid_ss_sum, aes(TEE_prop, pos_prop, colour = IBI)) + 
+  geom_line(linewidth = 1.5) +
+  geom_point(data = HG_means2, aes(TEE_prop, y = -0.05, colour = NULL), show.legend = F) +
+  geom_text(data = HG_means2, aes(label = Population, y  = -0.1, colour = NULL), size = 4, show.legend = F) +
+  annotate("segment", x = 1.5, xend = 3.0, y = 0, yend = 0, colour = "grey", linewidth = 1.5) +
+  scale_color_binary() + 
+  # scale_color_viridis_d(option = "A", end = 0.9) +
+  guides(colour = guide_legend(reverse = T)) + 
+  ylim(-0.1, 1) +
+  labs(x = "Joint productivity (TEE_prop)", y = "Self-sufficient proportion of parameter space") +
+  theme_minimal(15)
+# plot_selfsufficient

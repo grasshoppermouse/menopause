@@ -1,4 +1,6 @@
 
+binary_colors <- viridisLite::magma(11)[c(4,8)]
+
 # Misc functions
 
 signchange0 <- function(v){

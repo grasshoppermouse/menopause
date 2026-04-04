@@ -105,6 +105,67 @@ plot_TEE <-
 
 # Productivity ------------------------------------------------------------
 
+
+## Kraft et al 2020 ------------------------------------------------------
+
+HG_means2 <- 
+  HG_means |> 
+  dplyr::select(-Tf_mean) |>  
+  pivot_wider(names_from = "Sex", values_from = "Ea_mean") |> 
+  mutate(
+    Population = str_to_title(Population),
+    Total = Male + Female, 
+    TEE_prop = Total / 2300
+  ) |> 
+  arrange(Total)
+
+HG_means3 <-
+  HG_means2 |>
+  mutate(
+    Population = fct_reorder(Population, Total)
+  ) |> 
+  pivot_longer(Male:Total, names_to = "Sex", values_to = "kcals")
+
+pKraft1 <- 
+  ggplot(HG_means3, aes(kcals, y = 0, colour = Sex, shape = Sex)) + 
+  geom_boxplot(notch = F, show.legend = F) + 
+  geom_point(show.legend = F) +
+  scale_color_viridis_d(option = "B", begin = 0.2, end = 0.8) +
+  # guides(colour = guide_legend(title = element_blank()), shape = guide_legend(title = element_blank())) +
+  xlim(0, 8000) +
+  facet_wrap(~Sex, ncol = 1) +
+  theme_void() +
+  theme(
+    strip.text = element_blank()
+  )
+# pKraft1
+
+TEEavg_f <- mean(TEE2(20:60, 0, 'avg'))
+TEEavg_m <- mean(TEE2(20:60, 1, 'avg'))
+TEEavg <- mean(c(TEEavg_f, TEEavg_m))
+
+pKraft2 <- 
+  ggplot(HG_means3, aes(kcals, Population, colour = Sex, shape = Sex)) + 
+  annotate("rect", xmin = TEEavg_f, xmax = TEEavg_m, ymin = 1, ymax = 10.5, fill = 'grey', alpha = 0.2) + 
+  geom_vline(xintercept = TEEavg_f + TEEavg_m, linetype = 'dotted', linewidth = 1) + 
+  geom_point(size = 4) +
+  scale_x_continuous(limits = c(0, 8000), sec.axis = sec_axis(~ . / TEEavg, breaks = seq(0, 3.5, 0.5))) +
+  scale_color_viridis_d(option = "B", begin = 0.2, end = 0.8) +
+  guides(colour = guide_legend(title = NULL), shape = guide_legend(title = NULL)) +
+  # xlim(0, 8000) +
+  xlab('Energy production (kcals/day)') +
+  coord_cartesian(clip = 'off') +
+  theme_minimal(20) +
+  theme(
+    axis.title.y = element_blank()
+  )
+# pKraft2
+
+plot_kraft_energy <- pKraft1 + pKraft2 + plot_layout(ncol = 1, heights = c(1,5), guides = "collect") & theme(legend.position = "top")
+# plot_kraft_energy
+
+## Skill ontogeny ----------------------------------------------------------
+
 prod_params <- tibble(
   b1 = c(0.30, 0.2, 0.15),
   age50 = c(10, 15, 20)
@@ -153,7 +214,6 @@ plot_hadza_kids <-
   labs(x = "Age (years)", y = "Productivity (kcals)") +
   theme_classic(15)
 # plot_hadza_kids
-
 
 # Ratio of fertile females to adult males ---------------------------------
 

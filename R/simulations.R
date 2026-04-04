@@ -281,17 +281,6 @@ plot_effectsizes <-
   theme(legend.position = 'none')
 plot_effectsizes
 
-HG_means2 <- 
-  HG_means |> 
-  dplyr::select(-Tf_mean) |>  
-  pivot_wider(names_from = "Sex", values_from = "Ea_mean") |> 
-  mutate(
-    Population = str_to_title(Population),
-    Total = Male + Female, 
-    TEE_prop = Total / 2300
-  ) |> 
-  arrange(Total)
-
 plot_EB_pop <- 
   ggplot(pop_stats, aes(TEE_prop, totalEB)) + 
   geom_boxplot(aes(group = TEE_prop), colour = binary_colors[1]) + 

@@ -1,5 +1,4 @@
 
-
 # Functions ---------------------------------------------------------------
 
 binary_colors <- viridisLite::magma(11)[c(4,8)]
@@ -37,7 +36,7 @@ demographic_params <- list(
   afb = 20,
   IBI = c(3, 4),
   max_age = 80,
-  menopause_age = seq(30, 60, 10)
+  alb = c(30, 38, 50, 60) #, seq(30, 60, 10)
 )
 
 skill_params <- list(
@@ -63,7 +62,7 @@ run_sim <- function(params){
     param_constraints(params) |> 
     mutate(
       ParamSet = cur_group_rows(),
-      Menopause = str_glue("ALB: {menopause_age}")
+      Menopause = str_glue("ALB: {alb}")
     )
   param_grid$family_sims <- pmap(param_grid, hg_lifecourse, .progress = T)
   param_grid$pop_sims <- pmap(param_grid, hg_lifecourse2, .progress = T)
@@ -75,41 +74,53 @@ run_sim <- function(params){
 
 load("param_grid.rds")
 
-param_grid2 <-
-  param_grid |> 
-  mutate(
-    family_sims = map(
-      family_sims, 
-      \(d){
-        d |> 
-          mutate(
-            energy_balance2 = wife_production + husband_production - family_consumption,
-            cumulativeEB = cumsum(energy_balance)
-          )
-      }
-    )
-  )
-
 fam_grid <-
-  param_grid2 |> 
+  param_grid |> 
   unnest(family_sims) |> 
   mutate(
-    TEE_prop = round(TEE_prop_f + TEE_prop_m, 1)
+    TEE_prop = round(TEE_prop_f + TEE_prop_m, 1),
+    child_prod_con_ratio = ifelse(total_child_consumption == 0, NA, total_child_production / total_child_consumption)
   )
 
-EB_ALB <-
+LCmean <-
   fam_grid |> 
-  # dplyr::filter(IBI == 4) |> 
+  dplyr::select(
+    Menopause,
+    # alb,
+    IBI, 
+    wife_age,
+    parents,
+    family_size,
+    resident_children,
+    energy_balance,
+    cumulativeEB,
+    fertility2,
+    total_girl_consumption,
+    total_boy_consumption,
+    total_child_consumption,
+    total_girl_production,
+    total_boy_production,
+    total_child_production,
+    wifeTEE,
+    husbandTEE,
+    wife_production,
+    husband_production
+  ) |>
   summarise(
-    meanEB = mean(energy_balance),
-    mean_cumulative = mean(cumulativeEB),
-    TF = mean(fertility2),
-    mean_family_size = mean(family_size),
+    across(everything(), list(mean = mean2, min = min, max = max)),
+    .by = c(Menopause, IBI, wife_age)
+  )
+
+# Average over IBI
+LCmean2 <-
+  LCmean |> 
+  summarise(
+    across(everything(), mean2),
     .by = c(Menopause, wife_age)
   )
 
 plot_family_size <- 
-  ggplot(EB_ALB, aes(wife_age, mean_family_size, colour = Menopause)) +
+  ggplot(LCmean2, aes(wife_age, family_size_mean, colour = Menopause)) +
   geom_line(linewidth = 1.5) +
   # geom_text(data = margin_vals[margin_vals$IBI == 3,], aes(x = I(1), y = y, label = lab, hjust = 0)) +
   scale_color_viridis_d("", option = "A", end = 0.8, direction = -1) +
@@ -117,18 +128,19 @@ plot_family_size <-
   labs(title = "Family model", x = "Wife age (years)", y = "Family size") +
   theme_minimal(15) +
   theme(legend.position = "top")
+plot_family_size
 
 margin_vals <-
-  EB_ALB |> 
+  LCmean2 |> 
   summarise(
-    y = mean_cumulative[61],
-    TF = round(max(TF), 1),
+    y = cumulativeEB_mean[61],
+    TF = round(max(fertility2_mean), 1),
     lab = str_glue("{Menopause}, TF: {TF}")[1],
     .by = c(Menopause)
   )
 
 plot_EB_fam <- 
-  ggplot(EB_ALB, aes(wife_age, mean_cumulative, colour = Menopause)) +
+  ggplot(LCmean2, aes(wife_age, cumulativeEB_mean, colour = Menopause)) +
   geom_line(linewidth = 1.5) +
   geom_hline(yintercept = 0, linetype = "dotted") +
   geom_text(data = margin_vals, aes(x = I(1), y = y, label = lab, hjust = 0)) +
@@ -142,12 +154,90 @@ plot_EB_fam
 plot_family_model <- plot_family_size / plot_EB_fam + plot_layout(axes = "collect")
 plot_family_model
 
+# Average over wife age
+LCmean3 <-
+  LCmean |> 
+  summarise(
+    maxkids = max(resident_children_max),
+    agemaxkidsindex = which.max(resident_children_max),
+    agemaxkids = wife_age[agemaxkidsindex],
+    maxfamilysize = max(family_size_max),
+    total_fertility = max(fertility2_max),
+    zerokidsindex = signchange0(resident_children_mean > 0),
+    zerokidsage = wife_age[zerokidsindex],
+    posEBindex = signchange0(energy_balance_mean[wife_age > 25] > 0)[1], # omit early transient EB > 0 for IBI = 4
+    posEBage = wife_age[wife_age > 25][posEBindex],
+    across(-c(wife_age, maxkids:posEBage, matches("min$|max$")), mean2),
+    .by = c(Menopause, IBI)
+  )
+
+tbl_stats <-
+  LCmean3 |> 
+  dplyr::select(
+    ALB = Menopause,
+    IBI, 
+    `Mean dependents` = resident_children_mean,
+    `Maximum dependents` = maxkids,
+    `Mean family size` = family_size_mean,
+    `Maximum family size` = maxfamilysize,
+    `Total fertility` = total_fertility,
+    `Mean energy balance (kcals/day)` = energy_balance_mean,
+    `Age maximum dependents` = agemaxkids,
+    `Age positive energy balance` = posEBage,
+    `Age zero dependents` = zerokidsage
+  ) |>
+  mutate(
+    ALB = str_remove(ALB, "ALB: "),
+    across(-ALB,\(v) round(v, 1))
+  ) |>
+  arrange(IBI, ALB) |> 
+  rename(
+    `Age of last birth (ALB)` = ALB,
+    `Interbirth interval (IBI)` = IBI
+  ) |> 
+  t() |> 
+  as_tibble(rownames = "Variable", .name_repair = "unique") |> 
+  tt(colnames = F) |> 
+  style_tt(i = 1:2, bold = T) |> 
+  style_tt(i = 1:11, j = 6, line = 'l', line_color = 'lightgrey') |> 
+  style_tt(i = 2, j = 1:9, line = 'b') |> 
+  style_tt(j = 1, align = 'l')|> 
+  style_tt(fontsize = 0.8)
+
+tbl_stats
+
+LCmean3b <-
+  LCmean3 |> 
+  mutate(
+    across(-c(Menopause, IBI), \(v) round(v, 1)),
+    across(-c(Menopause, IBI), as.list),
+    across(-c(Menopause, IBI), \(v) set_names(v, nm = str_glue("ALB{str_remove(Menopause, 'ALB: ')}IBI{IBI}")))
+  )
+  
+
+# lc_grid <-
+#   expand_grid(ALB = params$alb, IBI = params$IBI) |> 
+#   mutate(
+#     lifecourse = map2(ALB, IBI, \(alb, ibi) hg_lifecourse(alb = alb, IBI = ibi, afb = 20)),
+#     zerokidsindex = map_dbl(lifecourse, \(lc) signchange0(lc$resident_children > 0)),
+#     zerokidsage = map2(lifecourse, zerokidsindex, \(lc, zerokidsindex) lc$wife_age[zerokidsindex]),
+#     mean_kids = map(lifecourse, \(lc) mean(lc$resident_children)),
+#     max_kids = map(lifecourse, \(lc) max(lc$resident_children)),
+#     mean_consumption = map(lifecourse, \(lc) mean(lc$total_child_consumption)),
+#     max_consumption = map(lifecourse, \(lc) max(lc$total_child_consumption)),
+#     across(lifecourse:max_consumption, \(v) set_names(v, nm = str_glue("IBI{IBI}ALB{ALB}"))),
+#     IBI = paste("IBI:", IBI),
+#     ALB = paste("ALB:", ALB),
+#   )
+
+
+
 fam_grid2 <-
   fam_grid |> 
   dplyr::filter(
     wife_age %in% seq(20, 80, 5),
     TEE_prop %in% c(2.2, 2.6, 3),
-    menopause_age %in% c(40,50,60)
+    alb %in% params$alb[2:4]
   ) |> 
   mutate(
     wife_age = factor(wife_age),
@@ -172,60 +262,47 @@ plot_ridgeline <-
   theme(strip.text.y = element_text(angle = 0))
 plot_ridgeline
 
-# Example lifecourse ------------------------------------------------------
+# Average lifecourse ------------------------------------------------------
 
-nm_dict <- c(
-  meanenergy_balance = "Energy balance",
-  meanwife = "Wife", 
-  meanhusband = "Husband",
-  meangirl = "Girls",
-  meanboy = "Boys",
-  meantotal_child_production = "All children",
-  meanwife = "Wife", 
-  meanhusband = "Husband", 
-  meangirl = "Girls",
-  meanboy = "Boys",
-  meantotal_child_consumption = "All children"
+member_dict <- c(
+  total_girl_ = "Girls",
+  total_boy_ = "Boys",
+  wife = "Wife",
+  wife_ = "Wife",
+  husband = "Husband",
+  husband_ = "Husband"
 )
 
-LCmean <-
-  param_grid2 |> 
-  # dplyr::filter(IBI == 3) |> 
-  unnest(family_sims) |> 
-  mutate(
-    TEE_prop = round(TEE_prop_f + TEE_prop_m, 1)
-  ) |> 
-  summarise(
-    meanenergy_balance = mean(energy_balance),
-    
-    meangirl_consumption = mean(total_girl_consumption),
-    meanboy_consumption = mean(total_boy_consumption),
-    meangirl_production = mean(total_girl_production),
-    meanboy_production = mean(total_boy_production),
-    
-    meanwife_consumption = mean(wifeTEE),
-    meanhusband_consumption = mean(husbandTEE),
-    meanwife_production = mean(wife_production),
-    meanhusband_production = mean(husband_production),
-
-    .by = c(Menopause, wife_age)
-  )  
+type_dict <- c(
+  consumption_mean = "Consumption",
+  production_mean = "Production",
+  TEE_mean = "Consumption"
+)
 
 LCprod_con <-
-  LCmean |>
+  LCmean2 |>
   pivot_longer(
-    c(meangirl_consumption:meanhusband_production), 
+    c(
+      total_girl_consumption_mean, 
+      total_boy_consumption_mean,
+      total_girl_production_mean,
+      total_boy_production_mean,
+      wifeTEE_mean,
+      husbandTEE_mean,
+      wife_production_mean,
+      husband_production_mean
+    ), 
     names_to = 'Member', 
-    values_to = 'Value'
+    values_to = 'kcals'
   ) |>
-  separate(Member, into = c("Member", "Type"), sep = "_") |> 
+  separate_wider_regex(Member, c(Member = "husband_|wife_|total_girl_|total_boy_|wife|husband", Type = ".*")) |> 
   mutate(
-    Member = nm_dict[Member],
-    Type = str_to_title(Type)
+    Member = member_dict[Member],
+    Type = type_dict[Type]
   )
 
 plot_energyProdCon <-
-  ggplot(LCprod_con, aes(wife_age, Value, fill = Member)) + 
+  ggplot(LCprod_con, aes(wife_age, kcals, fill = Member)) + 
   geom_col() +
   scale_fill_viridis_d(option = "A", begin = 0.2, end = 0.9, direction = -1) +
   labs(x = "Wife age (years)", y = "kcals/day") +
@@ -236,15 +313,16 @@ plot_energyProdCon <-
 plot_energyProdCon
 
 plot_EBbalance <-
-  ggplot(LCmean, aes(wife_age, meanenergy_balance)) +
+  ggplot(LCmean, aes(wife_age, energy_balance_mean)) +
   geom_smooth(span = 0.5, se=F) +
   geom_hline(yintercept = 0, linetype = "dotted") +
   labs(x = "Wife age (years)", y = "kcals/day") +
   facet_grid("Balance"~Menopause) +
   theme_minimal(15) +
   theme(strip.text.x = element_blank(), strip.text.y = element_text(angle = 0))
+plot_EBbalance
 
-plot_ProdConBal <- plot_energyProdCon / plot_EBbalance + plot_layout(axes = "collect", heights = c(2,1)) 
+plot_ProdConBal <- plot_energyProdCon / plot_EBbalance + plot_layout(axes = "collect", heights = c(2,1))
 
 # Population stats --------------------------------------------------------
 
@@ -253,9 +331,10 @@ pop_stats <-
   mutate(
     TEE_prop = round(TEE_prop_f + TEE_prop_m, 1),
     b1 = round(b1_f + b1_m, 2),
-    totalEB = map_dbl(pop_sims, \(d) mean(d$energy_balance) / 2),
+    totalEB = map_dbl(pop_sims, \(d) mean(d$energy_balance)),
     youngEB = map_dbl(pop_sims, \(d) mean(d$energy_balance[d$age <= 40])),
-    totalEB2 = map_dbl(pop_sims, \(d) mean(d$energy_balance_adult_prod) / 2)
+    totalEB2 = map_dbl(pop_sims, \(d) mean(d$energy_balance_adult_prod)),
+    ratio = map_dbl(pop_sims, \(d) mean((d$production_f[d$age < 20] + d$production_m[d$age < 20]) / (d$TEE_f[d$age < 20] + d$TEE_m[d$age < 20]), na.rm = T))
   )
 
 param_effects <-
@@ -273,7 +352,7 @@ plot_effectsizes <-
   ggplot(param_effects[param_effects$effects != 0,], aes(param, effects, fill = fct_rev(param_index), label = param_values)) + 
   geom_col() +
   geom_text(size = 4, position = position_stack(vjust = 0.5), colour = "white") +
-  geom_text(data = param_effects[param_effects$effects == 0,], aes(param, y = -20, label = param_values), size = 4) +
+  geom_text(data = param_effects[param_effects$effects == 0,], aes(param, y = -5, label = param_values), size = 4) +
   scale_fill_grey() + 
   # ylim(-300, 700) +
   labs(x = "\nParameter", y = "Change in energy balance (kcals)") +
@@ -285,18 +364,18 @@ plot_EB_pop <-
   ggplot(pop_stats, aes(TEE_prop, totalEB)) + 
   geom_boxplot(aes(group = TEE_prop), colour = binary_colors[1]) + 
   geom_boxplot(aes(TEE_prop, totalEB2, group = TEE_prop), colour = binary_colors[2]) +
-  geom_point(data = HG_means2, aes(y = -280), colour = binary_colors[2])  +
-  geom_text(data = HG_means2, aes(label = Population, y  = -250), size = 4) +
+  geom_point(data = HG_means2, aes(y = -450), colour = binary_colors[2])  +
+  geom_text(data = HG_means2, aes(label = Population, y  = -400), size = 4) +
   geom_hline(yintercept = 0, linetype = 'dotted') +
-  annotate("text", label = "With juvenile\nproduction", x = 3.75, y = 50, hjust = 0, colour = binary_colors[1]) +
-  annotate("text", label = "Without juvenile\nproduction", x = 3.75, y = -250, hjust = 0, colour = binary_colors[2]) +
+  annotate("text", label = "With juvenile\nproduction", x = 3.75, y = 150, hjust = 0, colour = binary_colors[1]) +
+  annotate("text", label = "Without juvenile\nproduction", x = 3.75, y = -150, hjust = 0, colour = binary_colors[2]) +
   scale_x_continuous(breaks = seq(1.8, 3.4, 0.4)) +
-  scale_y_continuous(breaks = seq(-250, 250, 50)) +
+  scale_y_continuous(breaks = seq(-500, 500, 100)) +
   labs(title = "Population model", x = "Daily adult production as proportion of adult TEE", y = "Mean energy balance\n(kcals/person/day)") +
   coord_cartesian(xlim = c(1.6, 3.6), clip = "off") +
   theme_minimal(13) +
   theme(plot.margin = margin(0.5, 5, 0.5, 1, "cm"))
-plot_EB_pop
+# plot_EB_pop
 
 plot_EB_pop_fam <- plot_EB_pop / plot_EB_fam
 # ggsave("Figures/plot_EB_pop_fam.xsvg") # Many manual edits. Don't run!
@@ -304,36 +383,24 @@ plot_EB_pop_fam <- plot_EB_pop / plot_EB_fam
 
 # ALB x IBI stats ---------------------------------------------------------------
 
-alb_grid <-
-  expand_grid(ALB = params$menopause_age, IBI = params$IBI) |> 
+lc_grid <-
+  expand_grid(ALB = params$alb, IBI = params$IBI) |> 
   mutate(
-    lifecourse = map2(ALB, IBI, \(alb, ibi) hg_lifecourse(menopause_age = alb, IBI = ibi, afb = 20)),
-    mean_dependents = map_dbl(lifecourse, \(lc) mean((lc$resident_girls + lc$resident_boys))),
-    mean_kcals = map_dbl(lifecourse, \(lc) mean((lc$total_girl_consumption + lc$total_boy_consumption))),
+    lifecourse = map2(ALB, IBI, \(alb, ibi) hg_lifecourse(alb = alb, IBI = ibi, afb = 20)),
+    lifecourse = map(lifecourse, \(lc) {lc$parents <- lc$wife_survival + lc$husband_survival; lc}),
+    zerokidsindex = map_dbl(lifecourse, \(lc) signchange0(lc$resident_children > 0)),
+    zerokidsage = map2(lifecourse, zerokidsindex, \(lc, zerokidsindex) lc$wife_age[zerokidsindex]),
+    mean_kids = map(lifecourse, \(lc) mean(lc$resident_children)),
+    max_kids = map(lifecourse, \(lc) max(lc$resident_children)),
+    mean_consumption = map(lifecourse, \(lc) mean(lc$total_child_consumption)),
+    max_consumption = map(lifecourse, \(lc) max(lc$total_child_consumption)),
+    across(lifecourse:max_consumption, \(v) set_names(v, nm = str_glue("IBI{IBI}ALB{ALB}"))),
     IBI = paste("IBI:", IBI),
-    ALB = paste("ALB:", ALB)
+    ALB = paste("ALB:", ALB),
   )
 
-plot_mean_dependents <-
-  ggplot(alb_grid, aes(ALB, mean_dependents, colour = IBI)) +
-  geom_line(linewidth = 1.5) +
-  scale_color_binary() +
-  ylim(0, NA) +
-  labs(x = "Age of Last Birth (years)", y = "Average number of dependents") +
-  theme_bw(15)
-
-plot_mean_energy <-
-  ggplot(alb_grid, aes(ALB, mean_kcals, colour = IBI)) +
-  geom_line(linewidth = 1.5) +
-  scale_color_binary() +
-  ylim(0, NA) +
-  labs(x = "Age of Last Birth (years)", y = "Average daily energy consumption\nof all dependents (kcals)") +
-  theme_bw(15)
-
-# plot_alb_stats <- plot_mean_dependents / plot_mean_energy + plot_layout(axes = "collect", guides = "collect")
-
 plot_alb_stats <- 
-  ggplot(alb_grid, aes(mean_dependents, mean_kcals, color = factor(ALB))) + 
+  ggplot(lc_grid, aes(unlist(mean_kids), unlist(mean_consumption), color = factor(ALB))) + 
     geom_point(size = 4) + 
     geom_text(aes(label = ALB), position = position_nudge(x = -0.3)) +
     scale_color_viridis_d(option = "C", end = 0.8, guide = guide_none()) +
@@ -352,7 +419,7 @@ plot_alb_stats
 # parents <- wives + husbands
 
 parent_loss <- function(e0_f, e0_m, IBI, afb, alb, age_gap){
-  d <- hg_lifecourse(afb = afb, e0_f = e0_f, e0_m = e0_m, menopause_age = alb, IBI = IBI)
+  d <- hg_lifecourse(afb = afb, e0_f = e0_f, e0_m = e0_m, alb = alb, IBI = IBI)
   husband_ages <- (afb + age_gap + 1):(81 + age_gap)
   tibble(
     wife_age = d$wife_age,
@@ -367,7 +434,9 @@ parent_loss <- function(e0_f, e0_m, IBI, afb, alb, age_gap){
 }
 
 mortality_grid <-
-  expand_grid(e0_f = 35, e0_m = 30, IBI = c(3, 4), afb = 20, alb = seq(30, 60, 10), age_gap = 0)
+  expand.grid(demographic_params[c("e0_f", "e0_m", "IBI", "afb", "alb")]) |> 
+  mutate(age_gap = 0)
+  # expand_grid(e0_f = 35, e0_m = 30, IBI = c(3, 4), afb = 20, alb = seq(30, 60, 10), age_gap = 0)
 mortality_grid$out <- pmap(mortality_grid, parent_loss, .progress = T)
 
 mortality_grid2 <-
@@ -387,7 +456,7 @@ plot_dependent_ratio <-
   theme_minimal(15)
 
 mortality_grid3 <-
-  expand_grid(e0_f = seq(25, 45, 5), e0_m = seq(25, 45, 5), IBI = c(3, 4), afb = 20, alb = c(40, 60), age_gap = c(0, 2, 5, 10)) |> 
+  expand_grid(e0_f = seq(25, 45, 5), e0_m = seq(25, 45, 5), IBI = c(3, 4), afb = 20, alb = c(38, 60), age_gap = c(0, 2, 5, 10)) |> 
   dplyr::filter(e0_f > e0_m, abs(e0_f - e0_m) <= 10)
 mortality_grid3$out <- pmap(mortality_grid3, parent_loss, .progress = T)
 mortality_grid3$ParamSet <- 1:nrow(mortality_grid3)
@@ -424,6 +493,8 @@ mortality_grid3b <-
   mortality_grid3 |>
   dplyr::filter(e0_f == 35, e0_m == 30) |> 
   mutate(
+    alb0 = alb,
+    IBI0 = IBI,
     alb = paste(alb, "years"),
     IBI = paste("IBI: ", IBI),
     Gap = paste("Gap:", age_gap, "years"),
@@ -434,10 +505,12 @@ mortality_grid3b <-
   mutate(
     wife_surv = paste0(wife_surv, "%"),
     husband_surv = paste0(husband_surv, "%"),
+    across(oneparentage:resid_kid_surv, as.list),
+    across(oneparentage:resid_kid_surv, \(v) set_names(v, nm = str_glue("IBI{IBI0}ALB{alb0}Gap{age_gap}")))
   )
 
 plot_oneparent <-
-  ggplot(mortality_grid3b, aes(oneparentage, resid_kid_surv, colour = alb)) + 
+  ggplot(mortality_grid3b, aes(unlist(oneparentage), unlist(resid_kid_surv), colour = alb)) + 
   geom_point() + 
   geom_text(aes(label = wife_surv), position = position_nudge(x = -0.5), show.legend = F) +
   xlim(48, 54) +

@@ -13,7 +13,7 @@ author:
 doi: 10.5281/zenodo.18149331
 date: today
 abstract: |
-  The grandmother hypothesis, which proposes that ancestral women ceased reproduction midlife to instead provision their adult daughters and grandchildren, is the most influential account of the evolution of human menopause. Here I use simulations to investigate two theories that ground the evolution of menopause in provisioning by parents and grandparents of both sexes. @Kaplan_2010 proposed a "two-sex" account in which the high energetic burden of caring for multiple, slow-developing offspring was met with biparental investment. According to this model, menopause evolved because the physiological costs of pregnancy and childbirth increased with age, yet productivity also increased with age, and the benefits of both grandparents transferring resources to adult children and their offspring eventually outweighed the diminishing benefits of continued reproduction. @kuhle2007 proposed the "father absent" hypothesis in which the higher mortality rate of husbands would often have left wives without the resources to raise young children, selecting for early reproductive cessation. Juvenile production plays little role in the three hypotheses, yet subsequent studies have found it to be surprisingly high. Simulations of hunter-gatherer energy consumption and production across the lifespan, taking account of age- and sex-specific survivorship, interbirth intervals, and varying rates of foraging skill acquisition typical of contemporary foragers, reveal a pronounced midlife energy deficit that could be averted with the increasing production of maturing juveniles, midlife cessation of reproduction, which limited the number of mouths to feed, and energy transfers from older parents (i.e., grandparents), and also sometimes younger couples (e.g., brideservice). Menopause emerges as an integral and necessary component of the unique human pattern of relatively short interbirth intervals, long period of juvenile dependency, and extensive food sharing, supporting and extending both the ECM and the grandmother hypothesis. **DOI: [10.5281/zenodo.18149332](https://doi.org/10.5281/zenodo.18149331)**
+  The grandmother hypothesis, which proposes that ancestral women ceased reproduction midlife to instead provision their adult daughters and grandchildren, is the most influential account of the evolution of human menopause. Here I use simulations to investigate two theories that ground the evolution of menopause in provisioning by parents and grandparents of both sexes. @Kaplan_2010 proposed a "two-sex" account in which the high energetic burden of caring for multiple, slow-developing offspring was met with biparental investment. According to this model, menopause evolved because the physiological costs of pregnancy and childbirth increased with age, yet productivity also increased with age, and the benefits of both grandparents transferring resources to adult children and their offspring eventually outweighed the diminishing benefits of continued reproduction. @kuhle2007 proposed the "father absent" hypothesis in which the higher mortality rate of husbands would often have left wives without the resources to raise young children, selecting for early reproductive cessation. Juvenile production plays little role in the three hypotheses, yet subsequent studies have found it to be surprisingly high. Simulations of hunter-gatherer energy consumption and production across the lifespan, taking account of age- and sex-specific survivorship, interbirth intervals, and varying rates of foraging skill acquisition typical of contemporary foragers, reveal a pronounced midlife energy deficit that could be averted with the increasing production of maturing juveniles; midlife cessation of reproduction, which limited the number of mouths to feed; and energy transfers from older parents (i.e., grandparents) and also sometimes younger couples (e.g., brideservice). Menopause emerges as an integral and necessary component of the unique human pattern of relatively short interbirth intervals, long period of juvenile dependency, and extensive food sharing, supporting and extending both the ECM and the grandmother hypothesis. **DOI: [10.5281/zenodo.18149332](https://doi.org/10.5281/zenodo.18149331)**
   
 lightbox: auto
 image: "Figures/plot_PrR.jpg"
@@ -70,7 +70,7 @@ library(hgEnergyGrowth)
 
 purrr::walk(list.files("R", pattern = "*.R", full.names = T), source)
 
-ALB <- min(params$menopause_age)
+ALB <- min(params$alb)
 AFB <- params$afb
 max_age <- params$max_age
 ```
@@ -88,7 +88,7 @@ Prolonged post-reproductive lifespans are rare in wild animals [@ellis2018b; @Mo
 plot_PrR
 ```
 
-Adaptive explanations include the influential grandmother hypothesis, in which the benefits of investing in grandchildren outweighed the fitness benefits of producing more children; the mother hypothesis, in which the benefits of maintaining investment in multiple slow-developing offspring outweighed the increasing risk of maternal morbidity and mortality from continued reproduction; the "aging eggs" hypothesis, in which increased risk of chromosomal abnormalities selected for a cessation of reproduction; and the avoidance of breeding competition with genetic kin. These and other hypotheses have been extensively reviewed elsewhere [@holmes2019; @Sievert_2024; @Monaghan_2023; @Ellis_2024; @arnot2021; @Croft_2015; @peccei2001; @Hawkes_2020; @hawkes2025], so I will not revisit them here. Instead, I will investigate two related hypotheses for the evolution of human menopause that have received relatively little attention.
+Adaptive explanations include the influential grandmother hypothesis, in which the benefits of investing in grandchildren outweighed the fitness benefits of producing more children; the mother hypothesis, in which the benefits of maintaining investment in multiple slow-developing offspring outweighed the increasing risk of maternal morbidity and mortality from continued reproduction; the "aging eggs" hypothesis, in which increased risk of chromosomal abnormalities selected for a cessation of reproduction; and the avoidance of breeding competition with genetic kin. These and other hypotheses have been extensively reviewed elsewhere [@holmes2019; @Sievert_2024; @Monaghan_2023; @Ellis_2024; @arnot2021; @Croft_2015; @peccei2001; @Hawkes_2020; @hawkes2025], so I will not revisit them here. Instead, I will investigate two hypotheses for the evolution of human menopause based on biparental care of offspring in light of new evidence that in hunter-gatherers, juveniles can produce a surprisingly large amount of food.
 
 ## The "two-sex" embodied capital model of menopause
 
@@ -112,9 +112,9 @@ Second, there is increasing evidence that children are able to acquire substanti
 
 ## Study Aims
 
-This study used simulations to investigate the energetic consequences of ages of last birth ranging from much younger than typical of human hunter gatherers, to much closer to the end of life, resembling the pattern seen in other primates (@fig-prr). It also investigated the energetic consequences of variation in skill acquisition rates, juvenile energy production, and interbirth intervals, with all life history, demographic, and energetic factors except ages of last birth falling within the ranges typical of contemporary hunter-gatherers.
+This study used simulations to investigate the energetic consequences of ages of last birth (ALB) ranging from much younger than typical of human hunter gatherers, to much closer to the end of life, resembling the pattern seen in other primates (@fig-prr), taking into account the energetic consequences of variation in foraging skill acquisition rates and juvenile energy production. Other than ALB, all life history, demographic, and energetic factors fell within the ranges typical of contemporary hunter-gatherers.
 
-Although this study was conceived, in part, as a test of the ECM "two sex" hypothesis, the grandmother hypothesis similarly depends on female midlife reproductive cessation and postreproductive energy transfers. If females but not males ceased reproduction midlife, however, this reduced the pool of fertile females relative to males, exacerbating male intrasexual competition (see @sfig-fertile-ratio). The grandmother hypothesis differs from the ECM mainly in the claim that men transfer their surplus energy, not necessarily to provision their spouses, children, or grandchildren, but to increase their social status, thereby gaining additional mating opportunities with the limited pool of fertile women [mate guarding also plays an important role, @Hawkes_2020; @hawkes2025]. The implications of the results for both hypotheses will therefore be addressed.
+Although this study was conceived, in part, as a test of the ECM "two sex" hypothesis, the grandmother hypothesis similarly depends on female midlife reproductive cessation and postreproductive energy transfers. The grandmother hypothesis differs from the ECM mainly in the claim that men transfer their surplus energy, not necessarily to provision their spouses, children, or grandchildren, but to increase their social status, thereby gaining additional mating opportunities with the limited pool of fertile women [mate guarding also plays an important role, @Hawkes_2020; @hawkes2025]. Specifically, if females but not males ceased reproduction midlife, this reduced the pool of fertile females relative to males, exacerbating male intrasexual competition (see @sfig-fertile-ratio). The implications of the results for both hypotheses will therefore be addressed.
 
 It should be acknowledged at the outset that if menopause is an adaptation it co-evolved with demographic and life history factors, so the counterfactual that a species with, e.g., modern human interbirth intervals, maturation times, body masses, total energy expenditures, and lifespans, but much later menopause, or no menopause, is unrealistic. Nevertheless, this exercise could illuminate why it is unrealistic.
 
@@ -123,10 +123,10 @@ It should be acknowledged at the outset that if menopause is an adaptation it co
 ```{r}
 # Lifecourse examples
 
-lifecourseIBI3ALB40 <- hg_lifecourse(IBI = 3, afb = AFB, menopause_age = 40)
-lifecourseIBI4ALB40 <- hg_lifecourse(IBI = 4, afb = AFB, menopause_age = 40)
-lifecourseIBI3ALB60 <- hg_lifecourse(IBI = 3, afb = AFB, menopause_age = 60)
-lifecourseIBI4ALB60 <- hg_lifecourse(IBI = 4, afb = AFB, menopause_age = 60)
+lifecourseIBI3ALB40 <- hg_lifecourse(IBI = 3, afb = AFB, alb = 38)
+lifecourseIBI4ALB40 <- hg_lifecourse(IBI = 4, afb = AFB, alb = 38)
+lifecourseIBI3ALB60 <- hg_lifecourse(IBI = 3, afb = AFB, alb = 60)
+lifecourseIBI4ALB60 <- hg_lifecourse(IBI = 4, afb = AFB, alb = 60)
 
 ```
 
@@ -136,17 +136,17 @@ Taking inspiration, in part, from @Gurven_2005, who evaluated the energetic cons
 
 The *population model* simulated the daily energy production and consumption of each age and sex class across the entire population, from birth to the maximum human lifespan (age `{r} params$max_age`), accounting for survivorship by age and sex. Energy consumption used age-, sex- and body-weight-adjusted total energy expenditure (TEE) values from the literature. Energy production was based on age- and sex-specific skills and physical strength (proxied by body weight), and varied across a range of parameter values for the relative importance of skill vs. strength, skill acquisition rates, and maximum adult energy production values (details below). Production, consumption, and their difference (energy balance) were computed for each age-sex class according to their proportions in a stationary population with a given life expectancy at birth, and then summed for all ages and sexes. Positive values of energy balance would indicate that the population as a whole produces more energy than it consumes on a daily basis, and negative values that it consumes more energy than it produces. 
 
-This model was used to assess how variation in skill ontogeny and juvenile energy production impacted energy balance at the population level. It had the advantages that the proportions of each age and sex in the population corresponded to standard life tables (details below), energy transfers were inherent, and it made no assumptions about social organization -- it was entirely agnostic regarding which individuals producing energy surpluses transfer them to which individuals in energy deficit. It had the disadvantages that it did not include variation in interbirth intervals or ages of last birth and their consequences for energy supply and demand.
+This model was used to assess how variation in skill ontogeny and juvenile energy production impacted energy balance at the population level. It had the advantages that the proportions of each age and sex in the population corresponded to standard life tables (details below), energy transfers were inherent, and it made no assumptions about social organization -- it was entirely agnostic regarding which individuals producing energy surpluses transferred them to which individuals in energy deficit. It had the disadvantages that it did not include variation in interbirth intervals or ages of last birth and their consequences for energy supply and demand.
 
 ## The family model
 
-The *family model* simulated a hunter-gatherer nuclear family (mother, father, and their joint offspring) starting at age at first birth (AFB) and continuing with one-year time steps for a maximum human lifespan. The mother gave birth at a regular integer-valued interbirth interval (IBI) until her age at last birth (ALB), which was varied from `{r} str_glue("{min(params$menopause_age)} to {max(params$menopause_age)}")` years old, in 10 year increments. Juveniles matured and left the family at their AFB. Age- and sex-specific mortality followed standard human life tables. Energy production and consumption were computed as in the population model. Family energy balance was total family production minus total family consumption computed for each year from the AFB to the maximum age (`{r} params$max_age`). 
+Every individual has exactly one biological mother and biological father. To account for the energy production and consumption of everyone in the population, the *family model* simulated a hunter-gatherer nuclear family (mother, father, and their joint offspring) starting at age at first birth (AFB) and continuing with one-year time steps for a maximum human lifespan. The mother gave birth at a regular integer-valued interbirth interval (IBI) until her age at last birth (ALB), which was set to `{r} str_flatten(params$alb, collapse = ", ", last = " and ")` years old. Juveniles matured and left the family at their AFB. Age- and sex-specific mortality followed standard human life tables. Energy production and consumption were computed as in the population model. Family energy balance was total family production minus total family consumption computed for each year from the AFB to the maximum age (`{r} params$max_age`). 
 
-All members of the population resided in identical families that, for a given combination of parameters, followed identical trajectories across the lifecourse. One family with energy surpluses at some life stages (e.g., parents or grandparents) was assumed to transfer them to one family with energy deficits at other life stages (e.g., to the family of an adult offspring). A negative sum of energy balance over the life of the family for a given combination of parameters would therefore indicate insufficient energy to support the families in the population, and thus a nonviable region of the parameter space.
+All members of the population resided in identical families that, for a given combination of parameters, followed identical trajectories across the lifecourse. One family with energy surpluses at some life stages (e.g., parents or grandparents) was assumed to transfer them to one family with energy deficits at other life stages (e.g., to the family of a young adult child). A negative sum of energy balance over the life of the family for a given combination of parameters would therefore indicate insufficient energy to support the families in the population, and thus a nonviable region of the parameter space.
 
 This model was used to evaluate the impact of variation in ALB's, IBI's, and skill acquisition rates on energy balance. It had the advantage that it could vary ALB and IBI to determine their impact on family composition, and hence on energy balance. It had the disadvantage that varying ALB and IBI altered age-specific birth rates, violating population stationarity, as further discussed below.
 
-This model conceptualized transfers of adult energy surpluses as biological parents feeding their spouses, joint offspring, and grandoffspring, per the ECM, but the underlying computations only assumed that the energy surpluses produced by some individuals were used to compensate for the energy deficits of other individuals. In other words, the computations were agnostic regarding who transferred energy to whom. These transfers could therefore be equally conceptualized as, e.g., some men transferring their energy surpluses, not to a single wife and their joint offspring, but to any fertile woman and her offspring who are in energy deficit, in exchange for mating opportunities, per the grandmother hypothesis [@Hawkes_2020; @hawkes2025].
+This model conceptualized transfers of adult energy surpluses as biological parents feeding their spouses, joint offspring, and grandoffspring, per the ECM and absent father hypotheses, but the underlying computations only assumed that the energy surpluses produced by some individuals were used to compensate for the energy deficits of other individuals. In other words, the computations were agnostic regarding who transferred energy to whom. These transfers could therefore be equally conceptualized as, e.g., some men transferring their energy surpluses, not to a single wife and their joint offspring, but to any fertile woman and her offspring who are in energy deficit, in exchange for mating opportunities, per the grandmother hypothesis [@Hawkes_2020; @hawkes2025].^[Due to the sex difference in mortality, the number of adult males in the simulations was always less than the number of adult females (@sfig-fertile-ratio), implying some degree of either polygyny or non-reproductive adult females. Simulations assumed all females reproduced, and the implied polygyny did not impact results, as further discussed in @sec-grandmother.]
 
 ## Age- and sex-specific survivorship (mortality)
 
@@ -159,15 +159,15 @@ e0hadzaM <- round(hadzaLTm$ex[1], 1)
 
 The average life expectancy at birth for human hunter-gatherers of both sexes combined is $e_0 = 30$ years [@Davison_2021]. For the Hadza, female $e_0=`{r} e0hadzaF`$ and male $e_0=`{r} e0hadzaM`$ [@jones2016]. An analysis of !Kung mortality [@howell2017] found that it did not differ meaningfully from other human populations with similar life expectancy at birth [@coale1966; @Li_2012], a conclusion echoed by @gurven2007, who concluded that "there is a characteristic life span for our species, in which mortality decreases sharply from infancy through childhood, followed by a period in which mortality rates remain essentially constant to about age 40 years, after which mortality rises steadily in Gompertz fashion" (p. 322).
 
-The @kuhle2007 hypothesis depends on a gap in the age of marriage (see @sec-agegap) combined with a sex difference in mortality, which is common in many human populations as well as in many wild mammals. A study of 101 mammal species, for example, found that the median female lifespan was 18.6% longer than that of conspecfic males, and in humans the mean female advantage was 7.8% [@Lematre_2020]. For age- and sex-specific survivorship (mortality) I used the UN Model Life Tables [@Li_2012; data and code from @Gaddy_2025] with $e_0$ values similar to the Hadza and !Kung, i.e., a female life expectancy at birth, $e_0 = `{r} params$e0_f`$, a male life expectancy at birth, $e_0 = `{r} params$e0_m`$, and a sex ratio at birth (SRB) of `{r} params$SRB` (i.e., a 5% male excess). See @sfig-lifetables.
+The absent father hypothesis [@kuhle2007] depends on a gap in the age of marriage (see @sec-agegap) combined with a sex difference in mortality, which is common in many human populations as well as in many wild mammals. A study of 101 mammal species, for example, found that the median female lifespan was 18.6% longer than that of conspecfic males, and in humans the mean female advantage was 7.8% [@Lematre_2020]. For age- and sex-specific survivorship (mortality) I used the UN Model Life Tables [@Li_2012; data and code from @Gaddy_2025] with $e_0$ values similar to the Hadza and !Kung, i.e., a female life expectancy at birth, $e_0 = `{r} params$e0_f`$, a male life expectancy at birth, $e_0 = `{r} params$e0_m`$, and a sex ratio at birth (SRB) of `{r} params$SRB` (i.e., a 5% male excess). See @sfig-lifetables.
 
 ## Age at first birth (AFB), age at last birth (ALB), and interbirth interval (IBI)
 
-@Davison_2021 compiled demographic and life history values for contemporary hunter-gather populations, small-scale subsistence populations, and chimpanzee populations. I primarily used their averaged values from the five hunter-gatherer populations: Ache, Agta, Hadza, Hiwi, and !Kung (Ju/'hoansi). Although @Davison_2021 did not provide a numerical value for mean AFB, their Figures 2 and S2 indicate hunter-gatherer values clustering from shortly before 20 years of age to shortly after. They found that the average AFB for all human subsistence populations was shortly before 20 years. Hunter-gatherer ALB ranged from 36 to 42, with a median of about 38, and mean total fertility was 6.2. Hunter-gatherer IBIs ranged from 2.8 years (Agta) to 3.3 years (Hiwi), with a mean value of 3.1 years. To match the foregoing values as closely as possible in the simulations, AFB = `{r} params$afb` and IBI = `{r} min(params$IBI)` years, although IBI = `{r} max(params$IBI)` years was also investigated.
+@Davison_2021 compiled demographic and life history values for contemporary hunter-gather populations, small-scale subsistence populations, and chimpanzee populations. I primarily used their averaged values from the five hunter-gatherer populations: Ache, Agta, Hadza, Hiwi, and !Kung (Ju/'hoansi). Although @Davison_2021 did not provide a numerical value for mean AFB, their Figures 2 and S2 indicate hunter-gatherer values clustering from shortly before 20 years of age to shortly after. They found that the average AFB for all human subsistence populations was shortly before 20 years. Hunter-gatherer ALB ranged from 36 to 42, with a median of about 38, and mean total fertility was 6.2. Hunter-gatherer IBIs ranged from 2.8 years (Agta) to 3.3 years (Hiwi), with a mean value of 3.1 years. To match the foregoing values as closely as possible in the simulations, AFB = `{r} params$afb`, and both IBI = `{r} min(params$IBI)` years and IBI = `{r} max(params$IBI)` years were investigated.
 
-To determine the energetic consequences of earlier vs. later ALBs, it was important to first determine the plausible range of ALBs. Females in most primates give birth until the end of life (@fig-prr). A curvilinear regression model of the maximum ALB of mammals vs. maximum lifespan found that the predicted ALB of species with a maximum lifespan of 100 years, such as humans and narwals (*Monodon monoceros*), would be about 60 years [@Huber_2018]. The narwal ALB was 68 years, greater than predicted, and the human ALB was 50, less than predicted. Three other species had ALB ≥ 60 years (values that were greater than predicted): African bush elephants (*Loxodonta africana*), Asian elephants (*Elephas maximus*), and North Atlantic right whales (*Eubalaena glacialis*). Moreover, this study noted that "there is little indication for reproductive senescence in any of the baleen whales so far", some of which have lifespans up to 200 years [@Huber_2018, p. 2]. Thus, because some mammals with maximum lifespans approaching or exceeding that of humans have ALB's approaching or exceeding 60 years, simulations were run with ALB = `{r} str_flatten(params$menopause_age, collapse = ", ", last = ", and ")` years. For simplicity, in all simulation runs fertility was constant until ALB, at which point it was set to 0.
+To determine the energetic consequences of earlier vs. later ALBs, it was important to first determine the plausible range of ALBs. Females in most primates give birth until the end of life (@fig-prr). A curvilinear regression model of the maximum ALB of mammals vs. maximum lifespan found that the predicted ALB of species with a maximum lifespan of 100 years, such as humans and narwals (*Monodon monoceros*), would be about 60 years [@Huber_2018]. The narwal ALB was 68 years, greater than predicted, and the human ALB was 50, less than predicted. Three other species had ALB ≥ 60 years (values that were greater than predicted): African bush elephants (*Loxodonta africana*), Asian elephants (*Elephas maximus*), and North Atlantic right whales (*Eubalaena glacialis*). Moreover, this study noted that "there is little indication for reproductive senescence in any of the baleen whales so far", some of which have lifespans up to 200 years [@Huber_2018, p. 2]. Thus, because some mammals with maximum lifespans approaching or exceeding that of humans have ALB's approaching or exceeding 60 years, simulations were run with ALB = `{r} str_flatten(params$alb, collapse = ", ", last = ", and ")` years. For simplicity, in all simulation runs fertility was constant until ALB, at which point it was set to 0.
 
-Birth at age x was conditional on female survival to age x. For women who survived to the ALB, an IBI = `{r} min(params$IBI)` and an ALB = 40 resulted in a total fertility rate (TFR) of `{r} max(lifecourseIBI3ALB40$fertility)`, slightly above the mean empirical value, and for IBI = `{r} max(params$IBI)`, TFR = `{r} max(lifecourseIBI4ALB40$fertility)`. Taking into account that not all women survive to the ALB, however, in the simulations with IBI = 3, TFR = `{r} round(max(lifecourseIBI3ALB40$fertility2), 1)`, and with IBI = 4, TFR = `{r} round(max(lifecourseIBI4ALB40$fertility2), 1)`.
+Birth at age x was conditional on female survival to age x. Taking into account that not all women survive to the ALB, in the simulations with IBI = 3, TFR = `{r} round(max(lifecourseIBI3ALB40$fertility2), 1)`, and with IBI = 4, TFR = `{r} round(max(lifecourseIBI4ALB40$fertility2), 1)`.
 
 ## Population stationarity and growth
 
@@ -198,7 +198,7 @@ A compilation of adult hunter-gatherer energy production by sex found that males
 #| label: fig-hg-energy
 #| fig-width: 11
 #| fig-height: 6
-#| fig-cap: "Empirical daily per capita adult energy production by contemporary hunter-gatherer females and males across ten populations. **Top**: Boxplots indicate the distributions of female, male, and total production depicted in the bottom panel. Total: average production of one adult female plus one adult male. **Bottom**: The grey bar indicates the range of an average female (left) to male (right) TEE for adult hunter-gatherers. The dotted line indicates total TEE for one female + male. Lower x-axis values are kcals/day. Upper x-axis values are kcals/day as a proportion of daily adult TEE (*TEE~prop~*). Data from @Kraft_2021. Figure adapted from @venkataraman2026."
+#| fig-cap: "Empirical daily per capita adult energy production of contemporary hunter-gatherer females and males across ten populations. Boxplots indicate the distributions of female, male, and total production depicted in the main panel. Total: average production of one adult female plus one adult male. The grey bar indicates the range of an average female (left) to male (right) TEE for adult hunter-gatherers. The dotted line indicates total TEE for one female + male. Lower x-axis values are kcals/day. Upper x-axis values are kcals/day as a proportion of daily adult TEE (*TEE~prop~*). Data from @Kraft_2021. Figure adapted from @venkataraman2026."
 plot_kraft_energy
 ```
 
@@ -217,7 +217,7 @@ biparental_min <- round(min(biparental_means$Sum) / TEEmean, 1)
 biparental_max <- round(max(biparental_means$Sum) / TEEmean, 1)
 ```
 
-Taking the average TEE of a hunter-gatherer adult to be `{r} TEEmean` kcals/day, and using the energy production values in @fig-hg-energy from @Kraft_2021, adult hunter-gatherer women produced from `{r} female_prop_min` to `{r} female_prop_max` of daily adult TEE, men from `{r} male_prop_min` to `{r} male_prop_max` of daily adult TEE, and one woman plus one man produced from `{r} biparental_min` to `{r} biparental_max` of daily adult TEE. Accordingly, maximum female energy production was modeled as a range from `{r} min(params$TEE_prop_f)` to `{r} max(params$TEE_prop_f)` of adult TEE, and maximum male energy production as a range from `{r} min(params$TEE_prop_m)` to `{r} max(params$TEE_prop_m)` of adult TEE, with the constraint that 2.2 ≤ *TEE~prop,f~* + *TEE~prop,m~* ≤ 3.4 [i.e., the range needed to support at least two adults with some surplus for juvenile offspring, with a maximum just slightly above @Kraft_2021].
+Taking the average TEE of a hunter-gatherer adult to be `{r} TEEmean` kcals/day, and using the energy production values in @fig-hg-energy from @Kraft_2021, adult hunter-gatherer women produced from `{r} female_prop_min` to `{r} female_prop_max` of daily adult TEE, men from `{r} male_prop_min` to `{r} male_prop_max` of daily adult TEE, and one woman plus one man produced from `{r} biparental_min` to `{r} biparental_max` of daily adult TEE. Accordingly, maximum female energy production was modeled as a range from `{r} min(params$TEE_prop_f)` to `{r} max(params$TEE_prop_f)` of adult TEE, and maximum male energy production as a range from `{r} min(params$TEE_prop_m)` to `{r} max(params$TEE_prop_m)` of adult TEE, with the constraint that 2.2 ≤ *TEE~prop,f~* + *TEE~prop,m~* ≤ 3.4 (i.e., the range needed to support at least two adults with some surplus for juvenile offspring, with a maximum just slightly above the maximum joint production in @fig-hg-energy).
 
 ### Age- and sex-specific energy production
 
@@ -272,7 +272,7 @@ tbl <- table(LRB$agedif)
 age_mod <- names(tbl)[which.max(tbl)]
 ```
 
-The *absent father* hypothesis assumes that, on average, husbands are older than wives [@kuhle2007]. @binford2001 compiled ages at first marriage from the ethnographic record for men and women in `{r} length(na.omit(LRB$agedif))` hunter-gatherer societies (see @sfig-agediff). The modal, median, and 75% quantile age differences were `{r} age_mod`, `{r} median(LRB$agedif, na.rm=T)`, and `{r} quantile(LRB$agedif, probs = 0.75, na.rm = T)` years, respectively. Marriage age gaps of 2, 5, and 10 years were therefore used to compute the probability that the husband and the wife would be alive, and the number of dependents, for each age of the wife (for simplicity, however, age gaps were only used for this computation, and not used in the family model).
+The *absent father* hypothesis assumes that, on average, husbands are older than wives [@kuhle2007]. @binford2001 compiled ages at first marriage from the ethnographic record for men and women in `{r} length(na.omit(LRB$agedif))` hunter-gatherer societies (see @sfig-agediff). The modal, median, and 75% quantile age differences were `{r} age_mod`, `{r} median(LRB$agedif, na.rm=T)`, and `{r} quantile(LRB$agedif, probs = 0.75, na.rm = T)` years, respectively. Marriage age gaps of 0, 2, 5, and 10 years were therefore used to compute the probability that the husband and the wife would be alive, and the number of dependents, for each age of the wife (for simplicity, age gaps were only used for this computation, however, and not used in the simulations).
 
 ## Parameter space and simulated lifecourse
 
@@ -282,7 +282,7 @@ In the *family model*, for each of the resulting `{r} nrow(param_grid)` combinat
 
 1.  wife and husband ages were integer-valued vectors from AFB until the maximum age (`{r} params$max_age`), at one-year intervals.
 3.  wife's probability of survival at each age relative to her AFB was computed with the female life table.
-4.  husband's probability of survival at each age relative to AFB was computed with the male life table (thus, there was slightly less than one husband per wife at AFB).
+4.  husband's probability of survival at each age relative to the wife's at AFB was computed with the male life table (thus, there was slightly less than one husband per wife at AFB).
 5.  pregnancies (coded as 0, 1) occurred every IBI years, starting at one year prior to AFB.
 6.  births (coded as 0, 1) occurred every IBI years, starting at AFB and ending at ALB, and then scaled by mother survival to age x.
 7.  child survival was age- and sex-specific survival multiplied by births (i.e., no new children in years with birth = 0).
@@ -290,7 +290,7 @@ In the *family model*, for each of the resulting `{r} nrow(param_grid)` combinat
 9.  wife, husband, and child productivities at each age were computed using @eq-productivity and multiplied by their respective survival at each age.
 10. The number, energy consumption, and energy production of all dependent children at each wife age were computed assuming offspring disperse (leave the family) at the AFB, and using a windowing function based on wife's age and wife survival (such that the number of children was scaled by the number of women who survived to give birth; see code).
 11. family consumption and production at each wife age were the sums of wife's, husband's, and total dependent children's consumption and production, respectively.
-12. family energy balance was family production - family consumption for each age. 
+12. family energy balance was family production minus family consumption for each age. 
 13. cumulative family energy balance was the cumulative sum of family energy balance at each age from AFB to the end of life (maximum age).
 
 Neither family member survival, nor pregnancies, births, IBI's, or any other factor were contingent on energy balance. Simulations were deterministic, i.e., there were no stochastic parameters. See code for details.
@@ -302,7 +302,7 @@ Neither family member survival, nor pregnancies, births, IBI's, or any other fac
 | *age~max~* | Maximum human age (years) | `{r} paste(params$max_age, collapse = ', ')` |
 | *SRB* | Sex ratio at birth | `{r} params$SRB` |
 | *AFB* | Age at first birth (years) | `{r} params$afb` |
-| *ALB* | Age of last birth | `{r} paste(params$menopause_age, collapse = ', ')` |
+| *ALB* | Age of last birth | `{r} paste(params$alb, collapse = ', ')` |
 | *IBI* | Interbirth interval (years) | `{r} paste(params$IBI, collapse = ', ')` |
 | *age~gap~* | Marriage age gap (years) | 0, 2, 5, 10 |
 | $\alpha_f$, $\alpha_m$ | Relative importance of skill vs. strength for females and males | `{r} paste(params$alpha_m, collapse = ', ')` |
@@ -319,7 +319,7 @@ Simulations were conducted using `{r} R.version.string`. Code and data are avail
 
 # Results
 
-The main results of the *population model* demonstrate that juvenile production was essential for maintaining population-level energy balance near or above zero across most of the parameter space, and was unnecessary only at the highest level of adult production. See @fig-population. The mean effects of skill ontogeny parameter variation are depicted in @sfig-effectsizes. Variation in maximum adult energy production (*TEE~prop~*) had by far the biggest effect, followed by the rate of skill acquisition (*b~1~*) and the relative importance of strength in energy production ($\alpha$).
+The main results of the *population model* demonstrate that juvenile production was essential for maintaining population-level energy balance near or above zero across most of the parameter space, and was unnecessary only at the highest level of adult production. See @fig-population. The mean effects of skill ontogeny parameter variation are depicted in @sfig-effectsizes. Variation in maximum adult energy production (*TEE~prop~*) had by far the biggest effect, followed by the rate of skill acquisition (*b~1~*) and the relative importance of strength in energy production ($\alpha$). Dependents produced `{r} 100 * round(mean(pop_stats$ratio), 2)`% of their TEE, on average, albeit with considerable variation across the parameter space. See @sfig-childprodconsum.
 
 ::: {#fig-population}
 ![](Figures/plot_EB_pop.svg)
@@ -327,58 +327,40 @@ The main results of the *population model* demonstrate that juvenile production 
 Mean per capita energy balance per day for different values of joint adult daily energy production (one adult female and male) as a proportion of adult TEE. Purple: energy balance including juvenile energy production. Orange: energy balance excluding juvenile production (age < 20). Boxplots represent variation in energy balance due to variation in skill ontogeny parameters. Hunter-gatherer populations along the x-axis are the joint adult energy production values from @fig-hg-energy, for comparison.
 :::
 
-The main results of the *family model* demonstrate that, averaging across the parameter space, as young couples produced offspring, family energy consumption outpaced production due to a short IBI, and families tended to fall into negative energy balance. Later in the lifecourse, reproductive cessation, the increasing production of older dependent offspring, and the departure of mature offspring enabled families to eventually produce a surplus that could be transferred to families in energy deficit (e.g., to the families of their adult offspring).
-
-As ALB increased, however, families grew larger, and stayed large longer, thereby accumulating more energy "debt" earlier in the lifecourse, and were less able to "pay off" this larger debt because they had fewer years later in the lifecourse to generate an energy surplus that could be transferred to families in energy deficit. Averaging over the parameter space, ALBs ≤ 40 were in energy balance or produced a net energy surplus by the end of the lifecourse, whereas ALBs > 40 had a net energy deficit by the end of the lifecourse. See @fig-family-model.
+The main results of the *family model* demonstrate a tradeoff between women's total fertility and the capacity to feed her offspring. At lower values of ALB, and averaging across the parameter space, as young couples produced offspring, family energy consumption outpaced production due to a short IBI, and families tended to fall into negative energy balance. Earlier reproductive cessation (ALB ≤ 38) reduced total fertility and the increasing production of older dependent offspring, and their ultimate departure, enabled families to eventually produce a surplus that could be transferred to families in energy deficit (e.g., to the families of their adult offspring who were in energy deficit). As ALB increased, however, couples' families grew larger, and stayed large longer. Couples achieved higher total fertility but accumulated more energy "debt" and were less able to "pay it off" because they had fewer years later in the lifecourse to generate an energy surplus that could be transferred to families in energy deficit. See @fig-family-model.
 
 ```{r}
 #| label: fig-family-model
 #| fig-width: 10
 #| fig-height: 8
-#| fig-cap: "Family model. **Top**: Mean family size by wife's age for different values of ALB. **Bottom**: Cumulative sum of daily family energy balance from the wife's AFB to the maximum lifespan, for different values of ALB (averaged across the parameter space). Values at age 80 near or above zero indicate that, on average, the family eventually produced enough total surplus energy to compenstate for its total energy deficits, whereas negative values indicate that the total surpluse fell short of the total deficit. Note the tradeoffs between energy balance and total fertility for different values of ALB. See also @fig-energyconprod. ALB: age of last birth. TF: total fertility."
+#| fig-cap: "Family model. **Top**: Mean family size by wife's age for different values of ALB. **Bottom**: Cumulative sum of daily family energy balance from the wife's AFB to the maximum lifespan, for different values of ALB (averaged across the parameter space). Values at age 80 near or above zero indicate that, on average, the family eventually produced enough total surplus energy to compenstate for its total energy deficits via energy transfers, whereas negative values indicate that the total surpluse fell short of the total deficit. Note the tradeoffs between energy balance and total fertility for different values of ALB. See also @fig-energyconprod. ALB: age of last birth. TF: total fertility."
 
 plot_family_model
 ```
 
 More details on these factors are provided in the following sections.
 
-## Family size
+## IBI, ALB, family size, and energy balance
 
+Energy balance tracked the number and ages of dependents (@fig-family-model), which were determined by the IBI and ALB. For a given IBI, family trajectories were identical prior to the youngest ALB (`{r} min(params$alb)` years), at which point they diverged. If there were no mortality, then for ALBs > 38, the number of dependents would remain constant until the ALB because as the oldest dependent child dispersed a new child would be born. In the simulations, however, the number of family members, including dependent children, slowly decreased due to husband mortality and to maternal mortality that also reduced the birth of new children (@fig-family-model).
+
+Critically, as ALB increased, the average number of dependent children and their total daily energy needs increased because new children continued to be born as older children matured and dispersed, although child and maternal mortality also took their toll. See @tbl-stats and @sfig-alb-stats.
 
 ```{r}
-lifecourseIBI3ALB40$parents <- 
-  lifecourseIBI3ALB40$wife_survival + lifecourseIBI3ALB40$husband_survival
-
-lifecourseIBI4ALB40$parents <- 
-  lifecourseIBI4ALB40$wife_survival + lifecourseIBI4ALB40$husband_survival
-
-total_fertility <- round(sum(lifecourseIBI3ALB40$births), 1)
-
-max_kids <- round(max(lifecourseIBI3ALB60$resident_children), 1)
-age_max_kids <- lifecourseIBI3ALB60$wife_age[which.max(lifecourseIBI3ALB60$resident_children)]
-
-age_zero <- signchange(lifecourseIBI3ALB40$resident_children, AFB:max_age)$age[1]
-age_none <- round(lifecourseIBI3ALB60$resident_children[lifecourseIBI4ALB60$wife_age == age_zero], 1)
-
-kids40 <- round(alb_grid$mean_dependents[3], 1)
-kids60 <- round(alb_grid$mean_dependents[7], 1)
-kcals40 <- round(alb_grid$mean_kcals[3])
-kcals60 <- round(alb_grid$mean_kcals[7])
+#| label: tbl-stats
+#| tbl-cap: "Demographic statistics by ALB and IBI, averaged over the parameter space. Age values refer to the wife's age when the number of dependents reaches a maximum, when energy balance transitions from negative to positive, and when the number of dependents falls to zero."
+tbl_stats
 ```
 
-Energy balance tracked the number and ages of dependents (@fig-family-model), which were determined by the IBI and ALB. For a given IBI, family trajectories were identical prior to the youngest ALB (`{r} min(params$menopause_age)` years), at which point they diverged. The number of dependents reached its maximum of around `{r} max_kids` (IBI = 3) when parents were age `{r} age_max_kids` because they had their firstborns at age `{r} params$afb`, who then dispersed `{r} params$afb` years later (at their AFB). If there were no mortality, then for ALBs > 40, the number of dependents would remain constant until the ALB because as the oldest dependent child dispersed a new child would be born. In the simulations, however, the number of family members, including dependent children, slowly decreased due to husband mortality and to maternal mortality that also reduced the birth of new children (@fig-family-model).
+Family energy production increased slowly for about the first decade after AFB, but more rapidly in the second decade as the productivity of maturing children increased. Subsequently, energy production declined due to wife and husband mortality, and the departure of older productive children as they reached their AFB. See @fig-energyconprod.
 
-Critically, as ALB increased, the average number of dependent children and their daily energy needs increased because new children continued to be born as older children matured and dispersed, although child and maternal mortality also took their toll. For example, with ALB = 40, and averaging across the entire lifecourse from the AFB to the end of life, families were supporting `{r} kids40` dependent children each day, and dependents' mean total energy need was `{r} kcals40` kcals/day, whereas with ALB = 60, families were supporting `{r} kids60` dependent children each day, and their mean total energy need was `{r} kcals60` kcals/day. See @sfig-alb-stats.
-
-## Energy consumption, production, and balance
-
-As family size grew and as children grew, daily family energy consumption grew, and as it shrunk, energy consumption shrunk, but critically, more rapidly for lower ALBs because dispersing offspring were not replaced by new offspring. Family energy production increased slowly for about the first decade after AFB, but more rapidly in the second decade as the productivity of maturing children increased. Subsequently, energy production declined due to wife and husband mortality, and the departure of older productive children as they reached their AFB. Averaging over the parameter space, consumption exceeded production early in the lifecourse, causing an increasing energy "debt" (a cumulative negative energy balance), which began to be "repaid" after reproductive cessation and the increasing production and eventual departure of older children. See @fig-energyconprod. Energy balance trajectories varied due to variation in the parameters affecting productivity, however, primarily *TEE~prop~* and *b~1~*, each of which varied by sex. See @sfig-ridgeline.
+Averaging over the parameter space, family consumption exceeded production early in the adult lifecourse, causing an increasing energy "debt" (a cumulative negative energy balance), which, after reproductive cessation and the increasing production and eventual departure of older children, began to be "repaid" via transfers of surplus energy to a family in energy deficit. See @fig-energyconprod. Energy balance trajectories varied, however, due to variation in the parameters affecting productivity, primarily *TEE~prop~* and *b~1~*, each of which varied by sex. See @sfig-ridgeline.
 
 ```{r}
 #| label: fig-energyconprod
 #| fig-width: 11
 #| fig-height: 8
-#| fig-cap: "Daily energy consumption and production by the wife, husband, and their dependent children over the lifespan of the wife, averaged over the parameter space. Balance = production minus consumption. For the cumulative sum of energy balance over the lifecourse, see @fig-family-model."
+#| fig-cap: "Daily energy consumption and production by the wife, husband, and their dependent children over the lifespan of the wife, averaged over the parameter space. Balance = production minus consumption. See @fig-hg-energy for the cumulative sum of energy balance over the lifecourse."
 plot_ProdConBal
 ```
 
@@ -390,8 +372,7 @@ nukak_prop <- round(HG_means2$TEE_prop[HG_means2$Population == "Nukak"], 1)
 pct3.3 <- 100*round(fam_grid_ss_sum$pos_prop[11], 2)
 ```
 
-For *TEE~prop~* ≤ 3, which characterized all hunter-gatherer populations in @fig-hg-energy but two, families always experienced at least some time in negative energy balance across the parameter space; in other words, there was no combination of parameters in which families were entirely self-sufficient. At higher levels, however, there was a sharp transition. For *TEE~prop~* = `{r} hadza_prop` (the level of Hadza joint energy production), families were entirely self-sufficient in `{r} pct3.1`% of the parameter space, and for *TEE~prop~* = `{r} nukak_prop` (the level of Nukak joint energy production , the highest in @fig-hg-energy), families were self-sufficient in `{r} pct3.3`% of the parameter space. See @sfig-selfsufficient.
-
+For *TEE~prop~* ≤ 3, which characterized all but two hunter-gatherer populations in @fig-hg-energy, families always experienced at least some time in negative energy balance across the parameter space; in other words, there was no combination of parameters in which families were entirely self-sufficient. At higher levels, however, there was a sharp transition: for *TEE~prop~* = `{r} hadza_prop` (the level of Hadza joint energy production), families were entirely self-sufficient in just `{r} pct3.1`% of the parameter space, but for *TEE~prop~* = `{r} nukak_prop` (the level of Nukak joint energy production , the highest in @fig-hg-energy), families were self-sufficient in `{r} pct3.3`% of the parameter space. See @sfig-selfsufficient.
 
 ## Brideservice and helpers-at-the-nest
 
@@ -404,40 +385,30 @@ Although in the simulations men and women both married at AFB, the age of marria
 ## Parent mortality
 
 ```{r}
-oneparentage0 <- mortality_grid3b$oneparentage[1]
-wife_surv0 <- mortality_grid3b$wife_surv[1]
-husband_surv0 <- mortality_grid3b$husband_surv[1]
-kids0_40 <- mortality_grid3b$resid_kid_surv[1]
-kids0_60 <- mortality_grid3b$resid_kid_surv[5]
+oneparentage0 <- mortality_grid3b$oneparentage$IBI3ALB38Gap0
+wife_surv0 <- mortality_grid3b$wife_surv$IBI3ALB38Gap0
+husband_surv0 <- mortality_grid3b$husband_surv$IBI3ALB38Gap0
+kids0_38 <- mortality_grid3b$resid_kid_surv$IBI3ALB38Gap0
+kids0_60 <- mortality_grid3b$resid_kid_surv$IBI3ALB60Gap0
 
-oneparentage10 <- mortality_grid3b$oneparentage[4]
-wife_surv10 <- mortality_grid3b$wife_surv[4]
-husband_surv10 <- mortality_grid3b$husband_surv[4]
-kids10_40 <- mortality_grid3b$resid_kid_surv[4]
-kids10_60 <- mortality_grid3b$resid_kid_surv[8]
+oneparentage10 <- mortality_grid3b$oneparentage$IBI3ALB38Gap10
+wife_surv10 <- mortality_grid3b$wife_surv$IBI3ALB38Gap10
+husband_surv10 <- mortality_grid3b$husband_surv$IBI3ALB38Gap10
+kids10_38 <- mortality_grid3b$resid_kid_surv$IBI3ALB38Gap10
+kids10_60 <- mortality_grid3b$resid_kid_surv$IBI3ALB60Gap10
 ```
 
-Mortality of both wives and husbands was high. With no marriage age gap, by age `{r} oneparentage0` only one parent had survived (the wife `{r} wife_surv0` of the time, the husband `{r} husband_surv0` of the time). With IBI = 3 and ALB = 40, the single parent would be caring for `{r} kids0_40` older dependent children, on average, whereas with ALB = 60, it would be `{r} kids0_60` dependents, some probably quite young (e.g., 2, 5, and 8). With a marriage age gap of 10 years and ALB = 40, the single parent was somewhat more likely to be a younger wife, age `{r} oneparentage10` (the wife `{r} wife_surv10` of the time, the husband `{r} husband_surv10` of the time), who would be caring for `{r} kids10_40` older dependents, on average, whereas with ALB = 60, it would be `{r} kids10_60` dependents. See @sfig-dependent-ratio and @sfig-oneparent.
+Mortality of both wives and husbands was high. With no marriage age gap, by age `{r} oneparentage0` only one parent had survived (the wife `{r} wife_surv0` of the time, the husband `{r} husband_surv0` of the time). With IBI = 3 and ALB = 38, the single parent would be caring for `{r} kids0_38` older dependent children, on average, whereas with ALB = 60, it would be `{r} kids0_60` dependents, some probably quite young (e.g., 2, 5, and 8). With a marriage age gap of 10 years and ALB = 38, the single parent was somewhat more likely to be a younger wife, age `{r} oneparentage10` (the wife `{r} wife_surv10` of the time, the husband `{r} husband_surv10` of the time), who would be caring for `{r} kids10_38` older dependents, on average, whereas with ALB = 60, it would be `{r} kids10_60` dependents. See @sfig-dependent-ratio and @sfig-oneparent.
 
 # Discussion
 
-```{r}
-newbornTEE <- signif(TEE2(0, 0, 'avg'), 2)
-threeTEE <- signif(TEE2(3, 1, 'avg'), 2)
-youngTEE <- paste0(c(newbornTEE, threeTEE), collapse = '-')
-maxconsumptionIBI3 <- format(round(max(lifecourseIBI3ALB40$family_consumption)), big.mark = ",")
-maxconsumptionIBI4 <- format(round(max(lifecourseIBI4ALB40$family_consumption)), big.mark = ",")
-jointprod <- HG_means |> summarise(Total = sum(Ea_mean), .by = Population)
-maxproduction <- format(max(jointprod$Total), big.mark = ",")
-```
-
-The key insight from the simulations is that with a counterfactual human ALB closer to the end of life, similar to other primates (@fig-prr), and given the energy consumption and production rates of contemporary foragers, the modern human pattern of relatively short interbirth intervals, long periods of juvenile dependency, minimal female reproductive skew, and long lifespans, was unlikely to have evolved. Shortly after AFB in most regions of the parameter space, younger parents with multiple highly dependent offspring would not be able to feed them without subsidies. Yet with a late ALB, older parents would still be burdened with many dependent children and would therefore be unable to supply surplus food to families in energy deficit -- the population would be unable to sustain itself (@fig-family-model and @fig-energyconprod).
+The key insight from the simulations is that with a counterfactual human ALB closer to the end of life, similar to other primates (@fig-prr), and given the energy consumption and production rates of contemporary foragers, the modern human pattern of relatively short interbirth intervals, long periods of juvenile dependency, minimal female reproductive skew, and long lifespans, was unlikely to have evolved. Shortly after AFB in most regions of the parameter space, younger parents with multiple highly dependent offspring would not be able to feed them without subsidies. Yet with a late ALB, older parents would still be burdened with many dependent children and would therefore be unable to subsidize families in energy deficit -- the population would be unable to feed everyone (@fig-family-model and @fig-energyconprod).
 
 It is possible that, with a late ALB, ancestral foragers could simply have extracted more energy from the environment, rendering food sharing unnecessary. When the maximum joint production of wife and husband exceeded the needs of 3.2 adults (*TEE~prop~* > 3.2), which was greater than all contemporary hunter-gatherers in @fig-hg-energy except the Nukak, families were indeed self-sufficient across much of the parameter space (@sfig-selfsufficient). Under these conditions, however, families produced an energy surplus across the entire lifespan, implying that changes to human life history parameters would have evolved to take advantage of the surplus, such as changes to interbirth intervals, growth and maturation rates, and ages of first birth and dispersal.
 
 The simulations therefore suggest the following role of menopause in the co-evolution of modern human life history traits. Relatively short interbirth intervals combined with long periods of juvenile dependence sow the seeds of a mid-life energetic crisis: parents have produced many young offspring with high energy requirements but who, per the ECM, require many years to acquire the skills necessary to provision themselves. This crisis was averted with three evolved strategies.
 
-First, by ceasing the production of new offspring in midlife, around age 40, parents limited the number of mouths to feed. Studies of contemporary humans and other species under resource constraints consistently show a quantity-quality tradeoff -- offspring in larger families suffer deficits of various sorts [@hagen2006; @Walker_2007; @Lawson_2011]. By limiting energetic investments to fewer slow-developing juveniles, parents enabled them to acquire the skills and strength necessary to support themselves before their dispersal, at which point parents began climbing out of an energy deficit even without subsidies (@fig-energyconprod). This refocuses the mother hypothesis on the energy production capacity of the mother and other family members.
+First, by ceasing the production of new offspring in midlife, around age 40, parents limited the number of mouths to feed. Studies of contemporary humans and other species under resource constraints consistently show a quantity-quality tradeoff -- offspring in larger families suffer deficits of various sorts [@hagen2006; @Walker_2007; @Lawson_2011; @Gillespie_2008]. By limiting energetic investments to fewer slow-developing juveniles, parents enabled them to acquire the skills and strength necessary to support themselves before their dispersal, at which point parents began climbing out of an energy deficit even without subsidies (@fig-energyconprod). This refocuses the mother hypothesis on the energy production capacity of the mother and other family members.
 
 Second, the increasing energy production of maturing juveniles, which tends to be overlooked in most theories of the evolution of menopause and other life history traits [@Pretelli_2024], was critical to meeting family energy needs (@fig-population). Even if juveniles could not completely support themselves, the combined production of multiple juveniles substantially reduced the total demand on parents. Furthermore, young adults, who had few or no children, often produced a surplus (@sfig-brideservice) that could subsidize their immature siblings to whom they are as closely genetically related as to their own offspring, akin to the "helper at the nest" pattern seen in some other cooperatively breeding species [@Hatchwell_2009; @hagen2009]. This is also consistent with the brideservice practices of many hunter-gatherer societies in which the bridegroom works for the family of the bride, likely helping feed her younger siblings, in exchange for marriage [brideprice is a related practice in which the bridegroom's family pays the bride's family with some form of wealth, @goody1973; @Walker_2011]. 
 
@@ -445,11 +416,11 @@ Second, the increasing energy production of maturing juveniles, which tends to b
 
 Third, older parents, perhaps especially the wife's parents [@Daly_2017], produced a surplus that could subsidize their younger adult children's children (the grandparent hypothesis) because the older parents' one or two dependent older children largely supported themselves or perhaps even produced a surplus, or their children had all dispersed (@fig-energyconprod). Although the simulations did not explicitly model energy transfers between families, food sharing and need-based transfers have been documented in many small-scale societies [@ringen2019; @Smith_2019, and references therein].
 
-These results are broadly consistent with @Kaplan_2010 (see @sfig-kaplan2010), albeit with important distinctions noted below.
+These results are broadly consistent with the ECM (see @sfig-kaplan2010) and with the grandmother hypothesis, albeit with important distinctions noted below.
 
 ## Rethinking the father absent hypothesis to include mother absence
 
-@kuhle2007 proposed that menopause might have evolved to mitigate the negative consequences of higher paternal than maternal mortality. With no marriage age gap, only one parent has survived by age `{r} oneparentage0`, on average, and it is almost as likely to be the husband as the wife (@sfig-oneparent). With ALB = 40, the surviving single parent would be caring for about `{r} kids0_40` older children, whereas with ALB = 60 it would be `{r} kids0_60` children, some quite young (@sfig-dependent-ratio). As marriage age gaps increase, the age at which only one parent remains decreases, and it is more likely to be the wife, but not dramatically so (@sfig-oneparent). It is possible that limiting the childcare burden on a surviving parent to a few older dependent offspring, which probably would have been manageable, rather than the care of several younger ones, which probably would not have been manageable, was a selection pressure for menopause. However, because the death of the wife would also have been common, and because the fitnesses of monogamous parents are tightly coupled, it is *parental* absence, not necessarily father absence, that matters.^[As an aside, the not infrequent death of mothers with multiple dependent children could have helped select for female fidelity to ensure surviving fathers would continue to invest in their joint offspring.]
+@kuhle2007 proposed that menopause might have evolved to mitigate the negative consequences of higher paternal than maternal mortality. With no marriage age gap, only one parent has survived by age `{r} oneparentage0`, on average, and it is almost as likely to be the husband as the wife (@sfig-oneparent). With ALB = 38, the surviving single parent would be caring for about `{r} kids0_38` older children, whereas with ALB = 60 it would be `{r} kids0_60` children, some quite young (@sfig-dependent-ratio). As marriage age gaps increase, the age at which only one parent remains decreases, and it is more likely to be the wife, but not dramatically so (@sfig-oneparent). It is possible that limiting the childcare burden on a surviving parent to a few older dependent offspring, which probably would have been manageable, rather than the care of several younger ones, which probably would not have been manageable, was a selection pressure for menopause. However, because the death of the wife would also have been common, and because the fitnesses of monogamous parents are tightly coupled, it is *parental* absence, not necessarily father absence, that matters.^[As an aside, the not infrequent death of mothers with multiple dependent children could have helped select for female fidelity to ensure surviving fathers would continue to invest in their joint offspring.]
 
 ## Rethinking the ECM
 
@@ -457,35 +428,11 @@ There are three important distinctions between the results of the simulations re
 
 Second, although I have framed the simulations in terms of nuclear families comprising a wife and husband in a lifelong monogamous relationship raising their joint offspring --- a key assumption of the "two sex" model --- the results of the simulations do not rely on this assumption. The results are equally consistent with, e.g., a pooled energy model [@kramer2010] in which all females reproduce (i.e., no non-reproductive females) and all individuals pool their resources to provision every member of the community according to their needs. In this regard, results are also consistent with the venerable grandmother hypothesis [@Hawkes_2020; @hawkes2025], a point to which I will return.
 
-Third, juvenile productivity plays little role in the @Kaplan_2010 model but an essential role in the simulations, where, in combination with reproductive cessation, the increasing productivity of older juveniles [@Pretelli_2022; @Pretelli_2024] helps families escape an energy deficit (@fig-energyconprod). Without juvenile production, the population would be in negative energy balance (@fig-population). In mobile hunter-gatherers ranging over a large, spatially and temporally varying landscape replete with competitors, predators, and other sundry hazards [e.g., @jones1994], however, child productivity in ancestral foraging bands would have depended on foraging bands moving to the right place at the right time [@hamilton2016; @Bettinger_2016].
+Third, juvenile productivity plays little role in the @Kaplan_2010 model but an essential role in the simulations, where, in combination with reproductive cessation, the increasing productivity of older juveniles [@Pretelli_2022; @Pretelli_2024] helps families escape an energy deficit (@fig-energyconprod). Without juvenile production, the population would be in negative energy balance (@fig-population). Nevertheless, in mobile hunter-gatherers ranging over a large, spatially and temporally varying landscape replete with competitors, predators, and other sundry hazards [e.g., @jones1994], child productivity would have depended on  ancestral foraging bands moving to the right place at the right time [@hamilton2016; @Bettinger_2016], a critical skill.
 
 Embodied capital should therefore be conceptualized not only as the skills required to extract energy from a resource patch, but also as including the skills required to locate optimal resource patches. Older mothers and fathers would have had greater knowledge of the large ranges necessary to support the hunting and gathering lifestyle of a large-bodied hominin [@Anton_2002], and hence greater ability to lead their families to productive resource patches where high juvenile productivity would have been feasible. This perspective aligns with theories of menopause in toothed whales that emphasize the superior ecological knowledge of older matriarchs [@Rendell_2019; @Brent_2015], and also with the predominance of female-biased leadership of collective movements in social mammals [@Smith_2022]. It is also consistent with the anthropology of older women in traditional societies who increasingly take on important social roles [@brown1982; @Jang_2025], with research on the important ecological knowledge of older individuals in foraging societies [e.g., @biesele1981; @Scalise_Sugiyama_2011; @wiessner2014; @Wood_2024], and with the computational services model, which emphasizes the cognitive challenges of raising multiple dependent offspring [@hagen2025].
 
-## The grandmother hypothesis vs. the ECM "two sex" hypothesis
-
-```{r}
-
-resident3a <- round(lifecourseIBI3ALB40$resident_children[21], 1)
-resident4a <- round(lifecourseIBI4ALB40$resident_children[21], 1)
-
-grandchild <- round(lifecourseIBI3ALB40$child_survival[21], 2)
-
-AgePos <- 
-  LCmean |> 
-  nest(.by = Menopause) |> 
-  mutate(
-    SignChange = map(data, \(d) signchange(d$meanenergy_balance, d$wife_age)),
-    PosAge = map_dbl(SignChange, \(d) d$age[d$direction == 1]),
-    PosIndex = map_int(SignChange, \(d) d$index[d$direction == 1])
-  )
-
-resident3b <- round(lifecourseIBI3ALB40$resident_children[AgePos$PosIndex[2]], 1)
-resident4b <- round(lifecourseIBI4ALB40$resident_children[AgePos$PosIndex[2]], 1)
-
-grandchild2 <- round(lifecourseIBI3ALB40$child_survival[AgePos$PosIndex[2]], 2)
-```
-
-<!-- Energy transfers from older adults to younger ones underlie both the grandmother hypothesis and the "two sex" hypothesis of menopause. It is therefore worth briefly comparing the two in light of the simulation results. In the simulations, parents become grandparents at age 40 when their first borns have their first child. At age 40, women with IBI = 3 have `{r} resident3a` dependent children, women with IBI = 4 have `{r} resident4a` dependent children, and both have `{r} grandchild` grandchildren (the proportion of firstborns that survive to AFB). On average across the parameter space when ALB = 40, families transition from an energy deficit to a surplus, and are thus able to invest in grandchildren, when wives are about `{r} AgePos$PosAge[2]` and there are either `{r} resident3b` dependent children (IBI = 3) or `{r} resident4b` dependent children (IBI = 4), and about `{r} grandchild + grandchild2` grandchildren (due to infant mortality). In other words, grandmothers are still mothering. -->
+## The grandmother hypothesis vs. the ECM "two sex" hypothesis {#sec-grandmother}
 
 The primary difference between the ECM and the grandmother hypothesis is the degree of conflict over the distribution of the energy surpluses. According to the ECM, individuals prefer to transfer their surpluses to close biological kin, e.g., to children, siblings, and the biological parents' grandchildren, who are the nieces and nephews of their older juveniles, and whose families are likely now in energy deficit. According to the grandmother hypothesis, in contrast, there is a conflict of interest, with women preferring to transfer surpluses to their children and grandchildren, and men preferring to transfer surpluses to fertile women to outcompete other males for mating opportunities. High male intrasexual competition is a consequence of midlife reproductive cessation by females but not males, reducing the pool of fertile females (ages 18-40) to about 0.7 per adult male (ages 18-60) (@sfig-fertile-ratio).
 
@@ -495,13 +442,13 @@ In the real world, food sharing required physical proximity. The substantial lit
 
 # Limitations
 
-Results depended on strong assumptions, such as population stationarity (constant age structure and no growth). If ancestral human populations were instead characterized by, e.g., fast growth with frequent population crashes [@Gurven_2019], this would alter the number of individuals requiring energy transfers relative to the number able to provide them. Nevertheless, energy production and consumption across the lifespan of a family with the given age structure remain valid. Simulations also assumed that age- and sex-specific productivity did not respond to family energy needs, yet in real families and communities, parents and children adjust the time devoted to production in response to changes in demand [e.g., @kramer2005]. In addition, parameters were varied independently (with the exception of male and female productivity, whose sum was constrained), yet in ancestral foragers, skill acquisition rates, productivity, the importance of strength, interbirth intervals, marriage age gaps, and so forth, likely co-varied in complex ways, and were linked to ecological variation. The multidimensional parameter space used in the simulations did not incorporate the unknown covariation of these values across actual foraging societies, past or present, and averages across the parameter space do not represent an "average" foraging society. 
+Results depended on strong assumptions, such as population stationarity (constant age structure and no growth). If ancestral human populations were instead characterized by, e.g., fast growth with frequent population crashes [@Gurven_2019], this would alter the number of individuals requiring energy subsidies relative to the number able to provide them. Nevertheless, energy production and consumption across the lifespan of a family with the given age structure would remain valid. Results also depended on the assumptions that all women reproduced at a constant IBI starting at age 20 until ALB, and that age- and sex-specific productivity did not respond to individual and family energy needs. Alternatively, physiological mechanisms linking fertility to energy metabolism [@torre2014; @fontana2016] and breastfeeding duration [@calik2022], and behavioral mechanisms like postpartum sex taboos [@mchome2020], might have adjusted AFB and/or IBI in response to the availability of energy in the environment. Moreover, parents and children could have adjusted the time devoted to production in response to changes in demand [e.g., @kramer2005]. If so, these would mitigate the negative impact of a later ALB on energy balance. Future studies should investigate which strategies for matching energy production to consumption across the lifecourse optimized fitness.
+
+In addition, parameters were varied independently (with the exception of male and female productivity, whose sum was constrained), yet in ancestral foragers, skill acquisition rates, productivity, the importance of strength, interbirth intervals, marriage age gaps, and so forth, likely co-varied in complex ways, and were linked to ecological variation. The multidimensional parameter space used in the simulations did not incorporate the unknown covariation of these values across actual foraging societies, past or present, and averages across the parameter space do not represent an "average" ancestral foraging society. 
 
 # Concluding remarks
 
-<!-- The ECM [@kaplan2000; @Kaplan_2010] is a leading explanation for the evolution of the distinctive human life history pattern involving relatively short interbirth intervals and long periods of dependency. Simulation results suggest that menopause was integral to the evolution of this pattern because it averted a midlife energetic crisis threatened by the rapid production of large bodied and large brained, and thus energetically expensive juveniles who would not become self-sufficient for a decade or more. Juveniles were subsidized, in part, by their older siblings and perhaps newly married sisters- or brothers-in-law, who in ethnographically documented hunter-gatherers, often lived with either the wife's or husband's parents [@hill2011]. Young couples, initially with few or no children of their own, often produced an energetic surplus that could benefit, e.g., the wives' younger siblings during brideservice [@Walker_2011]. Couples' later midlife reproductive cessation (menopause) optimized their family size at an energetically sustainable level as the energy production of their children ramped up (a variant of the mother hypothesis, albeit here also including fathers and older children), and energy transfers from couples' parents, whose children have mostly dispersed, burgeoned (the grandmother hypothesis, albeit here also including grandfathers). Couples past the ALB with fewer but increasingly productive offspring [@Pretelli_2022; @Pretelli_2024] then became energetically self-sustaining, and finally energetically "profitable", with the capacity to invest in their children's families. Results are equally consistent, however, with a model in which men transfer surpluses to fertile women and their unrelated offspring in energy deficit to obtain mating benefits [@Hawkes_2020; @hawkes2025]. High juvenile productivity probably depended on judicious resource patch choice by older individuals with substantial ecology knowledge, per the ECM. -->
-
-Simulations revealed a human-specific midlife energetic constraint on continued reproduction that, perhaps in conjunction with other constraints such as mammalian reproductive senescence [@Huber_2018] and kin competition in hominins [@White_2025], might help explain human's distinctive midlife reproductive cessation and high levels of cooperative food sharing.
+Simulations revealed a human-specific midlife energetic constraint on continued production of slowly developing, energetically expensive offspring that, perhaps in conjunction with other constraints such as mammalian reproductive senescence [@Huber_2018] and kin competition in hominins [@White_2025], might help explain human's distinctive midlife reproductive cessation and high levels of cooperative food sharing.
 
 # Acknowedgements
 
@@ -582,6 +529,30 @@ plot_effectsizes
 ```
 
 Mean difference in energy balance for each value of each skill ontogeny parameter, relative to its next smallest value, for individuals ages 0-40 in the population model (averaged over the values of the other parameters). Values on the bars, and at the base of the bars, are the parameter values.
+:::
+
+## Ratio of child production to child consumption
+
+::: {#sfig-childprodconsum}
+
+```{r}
+#| fig-width: 10
+
+childprodconratio <- 
+  pop_stats |>
+  mutate(TEE_prop = factor(TEE_prop)) |> 
+  summarise(meanratio = round(mean(ratio), 2), .by = TEE_prop)
+
+ggplot(pop_stats, aes(ratio, colour = factor(TEE_prop))) +
+  stat_density(geom = "line", position = 'identity', linewidth = 1) +
+  geom_point(data = childprodconratio, aes(x = meanratio, y = -0.1), show.legend = T) +
+  xlim(0, 1) +
+  scale_colour_viridis_d(option = "H", end = 0.9, name = "TEE_prop", guide = guide_legend(position = "top")) +
+  labs(x = "Ratio of child production to consumption", y = "Density") +
+  theme_minimal(15)
+```
+
+Distribution of child production / consumption ratios across the lifecourse for different values of TEE~prop~. Dots along the x-axis are the mean values of each distribution.
 :::
 
 ## Effects of variation in ALB and IBI on family composition and energy consumption

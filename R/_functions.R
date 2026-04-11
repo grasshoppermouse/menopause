@@ -3,6 +3,8 @@ binary_colors <- viridisLite::magma(11)[c(4,8)]
 
 # Misc functions
 
+mean2 <- function(v) mean(v, na.rm = T)
+
 signchange0 <- function(v){
   chng <- c(0, diff(sign(v)))
   which(chng != 0)

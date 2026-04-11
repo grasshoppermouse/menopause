@@ -134,11 +134,11 @@ pKraft1 <-
   # guides(colour = guide_legend(title = element_blank()), shape = guide_legend(title = element_blank())) +
   xlim(0, 8000) +
   facet_wrap(~Sex, ncol = 1) +
-  theme_void() +
+  ggplot2::theme_void() +
   theme(
     strip.text = element_blank()
   )
-# pKraft1
+pKraft1
 
 TEEavg_f <- mean(TEE2(20:60, 0, 'avg'))
 TEEavg_m <- mean(TEE2(20:60, 1, 'avg'))
@@ -263,7 +263,7 @@ plot_fertile_ratio <-
   ) +
   
   annotate("point", x = 35, y = 30, colour = 'white', fill = "red", size = 4, pch = 21) +
-  annotate("text", x = 35, y = 31, label = "Current study", hjust = 0, colour = "white") +
+  annotate("text", x = 35.25, y = 29.5, label = "Current study", hjust = 0, colour = "white") +
   coord_fixed() +
   theme_minimal(15) + theme(plot.subtitle = element_text(size = 11))
 plot_fertile_ratio

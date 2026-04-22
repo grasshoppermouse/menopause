@@ -82,6 +82,49 @@ fam_grid <-
     child_prod_con_ratio = ifelse(total_child_consumption == 0, NA, total_child_production / total_child_consumption)
   )
 
+child_grid <-
+  fam_grid |> 
+  summarise(
+    girlTEE = mean(girlTEE),
+    boyTEE = mean(boyTEE),
+    child_TEE = mean(c(girlTEE, boyTEE)),
+    girl_production = mean(girl_production),
+    boy_production = mean(boy_production),
+    child_production = mean(c(girl_production, boy_production)),
+    girl_prodconratio = mean(girl_production/girlTEE),
+    boy_prodconratio = mean(boy_production/boyTEE),
+    child_prodconratio = mean((girl_production + boy_production) / (girlTEE + boyTEE)),
+    .by = c(ParamSet, child_age)
+  )
+
+
+child_grid_long <-
+  child_grid |>
+  dplyr::select(ParamSet, child_age, girl_prodconratio, boy_prodconratio) |> 
+  pivot_longer(c(girl_prodconratio, boy_prodconratio), names_to = "Sex", values_to = "Ratio") |> 
+  mutate(
+    Sex = ifelse(Sex == "girl_prodconratio", "Girl", "Boy")
+  )
+
+
+child_grid2 <-
+  child_grid |> 
+  summarise(
+    across(-ParamSet, mean),
+    .by = child_age
+  )
+
+child_grid_long2 <-
+  child_grid2 |> 
+  pivot_longer(
+    c(girl_prodconratio, boy_prodconratio), 
+    names_to = "Sex", 
+    values_to = "Ratio", 
+  ) |> 
+  mutate(
+    Sex = ifelse(Sex == "girl_prodconratio", "Girl", "Boy")
+  )
+
 LCmean <-
   fam_grid |> 
   dplyr::select(
@@ -181,14 +224,17 @@ tbl_stats <-
     `Mean family size` = family_size_mean,
     `Maximum family size` = maxfamilysize,
     `Total fertility` = total_fertility,
-    `Mean energy balance (kcals/day)` = energy_balance_mean,
+    `Mean dependent consumption (kcals/day)` = total_child_consumption_mean,
+    `Mean dependent production (kcals/day)` = total_child_production_mean,
+    `Mean family energy balance (kcals/day)` = energy_balance_mean,
     `Age maximum dependents` = agemaxkids,
     `Age positive energy balance` = posEBage,
     `Age zero dependents` = zerokidsage
   ) |>
   mutate(
     ALB = str_remove(ALB, "ALB: "),
-    across(-ALB,\(v) round(v, 1))
+    across(-ALB,\(v) round(v, 1)),
+    across(matches("kcals"), \(v) round(v))
   ) |>
   arrange(IBI, ALB) |> 
   rename(
@@ -202,7 +248,7 @@ tbl_stats <-
   style_tt(i = 1:11, j = 6, line = 'l', line_color = 'lightgrey') |> 
   style_tt(i = 2, j = 1:9, line = 'b') |> 
   style_tt(j = 1, align = 'l')|> 
-  style_tt(fontsize = 0.8)
+  style_tt(fontsize = 0.7)
 
 tbl_stats
 

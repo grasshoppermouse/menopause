@@ -207,11 +207,12 @@ plot_hadza_kids <-
   geom_hline(yintercept = TEE2(30, 1, "hadza"), linetype = 'dotted', colour = "black") +
   geom_hline(yintercept = TEE2(30, 0, "hadza"), linetype = 'dotted', colour = "black") +
   geom_hline(yintercept = TEE2(10, NA, "hadza"), linetype = 'dotted', colour = "black") +
-  annotate("text", x = 5, y = TEE2(30, 1, "hadza") + 150, label = "Male Hadza TEE", size = 3, hjust = 0, alpha = 0.75) +
-  annotate("text", x = 5, y = TEE2(30, 0, "hadza") + 150, label = "Female Hadza TEE", size = 3, hjust = 0, alpha = 0.75) +
+  annotate("text", x = 5, y = TEE2(30, 1, "hadza") + 150, label = "Adult male Hadza TEE", size = 3, hjust = 0, alpha = 0.75) +
+  annotate("text", x = 5, y = TEE2(30, 0, "hadza") + 150, label = "Adult female Hadza TEE", size = 3, hjust = 0, alpha = 0.75) +
   annotate("text", x = 5, y = TEE2(10, NA, "hadza") - 150, label = "Child Hadza (age 10) TEE", size = 3, hjust = 0, alpha = 0.75) +
   scale_x_continuous(breaks = 5:15) +
-  labs(x = "Age (years)", y = "Productivity (kcals)") +
+  scale_y_continuous(breaks = seq(0, 7000, 1000), sec.axis = sec_axis(~ . / TEEavg, name = "TEE prop", breaks = seq(0, 3, 0.5))) +
+  labs(x = "Age (years)", y = "Productivity (kcals/day)") +
   theme_classic(15)
 # plot_hadza_kids
 

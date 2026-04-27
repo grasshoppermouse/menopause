@@ -69,6 +69,7 @@ run_sim <- function(params){
   return(param_grid)
 }
 
+# Uncomment these lines to run simulations
 # param_grid <- run_sim(params)
 # save(param_grid, file = "param_grid.rds")
 

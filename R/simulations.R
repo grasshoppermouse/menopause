@@ -460,18 +460,13 @@ plot_alb_stats
 
 # Mortality ---------------------------------------------------------------
 
-# wives0 <- lifetable("avg", 0, e0 = 35)$lx[21:81]
-# wives <- wives0 / wives0[1]
-# husbands <- lifetable("avg", 1, e0 = 30)$lx[21:81] / wives0[1]
-# parents <- wives + husbands
-
 parent_loss <- function(e0_f, e0_m, IBI, afb, alb, age_gap){
   d <- hg_lifecourse(afb = afb, e0_f = e0_f, e0_m = e0_m, alb = alb, IBI = IBI)
-  husband_ages <- (afb + age_gap + 1):(81 + age_gap)
+  husband_ages_index <- (afb + age_gap + 1):(81 + age_gap)
   tibble(
     wife_age = d$wife_age,
     wife_survival = d$wife_survival,
-    husband_survival = 1.05 * lifetable("avg", sex = 1, e0 = e0_m)$lx[husband_ages] / d$wife_num[1],
+    husband_survival = lifetable("avg", sex = 1, e0 = e0_m, SRB = 1.05)$lx[husband_ages_index] / d$wife_num[1],
     parents = wife_survival + husband_survival,
     spouse_ratio = husband_survival / wife_survival,
     dependents = d$resident_children,
@@ -483,7 +478,6 @@ parent_loss <- function(e0_f, e0_m, IBI, afb, alb, age_gap){
 mortality_grid <-
   expand.grid(demographic_params[c("e0_f", "e0_m", "IBI", "afb", "alb")]) |> 
   mutate(age_gap = 0)
-  # expand_grid(e0_f = 35, e0_m = 30, IBI = c(3, 4), afb = 20, alb = seq(30, 60, 10), age_gap = 0)
 mortality_grid$out <- pmap(mortality_grid, parent_loss, .progress = T)
 
 mortality_grid2 <-
@@ -498,30 +492,15 @@ plot_dependent_ratio <-
   ggplot(mortality_grid2, aes(wife_age, dependent_ratio, colour = ALB, group = ALB)) + 
   geom_line(linewidth = 1.5) + 
   scale_colour_viridis_d(option = "A", begin = 0.2, end = 0.9, direction = -1) +
-  labs(x = "Wife age (years)", y = "Dependent / Parent ratio") +
+  labs(x = "Wife age (years)", y = "Dependents / Parent ratio") +
   facet_wrap(~IBI) +
   theme_minimal(15)
 
 mortality_grid3 <-
   expand_grid(e0_f = seq(25, 45, 5), e0_m = seq(25, 45, 5), IBI = c(3, 4), afb = 20, alb = c(38, 60), age_gap = c(0, 2, 5, 10)) |> 
   dplyr::filter(e0_f > e0_m, abs(e0_f - e0_m) <= 10)
-mortality_grid3$out <- pmap(mortality_grid3, parent_loss, .progress = T)
+mortality_grid3$parent_loss <- pmap(mortality_grid3, parent_loss, .progress = T)
 mortality_grid3$ParamSet <- 1:nrow(mortality_grid3)
-
-# mortality_grid4 <-
-#   mortality_grid3 |> 
-#   unnest(out) |> 
-#   mutate(age_gap = factor(age_gap))
-# 
-# plot_spouse_ratio <-
-#   ggplot(mortality_grid4, aes(wife_age, spouse_ratio, colour = age_gap, group = ParamSet)) + 
-#   geom_line(linewidth = 1) + 
-#   scale_colour_viridis_d(option = "A", begin = 0.2, end = 0.9, direction = -1) +
-#   ylim(0, 1) +
-#   labs(x = "Wife age (years)", y = "Husband / Wife ratio") +
-#   facet_grid(e0_f~e0_m) +
-#   theme_linedraw(15)
-# plot_spouse_ratio
 
 parent_loss2 <- function(d){
   one_parent = signchange(d$parents <= 1, age = d$wife_age)
@@ -529,7 +508,7 @@ parent_loss2 <- function(d){
     oneparentage = one_parent$age[1],
     oneparentindex = one_parent$index[1],
     
-    # Interpolate
+    # Interpolate before and after the sign change
     wife_surv = 100*round((d$wife_survival[oneparentindex - 1] + d$wife_survival[oneparentindex]) / 2, 2),
     husband_surv = 100*round((d$husband_survival[oneparentindex - 1] + d$husband_survival[oneparentindex]) / 2, 2),
     resid_kid_surv = round((d$dependents[oneparentindex - 1] + d$dependents[oneparentindex]) / 2, 2)
@@ -538,7 +517,6 @@ parent_loss2 <- function(d){
 
 mortality_grid3b <-
   mortality_grid3 |>
-  dplyr::filter(e0_f == 35, e0_m == 30) |> 
   mutate(
     alb0 = alb,
     IBI0 = IBI,
@@ -546,20 +524,30 @@ mortality_grid3b <-
     IBI = paste("IBI: ", IBI),
     Gap = paste("Gap:", age_gap, "years"),
     Gap = fct_reorder(Gap, age_gap),
-    oneparent = map(out, parent_loss2)
+    oneparent = map(parent_loss, parent_loss2)
   ) |> 
   unnest(oneparent) |> 
   mutate(
-    wife_surv = paste0(wife_surv, "%"),
-    husband_surv = paste0(husband_surv, "%"),
+    wife_surv2 = paste0(wife_surv, "%"),
+    husband_surv2 = paste0(husband_surv, "%"),
     across(oneparentage:resid_kid_surv, as.list),
     across(oneparentage:resid_kid_surv, \(v) set_names(v, nm = str_glue("IBI{IBI0}ALB{alb0}Gap{age_gap}")))
   )
 
+plot_wife_survival <-
+  ggplot(mortality_grid3b, aes(e0_f, e0_m, fill = unlist(wife_surv))) + 
+  geom_tile() + 
+  geom_text(aes(label = wife_surv2), color = "white") + 
+  scale_fill_viridis_c(name = "Wife survival", option = "A", end = 0.9, label = scales::percent_format(scale = 1)) +
+  facet_wrap(~Gap) +
+  theme_bw(15)
+
+mortality_grid3c <- dplyr::filter(mortality_grid3b, e0_f == 35, e0_m == 30)
+
 plot_oneparent <-
-  ggplot(mortality_grid3b, aes(unlist(oneparentage), unlist(resid_kid_surv), colour = alb)) + 
+  ggplot(mortality_grid3c, aes(unlist(oneparentage), unlist(resid_kid_surv), colour = alb)) + 
   geom_point() + 
-  geom_text(aes(label = wife_surv), position = position_nudge(x = -0.5), show.legend = F) +
+  geom_text(aes(label = wife_surv2), position = position_nudge(x = -0.5), show.legend = F) +
   xlim(48, 54) +
   ylim(0, 3.5) +
   scale_color_binary() +
@@ -568,16 +556,7 @@ plot_oneparent <-
   facet_grid(Gap~IBI) +
   theme_bw(15) +
   theme(strip.text.y = element_text(angle = 0))
-# plot_oneparent
-
-# plot_dependent_age_ratio <-
-#   ggplot(mortality_grid2, aes(wife_age, mean_dependent_age, colour = ALB, group = ALB)) + 
-#   geom_line(linewidth = 1.5) + 
-#   scale_colour_viridis_d(option = "A", begin = 0.2, end = 0.9, direction = -1) +
-#   labs(x = "Wife age (years)", y = "Mean age of dependents") +
-#   facet_wrap(~IBI) +
-#   theme_minimal(15)
-# plot_dependent_age_ratio
+plot_oneparent
 
 # Brideservice ------------------------------------------------------------
 

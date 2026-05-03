@@ -63,7 +63,13 @@ wt_params <-
   arrange(sex, group, age)
 
 # IBI = 3 years (no menopause or fertility decline)
-wt_params$pregnant <- c(rep(c(rep(0, 18), rep(c(0, 0, 1), 21))[1:81], 4), rep(0, 324))
+wt_params$pregnant <- c(
+  rep(c(rep(0, 17), 
+        rep(c(0, 0, 1), 7),
+        rep(0, 43)
+  )[1:81], 4),
+  rep(0, 324)
+)
 
 wt_params$Weight <- pmap_dbl(wt_params, hg_weight)
 wt_params <-

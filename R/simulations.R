@@ -28,16 +28,21 @@ effectsizes <- function(d, outcome, param, max_age = 40){
 
 # Main params -------------------------------------------------------------
 
-demographic_params <- list(
+demographic_params0 <- list(
   e0_f = 35,
   e0_m = 30,
   SRB = 1.05,
   group = 'avg',
   afb = 20,
-  IBI = c(3, 4),
-  max_age = 80,
-  alb = c(30, 38, 50, 60) #, seq(30, 60, 10)
+  max_age = 80
 )
+
+demographic_params1 <- list(
+  IBI = c(3, 4),
+  alb = c(30, 38, 50, 60)
+)
+
+demographic_params <- c(demographic_params0, demographic_params1)
 
 skill_params <- list(
   alpha_m = c(0.25, 0.5, 0.75),
@@ -54,25 +59,30 @@ production_params <- list(
   TEE_prop_f = seq(0.4, 1.6, 0.4)
 )
 
+params0 <- c(skill_params, demographic_params0, production_params)
 params <- c(skill_params, demographic_params, production_params)
 
-run_sim <- function(params){
-  param_grid <- 
-    expand.grid(params) |> 
-    param_constraints(params) |> 
-    mutate(
-      ParamSet = cur_group_rows(),
-      Menopause = str_glue("ALB: {alb}")
-    )
-  param_grid$family_sims <- pmap(param_grid, hg_lifecourse, .progress = T)
-  param_grid$pop_sims <- pmap(param_grid, hg_lifecourse2, .progress = T)
-  return(param_grid)
-}
+param_grid0 <- 
+  expand.grid(params0) |> 
+  param_constraints(params) |> 
+  mutate(ParamSet = cur_group_rows())
+  
+param_grid <- 
+  expand.grid(params) |> 
+  param_constraints(params) |> 
+  mutate(
+    ParamSet = cur_group_rows(),
+    Menopause = str_glue("ALB: {alb}")
+  )
 
-# Uncomment these lines to run simulations
-# param_grid <- run_sim(params)
+# Uncomment these lines to run simulations, which take a few minutes
+# param_grid0$pop_sims <- pmap(param_grid0, hg_lifecourse2, .progress = T)
+# param_grid$family_sims <- pmap(param_grid, hg_lifecourse, .progress = T)
+# 
+# save(param_grid0, file = "param_grid0.rds")
 # save(param_grid, file = "param_grid.rds")
 
+load("param_grid0.rds")
 load("param_grid.rds")
 
 fam_grid <-
@@ -218,8 +228,8 @@ LCmean3 <-
 tbl_stats <-
   LCmean3 |> 
   dplyr::select(
+    IBI,
     ALB = Menopause,
-    IBI, 
     `Mean dependents` = resident_children_mean,
     `Maximum dependents` = maxkids,
     `Mean family size` = family_size_mean,
@@ -261,7 +271,6 @@ LCmean3b <-
     across(-c(Menopause, IBI), \(v) set_names(v, nm = str_glue("ALB{str_remove(Menopause, 'ALB: ')}IBI{IBI}")))
   )
   
-
 # lc_grid <-
 #   expand_grid(ALB = params$alb, IBI = params$IBI) |> 
 #   mutate(
@@ -276,8 +285,6 @@ LCmean3b <-
 #     IBI = paste("IBI:", IBI),
 #     ALB = paste("ALB:", ALB),
 #   )
-
-
 
 fam_grid2 <-
   fam_grid |> 
@@ -374,7 +381,7 @@ plot_ProdConBal <- plot_energyProdCon / plot_EBbalance + plot_layout(axes = "col
 # Population stats --------------------------------------------------------
 
 pop_stats <-
-  param_grid |> 
+  param_grid0 |> 
   mutate(
     TEE_prop = round(TEE_prop_f + TEE_prop_m, 1),
     b1 = round(b1_f + b1_m, 2),
@@ -387,12 +394,6 @@ pop_stats <-
 param_effects <-
   map(names(skill_params), \(p) effectsizes(pop_stats, "youngEB", p)) |> 
   list_rbind() |>
-  # mutate(
-  #   param2 = str_replace(param, "_prop_f", "<sub>prop,f</sub>"),
-  #   param2 = str_replace(param2, "_prop_m", "~prop,m~"),
-  #   param2 = str_replace(param2, "_f", "~f~"),
-  #   param2 = str_replace(param2, "_m", "~m~"),
-  # ) |> 
   dplyr::filter(!str_detect(param, "age"))
 
 plot_effectsizes <-
@@ -556,7 +557,7 @@ plot_oneparent <-
   facet_grid(Gap~IBI) +
   theme_bw(15) +
   theme(strip.text.y = element_text(angle = 0))
-plot_oneparent
+# plot_oneparent
 
 # Brideservice ------------------------------------------------------------
 

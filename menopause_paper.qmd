@@ -10,7 +10,7 @@ author:
      - id: wsu
        department: Department of Anthropology
        name: Washington State University
-doi: 10.5281/zenodo.18149331
+doi: 10.5281/zenodo.20817884
 date: today
 abstract: |
   **Objectives**: The grandmother hypothesis proposes that ancestral women ceased reproduction midlife to instead provision their grandchildren. An alternative “two-sex” account proposes that the high energetic burden of caring for slow-developing offspring was met with biparental investment. Menopause evolved because the physiological costs of reproduction increased with age, yet productivity also increased with age, and the benefits of resource transfers by parents and grandparents of both sexes to adult children and their offspring eventually outweighed the diminishing benefits of continued reproduction (Kaplan et al., 2010). The “father absent” hypothesis proposes that the higher mortality rate of husbands would often have left wives without the resources to raise young children, selecting for early reproductive cessation (Kuhle, 2007). Juvenile production plays little role in the three hypotheses, yet subsequent studies have found it to be surprisingly high. 
@@ -318,7 +318,7 @@ Neither family member survival, nor pregnancies, births, IBI's, or any other fac
 
 : Parameter values for simulation runs. Each run was a unique combination of these values for each age of women from age at first birth (AFB) to the maximum age (80 years), with the constraint that 2.2 ≤ *TEE~prop,f~* + *TEE~prop,m~* ≤ 3.4. Productivity is defined in @eq-productivity, strength in @eq-strength, and skill in @eq-skill. {#tbl-parameters}
 
-Simulations were conducted using `{r} R.version.string`. Code and data are available here: <https://github.com/grasshoppermouse/menopause>.
+Simulations were conducted using `{r} R.version.string`. Code and data are available here: <https://github.com/grasshoppermouse/menopause> and here: <https://doi.org/10.5281/zenodo.20817884>.
 
 # Results
 

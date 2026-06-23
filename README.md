@@ -2,8 +2,12 @@
 # menopause
 
 <!-- badges: start -->
-[https://doi.org/10.5281/zenodo.18149332](https://doi.org/10.5281/zenodo.18149332)
+
 <!-- badges: end -->
+
+Code used for:
+
+*Hagen EH: Menopause averted a midlife energetic crisis with help from older dependent children and parents: A simulation study. American Journal of Biological Anthropology.*
 
 Download this repo, and install the dependencies:
 

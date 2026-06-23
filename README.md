@@ -2,7 +2,7 @@
 # menopause
 
 <!-- badges: start -->
-
+[![](https://zenodo.org/badge/DOI/10.5281/zenodo.20817884.svg)](https://doi.org/10.5281/zenodo.20817883)
 <!-- badges: end -->
 
 Code used for:

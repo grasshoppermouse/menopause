@@ -1,5 +1,6 @@
 ---
 title: "Menopause averted a midlife energetic crisis with help from older dependent children and parents: A simulation study"
+description: "Published in the American Journal of Biological Anthropology"
 author: 
   - name: Edward H. Hagen
     orcid: 0000-0002-5758-9093
@@ -10,8 +11,7 @@ author:
      - id: wsu
        department: Department of Anthropology
        name: Washington State University
-doi: 10.5281/zenodo.20817884
-date: today
+doi: 10.1002/ajpa.70295
 abstract: |
   **Objectives**: The grandmother hypothesis proposes that ancestral women ceased reproduction midlife to instead provision their grandchildren. An alternative “two-sex” account proposes that the high energetic burden of caring for slow-developing offspring was met with biparental investment. Menopause evolved because the physiological costs of reproduction increased with age, yet productivity also increased with age, and the benefits of resource transfers by parents and grandparents of both sexes to adult children and their offspring eventually outweighed the diminishing benefits of continued reproduction (Kaplan et al., 2010). The “father absent” hypothesis proposes that the higher mortality rate of husbands would often have left wives without the resources to raise young children, selecting for early reproductive cessation (Kuhle, 2007). Juvenile production plays little role in the three hypotheses, yet subsequent studies have found it to be surprisingly high. 
   **Materials and methods**: Simulations were conducted of hunter-gatherer energy consumption and production across the lifespan, taking account of age- and sex-specific survivorship, interbirth intervals, and varying rates of foraging skill acquisition typical of contemporary foragers. 
@@ -55,6 +55,14 @@ crossref:
       space-before-numbering: true
 ---
 
+```{=typst}
+#place(top + left, dx: 0.75cm, dy: -0.75cm)[
+  #text(size: 9pt, fill: blue)[
+    #link("https://doi.org/10.1002/ajpa.70295")[Published in the American Journal of Biological Anthropology DOI: 10.1002/ajpa.70295]
+  ]
+]
+```
+
 ```{r}
 #| label: setup
 library(here)
@@ -96,7 +104,7 @@ Here I investigate two adaptive hypotheses for the evolution of human menopause 
 
 ## The "two-sex" embodied capital model of menopause
 
-@Kaplan_2010 proposed a "two-sex" learning and skill-based model of the evolution of human menopause. In this account, which was inspired, in part, by research among the Tsimane, humans evolved to exploit a highly knowledge- and skill-based "niche" providing energy-rich but difficult to extract resources that required the rearing of slow-developing, large-brained, and thus energetically expensive offspring [@kaplan2000]. Offspring were produced every few years but required almost two decades to become self-sufficient, placing a potentially high energetic burden on mothers. This burden is met by a co-evolving sexual division of labor in long-term monogamous marriages in which husbands specialized in skill-based acquisition of high-risk, high-return resources, with their skills and productivity increasing for about two decades beyond the age at which they became self-sufficient. Mothers specialized in equally skill-based child rearing and acquisition of lower-risk, lower-return resources [@kelly2013]. Menopause evolved because the physiological costs of pregnancy and childbirth increased with age, and oocyte quality decreased with age, yet productivity also increased with age. In this scenario, around midlife the fitness benefits of downward intergenerational transfers of resources (food sharing) by both parents, whose acquisition was based on four decades of skill development, termed *embodied capital*, outweighed the fitness benefits of continued offspring production. In particular, @Kaplan_2010 provide empirical evidence that Tsimane grandfathers provide more calories to grandchildren than do grandmothers. This account, which could therefore be dubbed the *grandparents hypothesis*, is part of the highly influential *Embodied Capital Model* [ECM, @kaplan2000]. See [@fig-skillontogeny]A,B.
+@Kaplan_2010 proposed a "two-sex" learning and skill-based model of the evolution of human menopause. In this account, which was inspired, in part, by research among the Tsimane, humans evolved to exploit a highly knowledge- and skill-based "niche" providing energy-rich but difficult to extract resources that required the rearing of slow-developing, large-brained, and thus energetically expensive offspring [@kaplan2000]. Offspring were produced every few years but required almost two decades to become self-sufficient, placing a potentially high energetic burden on mothers, which, based on Tsimane data, would increase by delaying menopause. This burden is met by a co-evolving sexual division of labor in long-term monogamous marriages in which husbands specialized in skill-based acquisition of high-risk, high-return resources, with their skills and productivity increasing for about two decades beyond the age at which they became self-sufficient. Mothers specialized in equally skill-based child rearing and acquisition of lower-risk, lower-return resources [@kelly2013]. Menopause evolved because the physiological costs of pregnancy and childbirth increased with age, and oocyte quality decreased with age, yet productivity also increased with age. In this scenario, around midlife the fitness benefits of downward intergenerational transfers of resources (food sharing) by both parents, whose acquisition was based on four decades of skill development, termed *embodied capital*, outweighed the fitness benefits of continued offspring production. In particular, @Kaplan_2010 provide empirical evidence that Tsimane grandfathers provide more calories to grandchildren than do grandmothers. This account, which could therefore be dubbed the *grandparents hypothesis*, is part of the highly influential *Embodied Capital Model* [ECM, @kaplan2000]. See [@fig-skillontogeny]A,B.
 
 ## The absent father model of menopause
 
@@ -242,7 +250,7 @@ where $b_0$ is a parameter that determines the rate of strength decline in old a
 Skill is the product of a sigmoidal function that predominates at young ages, similar to that fit to the data in @Schniter_2015, with a function that declines rapidly as age approaches the maximum age:
 
 $$
-skill(age) = \frac{1}{1 - e^{-b_1(age - age_{50})}} (1 - e^{b_0(age_{\mathrm{max}}-age)})
+skill(age) = \frac{1}{1 + e^{-b_1(age - age_{50})}} (1 - e^{b_0(age_{\mathrm{max}}-age)})
 $$ {#eq-skill}
 
 where $b_1$ is a parameter that determines the rate of skill acquisition, and $age_{50}$ is the age at which skill is 50% of maximum. These two parameters were combined to create *Fast* ($b_1 = `{r} params$b1_f[3]`$, $age_{50} = `{r} params$age50_f[1]`$), *Medium* ($b_1 = `{r} params$b1_f[2]`$, $age_{50} = `{r} params$age50_f[2]`$) and *Slow* ($b_1 = `{r} params$b1_f[1]`$, $age_{50} = `{r} params$age50_f[3]`$) skill acquisition ontogenies, separately for each sex. $b_0$ is a parameter that determines the rate of skill decline in old age, and was fixed at -0.15 for both sexes in all simulation runs. Productivity was set to 0 for children less than 3 years old. See [@fig-skillontogeny]F and @tbl-b1grid.
@@ -417,7 +425,7 @@ Third, older parents, perhaps especially the wife's parents [@Daly_2017], produc
 
 ## Rethinking the ECM
 
-The simulation results are broadly consistent with the ECM and the "two-sex" model, albeit with three important distinctions. First, in the two-sex model menopause evolves because at midlife the increasing costs of pregnancy and childbirth reduce the benefits of continued reproduction, which then no longer outweigh the benefits of transferring resources to kin. In the simulations, in contrast, menopause evolves simply because the relatively rapid production of offspring who require substantial calories, yet who cannot support themselves for a decade or more, limits the number of dependents to about three or four. With high infant mortality, this limit is reached about 20 years after age at first birth. Nevertheless, age-related increases in the costs of pregnancy and childbirth could be additional factors favoring menopause.
+The simulation results are broadly consistent with the ECM and the "two-sex" model, albeit with three important distinctions. First, in the two-sex model, although the increasing energetic demands of juveniles play a role, menopause evolves primarily because at midlife the increasing costs of pregnancy and childbirth reduce the benefits of continued reproduction, which then no longer outweigh the benefits of transferring resources to kin. In the simulations, in contrast, menopause evolves simply because the relatively rapid production of offspring who require substantial calories, yet who cannot support themselves for a decade or more, limits the number of dependents to about three or four. With high infant mortality, this limit is reached about 20 years after age at first birth. Nevertheless, age-related increases in the costs of pregnancy and childbirth could be additional factors favoring menopause.
 
 Second, although I have framed the simulations in terms of nuclear families comprising a wife and husband in a lifelong monogamous relationship raising their joint offspring --- a key assumption of the two-sex model --- the results of the simulations do not rely on this assumption. The results are equally consistent with, e.g., a pooled energy model [@kramer2010] in which all females reproduce (i.e., no non-reproductive females) and all individuals pool their resources to provision every member of the community according to their needs. In this regard, results are also consistent with the venerable grandmother hypothesis [@Hawkes_2020; @hawkes2025], a point to which I will return.
 
@@ -427,7 +435,7 @@ Embodied capital should therefore be conceptualized not only as the skills requi
 
 ## The grandmother hypothesis vs. the ECM "two-sex" hypothesis {#sec-grandmother}
 
-The grandmother hypothesis and the ECM both emphasize the importance of food sharing from older individuals with surpluses to younger individuals in deficit, a view strongly supported by simulation results. The primary difference between the hypotheses is the degree of conflict over the distribution of the surpluses. According to the ECM, monogamous couples prefer to transfer their surpluses to their joint children and grandchildren. According to the grandmother hypothesis, in contrast, there is a conflict of interest, with postmenopausal women preferring to transfer surpluses to their adult children and grandchildren, and men preferring to transfer surpluses to fertile women to outcompete other males for mating opportunities. High male intrasexual competition is a consequence of midlife reproductive cessation by females but not males, increasing the pool of fertile males to fertile females (@sfig-fertile-ratio) [yet the rarer sex typically has greater bargaining power, and male-biased sex ratios in humans tend to be associated with male commitment to one partner, @schacht2022].
+The grandmother hypothesis and the ECM both emphasize the importance of food sharing from older individuals with surpluses to younger individuals in deficit, a view strongly supported by simulation results. The primary difference between the hypotheses is the degree of conflict over the distribution of the surpluses. According to the ECM, monogamous couples prefer to transfer their surpluses to their joint children and grandchildren. According to the grandmother hypothesis, in contrast, there is a conflict of interest, with postmenopausal women preferring to transfer surpluses to their adult children and grandchildren, and men preferring to transfer surpluses to fertile women to outcompete other males for mating opportunities. High male intrasexual competition is a consequence of midlife reproductive cessation by females but not males, increasing the pool of fertile males relative to fertile females (@sfig-fertile-ratio) [yet the rarer sex typically has greater bargaining power, and male-biased sex ratios in humans tend to be associated with male commitment to one partner, @schacht2022].
 
 Because every individual has exactly one biological mother and one biological father, it was convenient to account for the energy production and consumption of the entire population in terms of biological parents and their offspring, i.e., nuclear families. Little hangs on this framing, however, because individuals of the same age and sex had identical energy production and consumption, mortality, IBI's, and ALB's. An individual whose production was less than their consumption required energy transfers (food sharing) from *someone* producing a surplus, who then had less to transfer to others. The simulation models do not address potential conflicts of interest over energy transfers, however, nor do they address the collective action problems or other evolutionary challenges they pose, and therefore they cannot adjudicate between the ECM, the grandmother hypothesis, and other models of food sharing, such as energy pooling [@kramer2010].
 

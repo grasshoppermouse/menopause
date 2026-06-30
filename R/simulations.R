@@ -75,12 +75,12 @@ param_grid <-
     Menopause = str_glue("ALB: {alb}")
   )
 
-# Uncomment these lines to run simulations, which take a few minutes
-# param_grid0$pop_sims <- pmap(param_grid0, hg_lifecourse2, .progress = T)
-# param_grid$family_sims <- pmap(param_grid, hg_lifecourse, .progress = T)
-# 
-# save(param_grid0, file = "param_grid0.rds")
-# save(param_grid, file = "param_grid.rds")
+# After first running simulations, which take a few minutes,
+# comment out these 4 lines for repeat runs, if desired
+param_grid0$pop_sims <- pmap(param_grid0, hg_lifecourse2, .progress = F)
+param_grid$family_sims <- pmap(param_grid, hg_lifecourse, .progress = F)
+save(param_grid0, file = "param_grid0.rds")
+save(param_grid, file = "param_grid.rds")
 
 load("param_grid0.rds")
 load("param_grid.rds")
@@ -599,9 +599,15 @@ production_params2 <- list(
 )
 
 params_ss <- c(skill_params, demographic_params, production_params2)
+param_grid_ss <- expand.grid(params_ss) |> 
+  param_constraints(params) |> 
+  mutate(ParamSet = cur_group_rows())
 
-# param_grid_ss <- run_sim(params_ss)
-# save(param_grid_ss, file = "param_grid_ss.rds")
+# Code takes a minute or two to run
+# After running, comment out these two lines for repeat runs
+param_grid_ss$family_sims <- pmap(param_grid_ss, hg_lifecourse)
+save(param_grid_ss, file = "param_grid_ss.rds")
+
 load("param_grid_ss.rds")
 
 fam_grid_ss <-
